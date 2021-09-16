@@ -50,6 +50,7 @@
               "vendorChunk": false,
               "buildOptimizer": true,
               "baseHref": "./",
+			  "deployUrl": "./web/",
               "budgets": [
                 {
                   "type": "initial",
