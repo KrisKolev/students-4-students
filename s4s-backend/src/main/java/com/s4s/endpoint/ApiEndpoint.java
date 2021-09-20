@@ -9,8 +9,9 @@ import javax.ws.rs.core.Response;
 public class ApiEndpoint {
 
     @GET
-    @Produces("text/plain")
+    @Produces("application/json")
     public Response getEcho() {
-        return Response.ok().entity("pong").build();
+        //ToDo: Refactor Response & Access-Control-Allow-Origin should be adapted to developing and production scenarios
+        return Response.ok().entity("{\"message\": \"echo\"}").header("Access-Control-Allow-Origin","*").build();
     }
 }
