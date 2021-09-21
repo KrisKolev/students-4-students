@@ -1,6 +1,7 @@
-/dist
-/target
-/node
-/node_modules
-/.idea
+**/dist
+**/target
+**/node
+**/npm
+**/node_modules
+**/.idea
 *.iml
