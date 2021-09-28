@@ -1,11 +1,20 @@
 package com.s4s.database.model;
 
 public class University {
+    private String uid;
 
     private String name;
     private String domain;
 
     public University(){
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {
