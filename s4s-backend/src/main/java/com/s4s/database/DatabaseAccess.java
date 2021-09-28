@@ -21,7 +21,7 @@ public class DatabaseAccess {
     public static final String GOOGLE_AUTH_JSON = PropertyAccessor.getGoogleAuthJson();
     public static final String GOOGLE_FIRESTORM_PROJECT_ID = PropertyAccessor.getGoogleAuthFirestormProject();
 
-    public static Firestore dbInstance;
+    private static Firestore dbInstance;
     public static Map<Class, String> documentMap;
 
     static {
@@ -36,7 +36,7 @@ public class DatabaseAccess {
         createInstance();
     }
 
-    private static Firestore createInstance() {
+    public static Firestore createInstance() {
         if (dbInstance == null) {
             ArrayList<String> scopes = Lists.newArrayList(GOOGLE_AUTH_SCOPE);
 
