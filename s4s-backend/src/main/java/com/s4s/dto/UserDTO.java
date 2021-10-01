@@ -5,6 +5,7 @@ public class UserDTO {
     private String lastname;
     private String email;
     private String password;
+    private String uid;
 
     public UserDTO() {
     }
@@ -40,4 +41,8 @@ public class UserDTO {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public String getUid(){return uid;}
+
+    public void setUid(String uid){this.uid = uid;}
 }

@@ -64,8 +64,14 @@ public class DatabaseAccess {
         return dbInstance;
     }
 
+    //use if you want to add a document and let firebase generate the uid for it
     public static <T> void saveOrInsertDocument(Object document) {
         dbInstance.collection(documentMap.get(document.getClass())).add(document);
+    }
+
+    //use if you know how the document shall be named
+    public static <T> void saveOrInsertDocument(Object document,String documentName) {
+        dbInstance.collection(documentMap.get(document.getClass())).document(documentName).set(document);
     }
 
     public static <T> T retrieveDocument(Class<T> documentType, String documentId)

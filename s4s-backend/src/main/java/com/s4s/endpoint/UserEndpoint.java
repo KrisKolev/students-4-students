@@ -1,5 +1,6 @@
 package com.s4s.endpoint;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
@@ -40,15 +41,11 @@ public class UserEndpoint {
             userRecord = FirebaseAuth.getInstance().createUser(request);
 
             com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
-            dbUser.setEmail(userDTO.getEmail());
             dbUser.setFirstname(userDTO.getFirstname());
             dbUser.setLastname(userDTO.getLastname());
             dbUser.setEmail(userDTO.getEmail());
-            dbUser.setCreatedAt(new Date());
-            dbUser.setUpdatedAt(new Date());
             dbUser.setUid(userRecord.getUid());
-
-            DatabaseAccess.saveOrInsertDocument(dbUser);
+            DatabaseAccess.saveOrInsertDocument(dbUser,dbUser.getUid());
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
 
@@ -63,6 +60,24 @@ public class UserEndpoint {
         responseBuilder.entity(userRecord);
         responseBuilder.header("Access-Control-Allow-Origin","*");
 
+        return responseBuilder.build();
+    }
+
+    @POST
+    @Path("/login")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response loginUser(UserDTO userDTO) throws FirebaseAuthException {
+        Response.ResponseBuilder responseBuilder;
+        DatabaseAccess.createInstance();
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+
+        String token = auth.createCustomToken(userDTO.getUid());
+
+
+        responseBuilder = Response.ok();
+        //responseBuilder.entity(userRecord);
+        responseBuilder.header("Access-Control-Allow-Origin","*");
         return responseBuilder.build();
     }
 }
