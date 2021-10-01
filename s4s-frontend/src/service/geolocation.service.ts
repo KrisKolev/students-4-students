@@ -1,13 +1,7 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
-import {Router} from '@angular/router';
-import {environment} from '../environments/environment';
+import {HttpClient} from '@angular/common/http';
 
-const httpOptions = {
-    headers: new HttpHeaders({
-        'Content-Type': 'application/json'
-    })
-};
+const geoLocationServiceUrl = 'https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=';
 
 @Injectable({providedIn: 'root'})
 export class GeolocationService {
@@ -15,8 +9,7 @@ export class GeolocationService {
     constructor(private http: HttpClient) {
     }
 
-    getGeoInformation(lat: string, lon: string) {
-        return this.http.get<any>('https://api.bigdatacloud.net/data/reverse-geocode-client?latitude='
-            + lat + '&longitude=' + lon + '&localityLanguage=en');
+    public getGeoInformation(lat: string, lon: string) {
+        return this.http.get<any>(geoLocationServiceUrl + lat + '&longitude=' + lon + '&localityLanguage=en');
     }
 }
