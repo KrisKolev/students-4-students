@@ -21,7 +21,7 @@ public class DatabaseAccess {
     public static final String GOOGLE_AUTH_JSON = PropertyAccessor.getGoogleAuthJson();
     public static final String GOOGLE_FIRESTORM_PROJECT_ID = PropertyAccessor.getGoogleAuthFirestormProject();
 
-    public static Firestore dbInstance;
+    private static Firestore dbInstance;
     public static Map<Class, String> documentMap;
 
     static {
@@ -36,7 +36,7 @@ public class DatabaseAccess {
         createInstance();
     }
 
-    private static Firestore createInstance() {
+    public static Firestore createInstance() {
         if (dbInstance == null) {
             ArrayList<String> scopes = Lists.newArrayList(GOOGLE_AUTH_SCOPE);
 
@@ -64,8 +64,14 @@ public class DatabaseAccess {
         return dbInstance;
     }
 
+    //use if you want to add a document and let firebase generate the uid for it
     public static <T> void saveOrInsertDocument(Object document) {
         dbInstance.collection(documentMap.get(document.getClass())).add(document);
+    }
+
+    //use if you know how the document shall be named
+    public static <T> void saveOrInsertDocument(Object document,String documentName) {
+        dbInstance.collection(documentMap.get(document.getClass())).document(documentName).set(document);
     }
 
     public static <T> T retrieveDocument(Class<T> documentType, String documentId)
