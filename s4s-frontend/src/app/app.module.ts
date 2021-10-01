@@ -8,11 +8,13 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {HttpClientModule} from '@angular/common/http';
 import { RegisterFormComponent } from './register-form/register-form.component';
+import {AngularFireModule} from "@angular/fire/compat";
+import {FirebaseService} from "./services/firebase.service";
 
 @NgModule({
   declarations: [
     AppComponent,
-    RegisterFormComponent
+    RegisterFormComponent,
   ],
     imports: [
         BrowserModule,
@@ -22,7 +24,7 @@ import { RegisterFormComponent } from './register-form/register-form.component';
         MatToolbarModule,
         MatIconModule
     ],
-  providers: [],
+  providers: [FirebaseService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
