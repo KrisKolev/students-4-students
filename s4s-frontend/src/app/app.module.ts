@@ -8,7 +8,7 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {HttpClientModule} from '@angular/common/http';
 import { RegisterFormComponent } from './register-form/register-form.component';
-import {FirebaseService} from './services/firebase.service';
+import {FirebaseService} from '../service/firebase.service';
 import {initializeApp} from "firebase/app";
 
 const firebaseConfig = {
@@ -20,7 +20,6 @@ const firebaseConfig = {
     appId: "1:148128489605:web:fe41a4249539e2b85749ec"
 };
 const app = initializeApp(firebaseConfig);
-
 
 @NgModule({
   declarations: [
