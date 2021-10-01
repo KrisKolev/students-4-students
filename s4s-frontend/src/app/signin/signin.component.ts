@@ -12,7 +12,6 @@ export class SigninComponent implements OnInit {
 
   constructor(firebaseService: FirebaseService) {
     this.firebaseService = firebaseService;
-     firebaseService.firebaseSignin("test@technikum-wien.at","123456");
   }
 
   //constants + attributes
