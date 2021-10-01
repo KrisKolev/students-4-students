@@ -8,14 +8,26 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {HttpClientModule} from '@angular/common/http';
 import { RegisterFormComponent } from './register-form/register-form.component';
-import {AngularFireModule} from "@angular/fire/compat";
-import {FirebaseService} from "./services/firebase.service";
+import {FirebaseService} from './services/firebase.service';
+import {initializeApp} from "firebase/app";
+
+const firebaseConfig = {
+    apiKey: "AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U",
+    authDomain: "students4students-f2e07.firebaseapp.com",
+    projectId: "students4students-f2e07",
+    storageBucket: "students4students-f2e07.appspot.com",
+    messagingSenderId: "148128489605",
+    appId: "1:148128489605:web:fe41a4249539e2b85749ec"
+};
+const app = initializeApp(firebaseConfig);
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    RegisterFormComponent,
+    RegisterFormComponent
   ],
+
     imports: [
         BrowserModule,
         AppRoutingModule,
@@ -27,4 +39,9 @@ import {FirebaseService} from "./services/firebase.service";
   providers: [FirebaseService],
   bootstrap: [AppComponent]
 })
-export class AppModule { }
+
+export class AppModule {
+    constructor() {
+
+    }
+}

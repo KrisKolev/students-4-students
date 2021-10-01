@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {AngularFireAuth} from '@angular/fire/compat/auth';
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 @Injectable({
   providedIn: 'root'
@@ -7,23 +7,25 @@ import {AngularFireAuth} from '@angular/fire/compat/auth';
 export class FirebaseService {
 
   isLoggedIn = false
-  constructor(public firebaseAuth : AngularFireAuth) { }
-  async signin(email: string, password : string){
-    await this.firebaseAuth.signInWithEmailAndPassword(email,password)
-        .then(res=>{
-          this.isLoggedIn = true
-          localStorage.setItem('user',JSON.stringify(res.user))
-        })
+  constructor() { }
+
+  public async signin(email: string, password : string){
+      const auth = getAuth();
+      signInWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+              // Signed in
+              const user = userCredential.user;
+              console.log(user)
+              // ...
+          })
+          .catch((error) => {
+              const errorCode = error.code;
+              const errorMessage = error.message;
+              console.log(error)
+          });
   }
-  async signup(email: string, password : string){
-    await this.firebaseAuth.createUserWithEmailAndPassword(email,password)
-        .then(res=>{
-          this.isLoggedIn = true
-          localStorage.setItem('user',JSON.stringify(res.user))
-        })
-  }
+
   logout(){
-    this.firebaseAuth.signOut()
-    localStorage.removeItem('user')
+    getAuth().signOut();
   }
 }
