@@ -35,7 +35,7 @@ export class AppComponent {
                     this.userService.getUser().latitude,
                     this.userService.getUser().longitude).subscribe(res => {
                     console.log(res);
-                    this.userService.setUserCoords(res.countryName, res.city);
+                    this.userService.setUserLocation(res.countryName, res.city);
                     console.log(this.userService.getUser());
                 });
             }));
