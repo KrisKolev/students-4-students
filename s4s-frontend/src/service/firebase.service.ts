@@ -40,7 +40,7 @@ export class FirebaseService {
 
         this.userService.setUserId(auth.currentUser.uid);
         this.userService.setEmail(auth.currentUser.email);
-        this.userService.setAccessToken(auth.currentUser.accessToken);
+        // this.userService.setAccessToken(auth.currentUser.accessToken);
     }
 
     logout() {
