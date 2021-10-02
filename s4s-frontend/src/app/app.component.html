@@ -1,40 +1,11 @@
 <mat-toolbar class="fix-nav" color="primary">
     <div class="container">
-        <span class="brandText"> {{title}} </span>
+        <span class="brandText">{{title}}</span>
     </div>
     <span class="nav-spacer"></span>
-    <mat-button-toggle class="login-button-header" (click)="open(content)">Login</mat-button-toggle>
+    <button mat-icon-button aria-label="Login" (click)="openLoginDialog()">
+        <mat-icon>login</mat-icon>
+    </button>
 </mat-toolbar>
 <br/>
 <router-outlet></router-outlet>
-<ng-template #content let-modal>
-    <div class="modal-header">
-        <h4 class="modal-title" id="modal-basic-title">Login</h4>
-        <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <div class="login-container">
-        <mat-form-field>
-            <mat-label>Enter your email</mat-label>
-            <input matInput placeholder="pat@example.com" [formControl]="email" required>
-            <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
-        </mat-form-field>
-
-        <mat-form-field>
-            <mat-label>Enter your password</mat-label>
-            <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="psw">
-            <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
-                <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-            </button>
-        </mat-form-field>
-
-
-    </div>
-
-    <div class="modal-footer">
-        <mat-button-toggle class="login-button"
-                           (click)="onSignin()">Login</mat-button-toggle>
-        <!--button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button-->
-    </div>
-</ng-template>
