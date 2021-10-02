@@ -10,6 +10,11 @@ import {HttpClientModule} from '@angular/common/http';
 import { RegisterFormComponent } from './register-form/register-form.component';
 import {FirebaseService} from '../service/firebase.service';
 import {initializeApp} from "firebase/app";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatInputModule} from "@angular/material/input";
 
 const firebaseConfig = {
     apiKey: "AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U",
@@ -33,7 +38,14 @@ const app = initializeApp(firebaseConfig);
         BrowserAnimationsModule,
         HttpClientModule,
         MatToolbarModule,
-        MatIconModule
+        MatIconModule,
+        MatButtonToggleModule,
+        FormsModule,
+        NgbModule,
+        MatFormFieldModule,
+        ReactiveFormsModule,
+        MatInputModule,
+        ReactiveFormsModule,
     ],
   providers: [FirebaseService],
   bootstrap: [AppComponent]

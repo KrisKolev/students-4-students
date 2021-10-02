@@ -10,26 +10,26 @@ export class FirebaseService {
   constructor() { }
 
   public async firebaseSignin(email: string, password : string) : Promise<boolean> {
+
+      var signResult = false;
       const auth = getAuth();
-      signInWithEmailAndPassword(auth, email, password)
+      await signInWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
               // Signed in
               const user = userCredential.user;
               console.log(user);
 
               localStorage.setItem('loggedInUser',JSON.stringify(user));
-
-              return true;
+              signResult = true;
               // ...
           })
           .catch((error) => {
               const errorCode = error.code;
               const errorMessage = error.message;
               console.log(error)
-              return false;
+              signResult = false;
           });
-
-      return false;
+    return signResult;
   }
 
   logout(){
