@@ -26,6 +26,7 @@ export class LoginDialogComponent {
                         this.email.setValue('');
                         this.pw.setValue('');
                         this.closeLoginDialog();
+                        this.firebaseService.login();
                     } else {
                         //Failed
                     }

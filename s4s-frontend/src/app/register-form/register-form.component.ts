@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {RegistrationService} from '../../service/registration.service';
 import {Router} from '@angular/router';
+import firebase from 'firebase/compat';
+import {FirebaseService} from '../../service/firebase.service';
 
 
 @Component({
@@ -21,7 +23,8 @@ export class RegisterFormComponent implements OnInit {
     }
 
     constructor(private registrationService: RegistrationService,
-                private router: Router) {
+                private router: Router,
+                private firebaseService: FirebaseService) {
     }
 
     getErrorMessage() {
@@ -33,7 +36,16 @@ export class RegisterFormComponent implements OnInit {
     async onRegister() {
         this.registrationService.register(this.email.value, this.psw.value).subscribe((res) => {
             console.log(res);
-            this.router.navigateByUrl('./');
+            this.router.navigateByUrl('/');
+            this.firebaseService.firebaseSignin(this.email.value, this.psw.value).then((res) => {
+                console.log(res);
+                if (res === true){
+                    //Successfull
+                    this.firebaseService.login();
+                } else {
+                    //Failed
+                }
+            });
         });
     }
 }
