@@ -7,6 +7,10 @@ const routes: Routes = [
         loadChildren: () => import('./landingpage/landingpage.module').then(m => m.LandingpageModule)
     },
     {
+        path: 'register',
+        loadChildren: () => import('./register-form/register-form.module').then(m => m.RegisterFormModule)
+    },
+    {
         path: '**',
         loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
     }
