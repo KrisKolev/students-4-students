@@ -20,7 +20,6 @@ export class LoginDialogComponent {
         this.firebaseService = firebaseService;
 
         dialogRef.afterClosed().subscribe(result => {
-            console.log(result);
 
             if (result === true) {
                 this.firebaseService.firebaseSignin(this.email.value, this.pw.value).then((res) => {
