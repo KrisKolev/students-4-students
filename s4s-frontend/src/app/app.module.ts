@@ -8,6 +8,10 @@ import {MatToolbarModule} from '@angular/material/toolbar';
 import {MatIconModule} from '@angular/material/icon';
 import {HttpClientModule} from '@angular/common/http';
 import { RegisterFormComponent } from './register-form/register-form.component';
+import {MatFormFieldModule} from "@angular/material/form-field";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
+import {ReactiveFormsModule} from "@angular/forms";
+import {MatInputModule} from "@angular/material/input";
 
 @NgModule({
   declarations: [
@@ -20,7 +24,11 @@ import { RegisterFormComponent } from './register-form/register-form.component';
         BrowserAnimationsModule,
         HttpClientModule,
         MatToolbarModule,
-        MatIconModule
+        MatIconModule,
+        MatFormFieldModule,
+        MatButtonToggleModule,
+        ReactiveFormsModule,
+        MatInputModule
     ],
   providers: [],
   bootstrap: [AppComponent]

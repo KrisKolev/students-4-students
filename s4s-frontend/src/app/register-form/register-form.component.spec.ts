@@ -10,7 +10,7 @@ describe('RegisterFormComponent', () => {
     TestBed.configureTestingModule({
       declarations: [ RegisterFormComponent ]
     })
-    .compileComponents();
+        .compileComponents();
   }));
 
   beforeEach(() => {
