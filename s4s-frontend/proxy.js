@@ -1,6 +1,6 @@
 var HttpsProxyAgent = require('https-proxy-agent');
 var proxyConfig = [{
-  context: 's4s-backend-0.0.1-SNAPSHOT/api/api',
+  context: 's4s-backend/api',
   target: 'http://localhost:8080',
   secure: false
 }];

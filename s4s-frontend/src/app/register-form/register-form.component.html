@@ -1,4 +1,4 @@
-<p>🌈 Register UI 🌈</p>
+<h1>Sign up</h1>
 <div class="register-container">
     <mat-form-field appearance="fill">
         <mat-label>Enter your email</mat-label>
@@ -9,17 +9,16 @@
 
     <mat-form-field appearance="fill">
         <mat-label>Enter your password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="psw">
-        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+        <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="psw" required>
+        <mat-button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-        </button>
+        </mat-button>
     </mat-form-field>
 
     <mat-form-field appearance="fill">
         <mat-label>Repeat your password</mat-label>
-        <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="psw">
+        <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="pswRepeat" required>
     </mat-form-field>
 
-
-    <mat-button-toggle class="register-button" (click)="onRegister()">Register</mat-button-toggle>
+    <button mat-raised-button color="primary" class="register-button" (click)="onRegister()">Sign up</button>
 </div>
