@@ -51,33 +51,13 @@ public class UserEndpoint {
 
             responseBuilder = Response.status(500);
             responseBuilder.entity(e.getMessage());
-            responseBuilder.header("Access-Control-Allow-Origin","*");
 
             return responseBuilder.build();
         }
 
         responseBuilder = Response.ok();
         responseBuilder.entity(userRecord);
-        responseBuilder.header("Access-Control-Allow-Origin","*");
 
-        return responseBuilder.build();
-    }
-
-    @POST
-    @Path("/login")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response loginUser(UserDTO userDTO) throws FirebaseAuthException {
-        Response.ResponseBuilder responseBuilder;
-        DatabaseAccess.createInstance();
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-
-        String token = auth.createCustomToken(userDTO.getUid());
-
-
-        responseBuilder = Response.ok();
-        //responseBuilder.entity(userRecord);
-        responseBuilder.header("Access-Control-Allow-Origin","*");
         return responseBuilder.build();
     }
 }

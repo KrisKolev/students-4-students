@@ -12,6 +12,9 @@ public class ApiEndpoint {
     @Produces("application/json")
     public Response getEcho() {
         //ToDo: Refactor Response & Access-Control-Allow-Origin should be adapted to developing and production scenarios
-        return Response.ok().entity("{\"message\": \"echo\"}").header("Access-Control-Allow-Origin","*").build();
+        Response.ResponseBuilder responseBuilder = Response.ok();
+        responseBuilder.entity("{\"message\": \"echo\"}");
+
+        return responseBuilder.build();
     }
 }
