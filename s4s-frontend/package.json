@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4200 --open --proxy-config proxy.js",
-    "build": "ng build --prod=true --outputPath=../s4s-backend/src/main/webapp/web --deleteOutputPath=true",
+    "build": "ng build --configuration production=true --outputPath=../s4s-backend/src/main/webapp/web --deleteOutputPath=true",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e"
