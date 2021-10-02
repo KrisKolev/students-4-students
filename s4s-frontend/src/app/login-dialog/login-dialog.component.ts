@@ -17,13 +17,10 @@ export class LoginDialogComponent {
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
                 private firebaseService: FirebaseService,
                 private router: Router) {
-        this.firebaseService = firebaseService;
 
         dialogRef.afterClosed().subscribe(result => {
-
             if (result === true) {
                 this.firebaseService.firebaseSignin(this.email.value, this.pw.value).then((res) => {
-                    console.log(res);
                     if (res === true){
                         //Successfull
                         this.email.setValue('');
