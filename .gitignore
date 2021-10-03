@@ -10,3 +10,4 @@
 *.war
 *.log
 *.json
+!universities.json
