@@ -15,6 +15,7 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatDialogModule} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {MatButtonModule} from '@angular/material/button';
+import {FlexLayoutModule} from '@angular/flex-layout';
 
 
 const firebaseConfig = {
@@ -36,6 +37,7 @@ const app = initializeApp(firebaseConfig);
         BrowserModule,
         AppRoutingModule,
         BrowserAnimationsModule,
+        FlexLayoutModule,
         HttpClientModule,
         MatToolbarModule,
         MatIconModule,

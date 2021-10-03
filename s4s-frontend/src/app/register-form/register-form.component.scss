@@ -1,14 +1,27 @@
-.register-container .mat-form-field + .mat-form-field {
-  margin-left: 16px;
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.register-button{
-  margin-left: 16px;
+mat-card {
+  width: 300px;
 }
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
 ::ng-deep {
-  .mat-form-field .mat-form-field-flex{
+  .mat-form-field {
+    width: 100% !important;
+  }
+
+  .mat-form-field .mat-form-field-flex {
     background-color: white;
   }
+
   .mat-button-toggle {
     background-color: white;
   }

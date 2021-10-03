@@ -1,5 +1,5 @@
 <mat-toolbar class="fix-nav" color="primary">
-    <div class="container">
+    <div class="topnav-container">
         <span class="brandText" routerLink="./">{{title}}</span>
     </div>
     <span class="nav-spacer"></span>
@@ -7,5 +7,7 @@
         <mat-icon>login</mat-icon>
     </button>
 </mat-toolbar>
-<br/>
-<router-outlet></router-outlet>
+<span class="router-container">
+    <router-outlet></router-outlet>
+</span>
+

@@ -1,6 +1,6 @@
 <h1 mat-dialog-title>Login</h1>
 
-<div mat-dialog-content>
+<div mat-dialog-content fxLayout="column">
     <mat-form-field>
         <mat-label>Enter your email</mat-label>
         <input matInput
@@ -22,9 +22,8 @@
             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
         </button>
     </mat-form-field>
-    <br/>
     <div style="text-align: center">
-        <a (click)="signUp()">Sign-up</a>
+        <a mat-button (click)="signUp()">Create an account.</a>
     </div>
 </div>
 
