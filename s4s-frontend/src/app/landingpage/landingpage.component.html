@@ -1,1 +1,19 @@
-<h1>LandingPage</h1>
+<span class="container">
+<mat-card>
+        <mat-card-title>Welcome to Students 4 Students!</mat-card-title>
+        <mat-card-subtitle> The Helper every newcomer needs!</mat-card-subtitle>
+    <mat-card-content>
+<ngb-carousel>
+  <ng-template ngbSlide *ngFor="let image of images">
+    <div class="picsum-img-wrapper">
+      <img [src]="image" alt="Random slide">
+    </div>
+    <div class="carousel-caption">
+      <h3>Enjoy!</h3>
+      <p>Example of The most popular places!</p>
+    </div>
+  </ng-template>
+</ngb-carousel>
+    </mat-card-content>
+    </mat-card>
+</span>

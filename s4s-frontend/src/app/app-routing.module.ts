@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
+import {LoginDialogComponent} from "./login-dialog/login-dialog.component";
 
 const routes: Routes = [
     {
-        path: '',
+        path: 'home',
         loadChildren: () => import('./landingpage/landingpage.module').then(m => m.LandingpageModule)
     },
     {

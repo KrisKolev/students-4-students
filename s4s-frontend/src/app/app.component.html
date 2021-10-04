@@ -1,13 +1,21 @@
-<mat-toolbar class="fix-nav" color="primary">
+<mat-toolbar class="mat-elevation-z6" color="primary">
     <div class="topnav-container">
         <span class="brandText" routerLink="./">{{title}}</span>
     </div>
-    <span class="nav-spacer"></span>
-    <button mat-icon-button aria-label="Login" (click)="openLoginDialog()">
-        <mat-icon>login</mat-icon>
-    </button>
+    <div class="spacer"></div>
+    <a mat-button routerLink="home">Home</a>
+    <a mat-button>About Us</a>
+
+    <form class="form-inline waves-light" mdbWavesEffect>
+        <div class="md-form my-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+        </div>
+    </form>
+    <a mat-raised-button color="warn" (click)="openLoginDialog()">Sign Up</a>
+
 </mat-toolbar>
-<span class="router-container">
+    <span class="router-container">
     <router-outlet></router-outlet>
-</span>
+        </span>
+
 

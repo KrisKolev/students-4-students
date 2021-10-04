@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component } from '@angular/core';
 import {BackendCheckService} from '../service/backend_check.service';
 import {GeolocationService} from '../service/geolocation.service';
 import {UserService} from '../service/user.service';

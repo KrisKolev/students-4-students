@@ -4,6 +4,7 @@ import {RegistrationService} from '../../service/registration.service';
 import {Router} from '@angular/router';
 import firebase from 'firebase/compat';
 import {FirebaseService} from '../../service/firebase.service';
+import {MatDialogRef} from "@angular/material/dialog";
 
 
 @Component({
