@@ -11,7 +11,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>s4s-backend</module>
         <module>s4s-frontend</module>
+        <module>s4s-backend</module>
     </modules>
 </project>
