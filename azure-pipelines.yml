@@ -22,7 +22,7 @@ steps:
   displayName: 'npm install and build'
 - task: Maven@3
   inputs:
-    mavenPomFile: 'pom.xml'
+    mavenPomFile: 's4s-backend/pom.xml'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     testRunTitle: 'Fontys-Technikum_TestRun'
