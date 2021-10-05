@@ -13,10 +13,22 @@ steps:
 - task: NodeTool@0
   inputs:
     versionSpec: '16.9'
-  displayName: 'Install Node.js'
+    checkLatest: true
 
 - script: |
     npm install -g @angular/cli
     npm install
     ng build --prod
   displayName: 'npm install and build'
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    testRunTitle: 'Fontys-Technikum_TestRun'
+    javaHomeOption: 'JDKVersion'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: true
+    sqMavenPluginVersionChoice: 'latest'
