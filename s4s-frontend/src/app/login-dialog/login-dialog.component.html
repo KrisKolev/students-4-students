@@ -28,6 +28,6 @@
 </div>
 
 <div mat-dialog-actions align="end">
-    <button mat-raised-button color="primary" [mat-dialog-close]="true" cdkFocusInitial>Login</button>
+    <button mat-raised-button color="primary" (click)="loginUser()" cdkFocusInitial>Login</button>
     <button mat-raised-button mat-dialog-close  (click)="closeLoginDialog()">Abort</button>
 </div>

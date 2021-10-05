@@ -17,20 +17,19 @@ export class LoginDialogComponent {
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
                 private firebaseService: FirebaseService,
                 private router: Router) {
+    }
 
-        dialogRef.afterClosed().subscribe(result => {
-            if (result === true) {
-                this.firebaseService.firebaseSignin(this.email.value, this.pw.value).then((res) => {
-                    if (res === true){
-                        //Successfull
-                        this.email.setValue('');
-                        this.pw.setValue('');
-                        this.closeLoginDialog();
-                        this.firebaseService.login();
-                    } else {
-                        //Failed
-                    }
-                });
+    async loginUser(){
+        this.firebaseService.firebaseSignin(this.email.value, this.pw.value).then((res) => {
+            if (res === true){
+                //Successfull
+                this.email.setValue('');
+                this.pw.setValue('');
+                this.closeLoginDialog();
+                this.firebaseService.login();
+                this.dialogRef.close();
+            } else {
+                //Failed
             }
         });
     }

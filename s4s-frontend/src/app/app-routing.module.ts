@@ -4,7 +4,7 @@ import {LoginDialogComponent} from "./login-dialog/login-dialog.component";
 
 const routes: Routes = [
     {
-        path: 'home',
+        path: '',
         loadChildren: () => import('./landingpage/landingpage.module').then(m => m.LandingpageModule)
     },
     {
