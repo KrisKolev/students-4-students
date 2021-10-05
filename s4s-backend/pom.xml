@@ -58,6 +58,14 @@
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
                 <configuration>
+                    <webResources>
+                        <resource>
+                            <directory>${basedir}/src/main/webapp/web/</directory>
+                            <filtering>false</filtering>
+							<targetPath>app</targetPath>
+                        </resource>
+                    </webResources>
+                    <packagingExcludes>/web/**</packagingExcludes>
                     <warName>${project.artifactId}</warName>
                     <webXml>src\main\webapp\WEB-INF\web.xml</webXml>
                 </configuration>

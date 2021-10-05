@@ -6,37 +6,41 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 
 public class StaticServeServlet extends HttpServlet {
     
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        PrintWriter writer = response.getWriter();
+        OutputStream writer = response.getOutputStream();
 
         String path = request.getRequestURI().substring(request.getContextPath().length());
-
         path = fixPaths(path);
 
         addMimeType(response, path);
 
         InputStream resource = getServletContext().getResourceAsStream(path);
         if(resource == null){
-            resource = getServletContext().getResourceAsStream("/web/index.html");
+            resource = getServletContext().getResourceAsStream("/app/index.html");
             response.setHeader("Content-Type", "text/html");
         }
         byte[] bytes = resource.readAllBytes();
 
-        writer.write(new String(bytes));
+        writer.write(bytes);
         writer.flush();
     }
 
     private String fixPaths(String path) {
-        if(path == null || path.trim().isEmpty() || "/web".equalsIgnoreCase(path) || "/web/".equalsIgnoreCase(path)){
-            path = "/web/index.html";
-        } else if(path != null && path.contains("/web/web")){
-            path = path.replace("/web/web", "/web");
+        String input = path.replace("web", "").replace("//", "");
+        String result = "/app/";
+
+        if(input == null || input.trim().isEmpty() || input.endsWith("/")) {
+            result += "index.html";
+        } else{
+            result += input;
         }
-        return path;
+
+        return result;
     }
 
     private void addMimeType(HttpServletResponse response, String path) {
@@ -49,6 +53,13 @@ public class StaticServeServlet extends HttpServlet {
                     break;
                 case "css":
                     contentType = "text/css";
+                    break;
+                case "jpeg":
+                case "jpg":
+                    contentType = "image/jpeg";
+                    break;
+                case "png":
+                    contentType = "image/png";
                     break;
                 default:
                     contentType = "text/html";
