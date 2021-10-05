@@ -29,9 +29,20 @@ public class UserEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(UserDTO userDTO) {
-        //TODO Check email domain
 
-        checkEmailDomain(userDTO.getEmail());
+        Response.ResponseBuilder responseBuilder;
+
+        if(!UniversityData.initialized){
+            UniversityData.extractUniversities();
+        }
+
+        //check the email domain.
+        Boolean res = checkEmailDomain(userDTO.getEmail());
+        if(!res){
+            responseBuilder = Response.status(500);
+            responseBuilder.entity("Email domain cannot be verified!");
+            return responseBuilder.build();
+        }
 
         UserRecord.CreateRequest request = new CreateRequest()
                 .setEmail(userDTO.getEmail())
@@ -40,7 +51,6 @@ public class UserEndpoint {
                 .setDisplayName(userDTO.getFirstname() + " " + userDTO.getLastname())
                 .setDisabled(false);
 
-        Response.ResponseBuilder responseBuilder;
 
         UserRecord userRecord = null;
         try {
@@ -69,20 +79,7 @@ public class UserEndpoint {
     }
 
     private boolean checkEmailDomain(String email){
-
-        UniversityData.extractUniversities();
-
-        List<List<String>> domains = new ArrayList<>();
-
-        for (University u : UniversityData.universities){
-            domains.add(u.getDomains());
-        }
-
-        List<String> d = domains.stream().flatMap(List::stream).collect(Collectors.toList());
-
-        email = email.substring(email.indexOf('@'));
-
-        return d.contains(email);
-
+        String emailDomain = email.substring(email.indexOf('@')).replace("@","");
+        return UniversityData.uniqueDomains.contains(emailDomain);
     }
 }

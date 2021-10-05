@@ -12,10 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class UniversityData {
-    public static List<University> universities = new ArrayList<>();
+    public static List<University> universities;
+    public static List<String> uniqueDomains;
+
+    public static boolean initialized = false;
 
     public static void extractUniversities() {
         try {
+            initialized = true;
             InputStream universityJsonStream = UniversityData.class.getResourceAsStream("../../../universities.json");
 
             if(universityJsonStream==null)
@@ -25,6 +29,8 @@ public class UniversityData {
                     new InputStreamReader(universityJsonStream , StandardCharsets.UTF_8));
 
             if(jsonObjects!=null){
+                universities = new ArrayList<>();
+                uniqueDomains = new ArrayList<>();
                 jsonObjects.forEach(university->{
                     JsonObject newUniversityObject = (JsonObject) university;
                     University newUniversity = new University();
@@ -40,9 +46,17 @@ public class UniversityData {
                     websites.forEach(webpage-> newUniversity.getWebsites().add(webpage.getAsString()));
 
                     universities.add(newUniversity);
+
+                    for (String domain : newUniversity.getDomains()){
+                        uniqueDomains.add(domain);
+                    }
+
+                    initialized = true;
+
                 });
             }
         } catch (Exception e) {
+            initialized = false;
             e.printStackTrace();
         }
     }
