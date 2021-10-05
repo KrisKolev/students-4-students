@@ -6,12 +6,19 @@
     <a mat-button routerLink="">Home</a>
     <a mat-button>About Us</a>
 
-    <form class="form-inline waves-light" mdbWavesEffect>
-        <div class="md-form my-0">
-            <input class="form-control mr-sm-2" type="text" placeholder="Search">
-        </div>
+
+    <form class="example-form">
+        <mat-form-field>
+            <span matPrefix> </span>
+            <input type="text" matInput placeholder="Search" name= "search" [(ngModel)]= "search">
+            <button matSuffix mat-button><mat-icon >search</mat-icon></button>
+        </mat-form-field>
     </form>
-    <a mat-raised-button color="warn" (click)="openLoginDialog()">Sign In</a>
+
+    <button mat-button>
+        <mat-icon>add_location_alt</mat-icon>
+    </button>
+    <a mat-raised-button (click)="openLoginDialog()">Sign In</a>
 
 </mat-toolbar>
     <span class="router-container">

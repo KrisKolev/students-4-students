@@ -12,6 +12,7 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 })
 export class AppComponent {
     title = 'Students4Students';
+    search : String ="";
 
     constructor(private backendCheckService: BackendCheckService,
                 private geolocationService: GeolocationService,
