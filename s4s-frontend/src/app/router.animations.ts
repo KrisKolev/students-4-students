@@ -1,5 +1,7 @@
 import { trigger, transition, style, animate, query, stagger, group, keyframes, state } from '@angular/animations';
 
+//animations to be used
+
 export function moveIn() {
    return trigger('moveIn', [
       state('void', style({})),
@@ -14,6 +16,7 @@ export function moveIn() {
       // ])
    ]);
 }
+
 
 export function fallIn() {
    return trigger('fallIn', [
