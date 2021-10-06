@@ -79,6 +79,10 @@ public class UserEndpoint {
     }
 
     private boolean checkEmailDomain(String email){
+
+        if(email==null || email =="" || !email.contains("@"))
+            return false;
+
         String emailDomain = email.substring(email.indexOf('@')).replace("@","");
         return UniversityData.uniqueDomains.contains(emailDomain);
     }

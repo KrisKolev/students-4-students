@@ -34,7 +34,7 @@ export class RegisterFormComponent implements OnInit {
         }
     }
 
-    async onRegister() {
+    onRegister() {
         this.registrationService.register(this.email.value, this.psw.value).subscribe((res) => {
             console.log(res);
             this.router.navigateByUrl('/');
