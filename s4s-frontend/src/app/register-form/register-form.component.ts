@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
-import {RegistrationService} from '../../service/registration.service';
 import {Router} from '@angular/router';
-import firebase from 'firebase/compat';
-import {FirebaseService} from '../../service/firebase.service';
-import {MatDialogRef} from "@angular/material/dialog";
+import {RegistrationService} from "../../service/backend/registration.service";
+import {FirebaseService} from "../../service/external/firebase.service";
 
 
 @Component({
@@ -38,6 +36,7 @@ export class RegisterFormComponent implements OnInit {
         this.registrationService.register(this.email.value, this.psw.value).subscribe((res) => {
             console.log(res);
             this.router.navigateByUrl('/');
+
             this.firebaseService.firebaseSignin(this.email.value, this.psw.value).then((res) => {
                 console.log(res);
                 if (res === true){

@@ -1,14 +1,12 @@
 package com.s4s.endpoint;
 
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.s4s.database.DatabaseAccess;
 import com.s4s.database.UniversityData;
-import com.s4s.database.model.University;
-import com.s4s.dto.UserDTO;
+import com.s4s.dto.request.UserDTO;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -16,10 +14,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Path("/user")
 public class UserEndpoint {
