@@ -29,7 +29,6 @@ public class UserEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(UserDTO userDTO) {
-
         Response.ResponseBuilder responseBuilder;
 
         if(!UniversityData.initialized){
@@ -37,7 +36,7 @@ public class UserEndpoint {
         }
 
         //check the email domain.
-        Boolean res = checkEmailDomain(userDTO.getEmail());
+        boolean res = checkEmailDomain(userDTO.getEmail());
         if(!res){
             responseBuilder = Response.status(500);
             responseBuilder.entity("Email domain cannot be verified!");
@@ -51,8 +50,7 @@ public class UserEndpoint {
                 .setDisplayName(userDTO.getFirstname() + " " + userDTO.getLastname())
                 .setDisabled(false);
 
-
-        UserRecord userRecord = null;
+        UserRecord userRecord;
         try {
             DatabaseAccess.createInstance();
             userRecord = FirebaseAuth.getInstance().createUser(request);
@@ -60,6 +58,7 @@ public class UserEndpoint {
             com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
             dbUser.setFirstname(userDTO.getFirstname());
             dbUser.setLastname(userDTO.getLastname());
+            dbUser.setNickname(userDTO.getNickname());
             dbUser.setEmail(userDTO.getEmail());
             dbUser.setUid(userRecord.getUid());
             DatabaseAccess.saveOrInsertDocument(dbUser,dbUser.getUid());
@@ -80,7 +79,7 @@ public class UserEndpoint {
 
     private boolean checkEmailDomain(String email){
 
-        if(email==null || email =="" || !email.contains("@"))
+        if(email == null || email.equals("") || !email.contains("@"))
             return false;
 
         String emailDomain = email.substring(email.indexOf('@')).replace("@","");

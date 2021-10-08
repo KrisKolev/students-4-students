@@ -15,13 +15,14 @@ export class RegistrationService {
     constructor(public router: Router, private http: HttpClient) {
     }
 
-    register(email: string, password: string) {
+    register(email: string, password: string, firstname: string, lastname: string, nickname: string) {
         return this.http.post<any>(environment.baseUrl + 'user/registration',
             {
                 'email': email,
                 'password': password,
-                'firstname': '',
-                'lastname': '',
+                'firstname': firstname,
+                'lastname': lastname,
+                'nickname': nickname,
                 'uid': ''
             }, httpOptions);
     }
