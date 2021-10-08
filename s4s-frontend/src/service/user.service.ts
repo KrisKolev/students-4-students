@@ -38,4 +38,10 @@ export class UserService {
     public setAccessToken(accessToken: string) {
         this.userBehaviorSubject.value.accessToken = accessToken;
     }
+
+    public isUserLoggedIn() {
+        return (this.userBehaviorSubject.value !== undefined
+            && this.userBehaviorSubject.value !== null
+            && localStorage.getItem('loggedInUser') !== null)
+    }
 }

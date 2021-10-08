@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
-import {BackendCheckService} from '../service/backend_check.service';
-import {GeolocationService} from '../service/geolocation.service';
+import {Component} from '@angular/core';
+import {HealthCheckService} from '../service/backend/healthCheck.service';
+import {GeoLocationService} from '../service/external/geoLocation.service';
 import {UserService} from '../service/user.service';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
@@ -12,10 +12,10 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 })
 export class AppComponent {
     title = 'Students4Students';
-    search : String ="";
+    search: String = "";
 
-    constructor(private backendCheckService: BackendCheckService,
-                private geolocationService: GeolocationService,
+    constructor(private healthCheckService: HealthCheckService,
+                private geolocationService: GeoLocationService,
                 public userService: UserService,
                 public loginDialog: MatDialog) {
         this.checkBackendConnection();
@@ -23,7 +23,7 @@ export class AppComponent {
     }
 
     private checkBackendConnection() {
-        this.backendCheckService.getEcho().subscribe(res => {
+        this.healthCheckService.getEcho().subscribe(res => {
             console.log(res);
         });
     }

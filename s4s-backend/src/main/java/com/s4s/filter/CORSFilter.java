@@ -12,27 +12,31 @@ public class CORSFilter implements Filter {
 
     }
 
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain chain)
-        throws IOException, ServletException {
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
+            throws IOException, ServletException {
+        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
 
-        HttpServletRequest request = (HttpServletRequest) servletRequest;
-        System.out.println("CORSFilter HTTP Request: " + request.getMethod());
+        StringBuilder sb = new StringBuilder("CORSFilter: ");
+        sb.append(httpServletRequest.getMethod()).append(" ");
+        sb.append(httpServletRequest.getRequestURL());
+        sb.append(httpServletRequest.getRequestURI());
+        System.out.println(sb);
 
         // Authorize (allow) all domains to consume the content
-        ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Origin", "*");
-        ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Methods","GET, OPTIONS, HEAD, PUT, POST");
-        ((HttpServletResponse) servletResponse).addHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Origin", "*");
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Methods", "GET, OPTIONS, HEAD, PUT, POST");
+        ((HttpServletResponse) response).addHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 
-        HttpServletResponse resp = (HttpServletResponse) servletResponse;
+        HttpServletResponse resp = (HttpServletResponse) response;
 
         // For HTTP OPTIONS verb/method reply with ACCEPTED status code -- per CORS handshake
-        if (request.getMethod().equals("OPTIONS")) {
+        if (httpServletRequest.getMethod().equals("OPTIONS")) {
             resp.setStatus(HttpServletResponse.SC_ACCEPTED);
             return;
         }
 
         // pass the request along the filter chain
-        chain.doFilter(request, servletResponse);
+        chain.doFilter(request, response);
     }
 
     @Override

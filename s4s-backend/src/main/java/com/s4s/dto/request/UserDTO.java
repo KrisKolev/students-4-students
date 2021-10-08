@@ -1,4 +1,4 @@
-package com.s4s.dto;
+package com.s4s.dto.request;
 
 public class UserDTO {
     private String firstname;

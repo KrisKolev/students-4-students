@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {FirebaseService} from '../../service/firebase.service';
+import {FirebaseService} from '../../service/external/firebase.service';
 import {FormControl, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
