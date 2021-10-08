@@ -1,8 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {FormControl, Validators} from '@angular/forms';
+import {RegistrationService} from '../../service/registration.service';
 import {Router} from '@angular/router';
-import {RegistrationService} from "../../service/backend/registration.service";
-import {FirebaseService} from "../../service/external/firebase.service";
+import firebase from 'firebase/compat';
+import {FirebaseService} from '../../service/firebase.service';
+import {MatDialogRef} from "@angular/material/dialog";
+
 
 @Component({
     selector: 'app-register-form',

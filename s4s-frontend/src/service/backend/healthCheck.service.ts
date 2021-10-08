@@ -5,6 +5,10 @@ import {BackendClientService} from "../backendClientService";
 export class HealthCheckService extends BackendClientService {
 
     getEcho() {
+<<<<<<< HEAD
         return this.createGetCall('echo');
+=======
+        return super.createGetCall('echo');
+>>>>>>> feature/MessagingRework
     }
 }
