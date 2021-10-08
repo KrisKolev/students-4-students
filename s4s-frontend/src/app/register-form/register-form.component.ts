@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {RegistrationService} from '../../service/registration.service';
 import {Router} from '@angular/router';
-import {FirebaseService} from '../../service/firebase.service';
+import {RegistrationService} from "../../service/backend/registration.service";
+import {FirebaseService} from "../../service/external/firebase.service";
 
 @Component({
     selector: 'app-register-form',
