@@ -40,8 +40,4 @@ public class ResponseHelper {
     public javax.ws.rs.core.Response build(){
         return this.jaxResponseBuilder.build();
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> feature/MessagingRework

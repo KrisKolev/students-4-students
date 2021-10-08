@@ -12,8 +12,4 @@ public enum Info {
         this.code = code;
         this.defaultMessage = defaultMessage;
     }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> feature/MessagingRework
