@@ -6,7 +6,9 @@ import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.s4s.database.DatabaseAccess;
 import com.s4s.database.UniversityData;
+import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.request.UserDTO;
+import com.s4s.dto.response.Info;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -23,8 +25,6 @@ public class UserEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(UserDTO userDTO) {
-        Response.ResponseBuilder responseBuilder;
-
         if(!UniversityData.initialized){
             UniversityData.extractUniversities();
         }
@@ -32,9 +32,7 @@ public class UserEndpoint {
         //check the email domain.
         boolean res = checkEmailDomain(userDTO.getEmail());
         if(!res){
-            responseBuilder = Response.status(500);
-            responseBuilder.entity("Email domain cannot be verified!");
-            return responseBuilder.build();
+            return new ResponseHelper(Info.FAILURE,"Email domain cannot be verified!" ).build();
         }
 
         UserRecord.CreateRequest request = new CreateRequest()
@@ -58,17 +56,10 @@ public class UserEndpoint {
             DatabaseAccess.saveOrInsertDocument(dbUser,dbUser.getUid());
         } catch (FirebaseAuthException e) {
             e.printStackTrace();
-
-            responseBuilder = Response.status(500);
-            responseBuilder.entity(e.getMessage());
-
-            return responseBuilder.build();
+            return new ResponseHelper(Info.FAILURE, e.getMessage()).build();
         }
 
-        responseBuilder = Response.ok();
-        responseBuilder.entity(userRecord);
-
-        return responseBuilder.build();
+        return new ResponseHelper(Info.SUCCESS, userRecord).build();
     }
 
     private boolean checkEmailDomain(String email){
