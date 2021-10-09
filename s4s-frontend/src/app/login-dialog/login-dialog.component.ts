@@ -1,8 +1,9 @@
 import {Component} from '@angular/core';
-import {FirebaseService} from '../../service/external/firebase.service';
+import {FirebaseService} from '../../service/http/external/firebase.service';
 import {FormControl, Validators} from '@angular/forms';
 import {MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
+import {UserAuthService} from "../../service/userAuthService";
 
 @Component({
     selector: 'app-login-dialog',
@@ -15,18 +16,17 @@ export class LoginDialogComponent {
     pw = new FormControl('');
 
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
-                private firebaseService: FirebaseService,
+                private userAuthService: UserAuthService,
                 private router: Router) {
     }
 
     async loginUser(){
-        this.firebaseService.firebaseSignin(this.email.value, this.pw.value).then((res) => {
+        this.userAuthService.login(this.email.value, this.pw.value).then((res) => {
             if (res === true){
                 //Successfull
                 this.email.setValue('');
                 this.pw.setValue('');
                 this.closeLoginDialog();
-                this.firebaseService.login();
                 this.dialogRef.close();
             } else {
                 //Failed

@@ -3,8 +3,8 @@ import {NgModule} from '@angular/core';
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {HttpClientModule} from '@angular/common/http';
-import {FirebaseService} from '../service/external/firebase.service';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {FirebaseService} from '../service/http/external/firebase.service';
 import {initializeApp} from 'firebase/app';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatFormFieldModule} from '@angular/material/form-field';
@@ -16,6 +16,7 @@ import {MatDialogModule} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {MatButtonModule} from '@angular/material/button';
 import {FlexLayoutModule} from '@angular/flex-layout';
+import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service";
 
 
 const firebaseConfig = {
@@ -50,7 +51,7 @@ const app = initializeApp(firebaseConfig);
         MatInputModule,
         ReactiveFormsModule,
     ],
-    providers: [FirebaseService],
+    providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent],
     bootstrap: [AppComponent]
 })

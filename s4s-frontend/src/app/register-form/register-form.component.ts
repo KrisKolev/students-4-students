@@ -1,8 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {RegistrationService} from "../../service/backend/registration.service";
-import {FirebaseService} from "../../service/external/firebase.service";
+import {RegistrationService} from "../../service/http/backend/registration.service";
+import {UserAuthService} from "../../service/userAuthService";
 
 
 @Component({
@@ -17,9 +17,8 @@ export class RegisterFormComponent implements OnInit {
     ngOnInit(): void {
     }
 
-    constructor(private registrationService: RegistrationService,
-                private router: Router,
-                private firebaseService: FirebaseService) {
+    constructor(private router: Router,
+                private userAuthService: UserAuthService) {
 
         this.signUpForm = new FormGroup({
             firstname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
@@ -47,16 +46,15 @@ export class RegisterFormComponent implements OnInit {
         let lastname = this.signUpForm.get('lastname').value;
         let nickname = this.signUpForm.get('nickname').value;
 
-        this.registrationService.register(email, password, firstname, lastname, nickname).subscribe((res) => {
+        this.userAuthService.register(email, password, firstname, lastname, nickname).subscribe((res) => {
             console.log(res);
             this.router.navigateByUrl('/');
 
-            this.firebaseService.firebaseSignin(email, password).then((res) => {
+            this.userAuthService.login(email, password).then((res) => {
                 console.log(res);
 
                 if (res === true) {
                     //Successfull
-                    this.firebaseService.login();
                 } else {
                     //Failed
                 }
