@@ -5,7 +5,7 @@ import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.s4s.database.DatabaseAccess;
-import com.s4s.database.UniversityData;
+import com.s4s.database.UniversityAccess;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.request.UserDTO;
 import com.s4s.dto.response.Info;
@@ -25,13 +25,7 @@ public class UserEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(UserDTO userDTO) {
-        if(!UniversityData.initialized){
-            UniversityData.extractUniversities();
-        }
-
-        //check the email domain.
-        boolean res = checkEmailDomain(userDTO.getEmail());
-        if(!res){
+        if(!UniversityAccess.isValidEmailDomain(userDTO.getEmail())){
             return new ResponseHelper(Info.FAILURE,"Email domain cannot be verified!" ).build();
         }
 
@@ -60,14 +54,5 @@ public class UserEndpoint {
         }
 
         return new ResponseHelper(Info.SUCCESS, userRecord).build();
-    }
-
-    private boolean checkEmailDomain(String email){
-
-        if(email == null || email.equals("") || !email.contains("@"))
-            return false;
-
-        String emailDomain = email.substring(email.indexOf('@')).replace("@","");
-        return UniversityData.uniqueDomains.contains(emailDomain);
     }
 }
