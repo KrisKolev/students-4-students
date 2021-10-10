@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
-import {BackendCheckService} from '../service/backend_check.service';
-import {GeolocationService} from '../service/geolocation.service';
-import {UserService} from '../service/user.service';
+import {Component} from '@angular/core';
+import {HealthCheckService} from '../service/http/backend/healthCheck.service';
+import {GeoLocationService} from '../service/http/external/geoLocation.service';
+import {UserAuthService} from '../service/userAuthService';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
+import {getAuth, onAuthStateChanged } from "firebase/auth";
 
 @Component({
     selector: 'app-root',
@@ -12,19 +13,19 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 })
 export class AppComponent {
     title = 'Students4Students';
-    search : String ="";
+    search: String = "";
 
-    constructor(private backendCheckService: BackendCheckService,
-                private geolocationService: GeolocationService,
-                public userService: UserService,
+    constructor(private healthCheckService: HealthCheckService,
+                private geolocationService: GeoLocationService,
+                public userAuthService: UserAuthService,
                 public loginDialog: MatDialog) {
         this.checkBackendConnection();
         this.initGeolocation();
     }
 
     private checkBackendConnection() {
-        this.backendCheckService.getEcho().subscribe(res => {
-            console.log(res);
+        this.healthCheckService.getEcho().subscribe(res => {
+            //TODO React in case of failure
         });
     }
 
@@ -33,14 +34,14 @@ export class AppComponent {
             console.log('geolocation is not supported!');
         } else {
             navigator.geolocation.getCurrentPosition((position => {
-                this.userService.setUserCoords(String(position.coords.latitude), String(position.coords.longitude));
+                this.userAuthService.setUserCoords(String(position.coords.latitude), String(position.coords.longitude));
 
                 this.geolocationService.getGeoInformation(
-                    this.userService.getUser().latitude,
-                    this.userService.getUser().longitude).subscribe(res => {
+                    this.userAuthService.getUser().latitude,
+                    this.userAuthService.getUser().longitude).subscribe(res => {
                     console.log(res);
-                    this.userService.setUserLocation(res.countryName, res.city);
-                    console.log(this.userService.getUser());
+                    this.userAuthService.setUserLocation(res.countryName, res.city);
+                    console.log(this.userAuthService.getUser());
                 });
             }));
         }

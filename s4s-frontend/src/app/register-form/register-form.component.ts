@@ -1,10 +1,8 @@
 import {Component, OnInit} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
-import {RegistrationService} from '../../service/registration.service';
+import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import firebase from 'firebase/compat';
-import {FirebaseService} from '../../service/firebase.service';
-import {MatDialogRef} from "@angular/material/dialog";
+import {RegistrationService} from "../../service/http/backend/registration.service";
+import {UserAuthService} from "../../service/userAuthService";
 
 
 @Component({
@@ -13,36 +11,50 @@ import {MatDialogRef} from "@angular/material/dialog";
     styleUrls: ['./register-form.component.scss']
 })
 export class RegisterFormComponent implements OnInit {
-
-    //declarations
     hidePassword = true;
-    email = new FormControl('', [Validators.required, Validators.email]);
-    psw = new FormControl('', [Validators.required]);
-    pswRepeat = new FormControl('', [Validators.required]);
+    signUpForm: FormGroup;
 
     ngOnInit(): void {
     }
 
-    constructor(private registrationService: RegistrationService,
-                private router: Router,
-                private firebaseService: FirebaseService) {
+    constructor(private router: Router,
+                private userAuthService: UserAuthService) {
+
+        this.signUpForm = new FormGroup({
+            firstname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
+            lastname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
+            nickname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(50)]),
+            email: new FormControl('', [Validators.required, Validators.email]),
+            password: new FormControl('', [Validators.required, Validators.min(6)]),
+            passwordRepeat: new FormControl('', [Validators.required, Validators.min(6)])
+        });
+
     }
 
-    getErrorMessage() {
-        if (this.email.hasError('required')) {
-            return 'You must enter a value';
-        }
+    public hasError = (controlName: string, errorName: string) => {
+        return this.signUpForm.controls[controlName].hasError(errorName);
     }
 
-    onRegister() {
-        this.registrationService.register(this.email.value, this.psw.value).subscribe((res) => {
+    onAbort(){
+        this.router.navigateByUrl('/');
+    }
+
+    onSignUp() {
+        let email = this.signUpForm.get('email').value;
+        let password = this.signUpForm.get('password').value;
+        let firstname = this.signUpForm.get('firstname').value;
+        let lastname = this.signUpForm.get('lastname').value;
+        let nickname = this.signUpForm.get('nickname').value;
+
+        this.userAuthService.register(email, password, firstname, lastname, nickname).subscribe((res) => {
             console.log(res);
             this.router.navigateByUrl('/');
-            this.firebaseService.firebaseSignin(this.email.value, this.psw.value).then((res) => {
+
+            this.userAuthService.login(email, password).then((res) => {
                 console.log(res);
-                if (res === true){
+
+                if (res === true) {
                     //Successfull
-                    this.firebaseService.login();
                 } else {
                     //Failed
                 }
