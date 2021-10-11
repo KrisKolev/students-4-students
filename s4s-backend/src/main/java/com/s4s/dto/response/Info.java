@@ -2,7 +2,8 @@ package com.s4s.dto.response;
 
 public enum Info {
 
-    SUCCESS(200, "Request was successfull."),
+    SUCCESS(200, "Request was successful."),
+    UNAUTHORIZED(400, "Request is unauthorized."),
     FAILURE(500, "Request failed.");
 
     public final int code;
