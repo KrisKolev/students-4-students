@@ -22,7 +22,7 @@ steps:
   displayName: 'npm install and build'
 - task: Maven@3
   inputs:
-    mavenPomFile: 's4s-backend/pom.xml'
+    mavenPomFile: 'pom.xml'
     publishJUnitResults: true
     testResultsFiles: '**/surefire-reports/TEST-*.xml'
     javaHomeOption: 'JDKVersion'
