@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import {LoginDialogComponent} from "./login-dialog/login-dialog.component";
 
 const routes: Routes = [
     {
@@ -10,6 +9,10 @@ const routes: Routes = [
     {
         path: 'register',
         loadChildren: () => import('./register-form/register-form.module').then(m => m.RegisterFormModule)
+    },
+    {
+        path: 'manageSight',
+        loadChildren: () => import('./manage-sight-dialog/manage-sight-dialog.module').then(m => m.ManageSightDialogModule)
     },
     {
         path: '**',

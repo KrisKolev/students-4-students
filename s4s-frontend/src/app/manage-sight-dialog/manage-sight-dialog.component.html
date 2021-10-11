@@ -1,0 +1,77 @@
+<span class="containerAddSight">
+    <mat-card class="mat-elevation-z6">
+        <mat-card-title>Add new Sight</mat-card-title>
+        <br/>
+        <mat-card-content>
+            <form (ngSubmit)="onSightAdd()" [formGroup]="addSightForm">
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter the sight name</mat-label>
+                    <input formControlName="sightName" matInput placeholder="Ernst-Happel Stadium" required>
+                    <mat-error *ngIf="hasError('sightName', 'required')">Name is required</mat-error>
+                    <mat-error *ngIf="hasError('sightName', 'minlength')">Firstname minimum length is 2</mat-error>
+                    <mat-error *ngIf="hasError('sightName', 'maxlength')">Firstname maximum length is 200</mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter the street address</mat-label>
+                    <input formControlName="address" matInput placeholder="Meiereistraße 7" required>
+                    <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
+                    <mat-error *ngIf="hasError('address', 'minlength')">Address minimum length is 2</mat-error>
+                    <mat-error *ngIf="hasError('address', 'maxlength')">Address maximum length is 200</mat-error>
+                </mat-form-field>
+
+                <mat-grid-list cols="3" rowHeight="100px">
+
+                         <mat-grid-tile class="form-tile">
+                           <mat-form-field class="example-full-width">
+                            <input formControlName="country" type="text" placeholder="Country" aria-label="Country" matInput [matAutocomplete]="auto">
+                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+                              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                                {{ option.name }}
+                              </mat-option>
+                            </mat-autocomplete>
+
+                           <mat-error *ngIf="hasError('country', 'required')">Country is required</mat-error>
+                            <mat-error *ngIf="hasError('country', 'minlength')">Country minimum length is 2</mat-error>
+                            <mat-error *ngIf="hasError('country', 'maxlength')">Country maximum length is 50</mat-error>
+
+                          </mat-form-field>
+                         </mat-grid-tile>
+
+                    <mat-grid-tile>
+                         <mat-form-field appearance="outline">
+                            <mat-label>Enter postal code</mat-label>
+                            <input formControlName="postalCode" matInput placeholder="1020" required>
+                            <mat-error *ngIf="hasError('postalCode', 'required')">Postal Code is required</mat-error>
+                            <mat-error *ngIf="hasError('postalCode', 'minlength')">City minimum length is 3</mat-error>
+                            <mat-error *ngIf="hasError('postalCode', 'maxlength')">City maximum length is 12</mat-error>
+                        </mat-form-field>
+                     </mat-grid-tile>
+
+                    <mat-grid-tile class="form-tile">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Enter city</mat-label>
+                            <input formControlName="city" matInput placeholder="Vienna" required>
+                            <mat-error *ngIf="hasError('city', 'required')">City is required</mat-error>
+                            <mat-error *ngIf="hasError('city', 'minlength')">City minimum length is 2</mat-error>
+                            <mat-error *ngIf="hasError('city', 'maxlength')">City maximum length is 50</mat-error>
+                        </mat-form-field>
+                    </mat-grid-tile>
+
+                </mat-grid-list>
+
+
+                <mat-card-actions>
+                    <button [disabled]="!addSightForm.valid"
+                            color="primary" mat-raised-button>
+                        Add Sight
+                    </button>
+                     <button (click)="onAbort()" color="warn" mat-stroked-button>
+                         Abort
+                     </button>
+                </mat-card-actions>
+            </form>
+        </mat-card-content>
+    </mat-card>
+</span>

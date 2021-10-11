@@ -11,3 +11,4 @@
 *.log
 *.json
 !universities.json
+!countries+cities.json

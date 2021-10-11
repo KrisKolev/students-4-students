@@ -17,6 +17,7 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {MatButtonModule} from '@angular/material/button';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service";
+import {MatCardModule} from "@angular/material/card";
 
 
 const firebaseConfig = {
@@ -50,6 +51,7 @@ const app = initializeApp(firebaseConfig);
         ReactiveFormsModule,
         MatInputModule,
         ReactiveFormsModule,
+        MatCardModule,
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent],

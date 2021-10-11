@@ -5,6 +5,7 @@ import {UserAuthService} from '../service/userAuthService';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {getAuth, onAuthStateChanged } from "firebase/auth";
+import {ManageSightDialogComponent} from "./manage-sight-dialog/manage-sight-dialog.component";
 
 @Component({
     selector: 'app-root',
@@ -18,7 +19,8 @@ export class AppComponent {
     constructor(private healthCheckService: HealthCheckService,
                 private geolocationService: GeoLocationService,
                 public userAuthService: UserAuthService,
-                public loginDialog: MatDialog) {
+                public loginDialog: MatDialog,
+                public addSightDialog: MatDialog) {
         this.checkBackendConnection();
         this.initGeolocation();
     }
@@ -49,5 +51,9 @@ export class AppComponent {
 
     openLoginDialog(): void {
         const dialogRef = this.loginDialog.open(LoginDialogComponent);
+    }
+
+    openAddSightDialog(): void{
+        const dialogRef = this.addSightDialog.open(ManageSightDialogComponent);
     }
 }

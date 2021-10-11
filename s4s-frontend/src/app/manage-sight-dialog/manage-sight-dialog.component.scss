@@ -1,0 +1,35 @@
+.containerAddSight {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+mat-card {
+  max-width: 350px;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+}
+
+mat-form-field-horizontal{
+  display: inline;
+}
+
+
+::ng-deep {
+  .mat-form-field {
+    width: 100% !important;
+  }
+
+  .mat-form-field .mat-form-field-flex {
+    background-color: white;
+  }
+
+  .mat-button-toggle {
+    background-color: white;
+  }
+}
