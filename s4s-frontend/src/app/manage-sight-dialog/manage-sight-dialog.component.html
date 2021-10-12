@@ -4,7 +4,34 @@
         <br/>
         <mat-card-content>
             <form (ngSubmit)="onSightAdd()" [formGroup]="addSightForm">
-                <mat-form-field appearance="outline">
+              <mat-form-field class="autocomplete-container" appearance="outline">
+                <input formControlName="country" type="text" placeholder="Country" aria-label="Country" matInput [matAutocomplete]="auto">
+                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCountry">
+                  <mat-option *ngFor="let optionCountry of filteredCountryOptions | async" [value]="optionCountry">
+                    {{ optionCountry.name }}
+                  </mat-option>
+                </mat-autocomplete>
+
+               <mat-error *ngIf="hasError('country', 'required')">Country is required</mat-error>
+                <mat-error *ngIf="hasError('country', 'minlength')">Country minimum length is 2</mat-error>
+                <mat-error *ngIf="hasError('country', 'maxlength')">Country maximum length is 50</mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="autocomplete-container" appearance="outline">
+                <input formControlName="city" type="text" placeholder="City" aria-label="City" matInput [matAutocomplete]="autoCity" >
+                <mat-autocomplete #autoCity="matAutocomplete" [displayWith]="displayCity">
+                  <mat-option *ngFor="let optionCity of filteredCityOptions | async" [value]="optionCity">
+                    {{ optionCity.name }}
+                  </mat-option>
+                </mat-autocomplete>
+
+               <mat-error *ngIf="hasError('city', 'required')">Country is required</mat-error>
+                <mat-error *ngIf="hasError('city', 'minlength')">Country minimum length is 2</mat-error>
+                <mat-error *ngIf="hasError('city', 'maxlength')">Country maximum length is 50</mat-error>
+
+              </mat-form-field>
+
+                 <mat-form-field appearance="outline">
                     <mat-label>Enter the sight name</mat-label>
                     <input formControlName="sightName" matInput placeholder="Ernst-Happel Stadium" required>
                     <mat-error *ngIf="hasError('sightName', 'required')">Name is required</mat-error>
@@ -20,38 +47,6 @@
                     <mat-error *ngIf="hasError('address', 'minlength')">Address minimum length is 2</mat-error>
                     <mat-error *ngIf="hasError('address', 'maxlength')">Address maximum length is 200</mat-error>
                 </mat-form-field>
-
-                <mat-grid-list cols="3" rowHeight="100px">
-
-                         <mat-grid-tile class="form-tile">
-                           <mat-form-field class="example-full-width">
-                            <input formControlName="country" type="text" placeholder="Country" aria-label="Country" matInput [matAutocomplete]="auto">
-                            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                              <mat-option *ngFor="let option of filteredOptions | async" [value]="countryOptions">
-                                {{ option.name }}
-                              </mat-option>
-                            </mat-autocomplete>
-
-                           <mat-error *ngIf="hasError('country', 'required')">Country is required</mat-error>
-                            <mat-error *ngIf="hasError('country', 'minlength')">Country minimum length is 2</mat-error>
-                            <mat-error *ngIf="hasError('country', 'maxlength')">Country maximum length is 50</mat-error>
-
-                          </mat-form-field>
-                         </mat-grid-tile>
-
-
-                    <mat-grid-tile class="form-tile">
-                        <mat-form-field appearance="outline">
-                            <mat-label>Enter city</mat-label>
-                            <input formControlName="city" matInput placeholder="Vienna" required>
-                            <mat-error *ngIf="hasError('city', 'required')">City is required</mat-error>
-                            <mat-error *ngIf="hasError('city', 'minlength')">City minimum length is 2</mat-error>
-                            <mat-error *ngIf="hasError('city', 'maxlength')">City maximum length is 50</mat-error>
-                        </mat-form-field>
-                    </mat-grid-tile>
-
-                </mat-grid-list>
-
 
                 <mat-card-actions>
                     <button [disabled]="!addSightForm.valid"

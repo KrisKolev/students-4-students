@@ -9,4 +9,10 @@ export class LocationService extends BackendClientService {
     getCountries(){
         return this.createGetCall('location/getCountries');
     }
+
+    getCitiesFromCountry(countryId: string){
+        return this.createPostCall('location/getCities', {
+            'uid': countryId
+        });
+    }
 }

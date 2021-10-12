@@ -5,11 +5,7 @@ import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {LocationService} from "../../service/http/backend/locations";
 import {strict} from "assert";
-import {Country} from "../../model/location";
-
-export class UiCountry {
-  constructor(public name: string) { }
-}
+import {City, Country} from "../../model/location";
 
 @Component({
   selector: 'app-manage-sight-dialog',
@@ -31,15 +27,76 @@ export class ManageSightDialogComponent implements OnInit {
     });
 
     //set the filter options for the country
-    this.filteredOptions = this.addSightForm.controls["country"].valueChanges
+    this.filteredCountryOptions = this.addSightForm.controls["country"].valueChanges
         .pipe(
             startWith<string | Country>(''),
             map(value => typeof value === 'string' ? value : value.name),
-            map(name => name ? this.filter(name) : this.countryOptions.slice())
+            map(name => name ? this.filterCountry(name) : this.countryOptions.slice())
         );
 
-    locService.getCountries().subscribe((res)=>{
 
+    //set the filter options for the city
+    this.filteredCityOptions = this.addSightForm.controls["city"].valueChanges
+        .pipe(
+            startWith<string | City>(''),
+            map(value => typeof value === 'string' ? value : value.name),
+            map(name => name ? this.filterCity(name) : this.cityOptions.slice())
+        );
+
+    //get countries
+    this.onGetCountry();
+
+
+    //subscribe to changes in the value
+    this.addSightForm.controls["country"].valueChanges.subscribe((val)=>{
+
+      let index = this.countryOptions.find(x => x.name == val.name);
+      if (index == undefined) {
+        this.cityOptions = new Array(new City());
+        this.addSightForm.controls["city"].updateValueAndValidity();
+        return;
+      } else {
+
+        //country found
+        this.selectedCountry = index;
+        locService.getCitiesFromCountry(this.selectedCountry.uid).subscribe(res=>{
+          var pulledCities=[];
+
+          // @ts-ignore
+          var country = res.data as Array;
+          country.cities.forEach(city=>{
+            var newCity = new City();
+            newCity.uid = city.uid;
+            newCity.name = city.name;
+            newCity.centerLatitude = city.centerLatitude;
+            newCity.centerLongitude = city.centerLongitude;
+            pulledCities.push(newCity);
+          })
+          this.cityOptions = pulledCities;
+          this.addSightForm.controls["city"].updateValueAndValidity();
+        })
+      }
+    })
+  }
+
+  //variables
+  filteredCountryOptions: Observable<Country[]>;
+  selectedCountry: Country;
+  countryOptions = [
+    new Country()
+  ];
+
+  filteredCityOptions: Observable<City[]>;
+  selectedCity: City;
+  cityOptions = [
+      new City()
+  ]
+
+  ngOnInit(): void {
+  }
+
+  onGetCountry(){
+    this.locService.getCountries().subscribe((res)=>{
       var pulledCountries=[];
 
       // @ts-ignore
@@ -47,33 +104,30 @@ export class ManageSightDialogComponent implements OnInit {
       te.forEach(ob=>{
         var newCountry = new Country();
         newCountry.name = ob.name;
-        newCountry.id = ob.id;
-        pulledCountries.push(newCountry.name)
+        newCountry.uid = ob.uid;
+        pulledCountries.push(newCountry)
       })
 
       this.countryOptions = pulledCountries;
       this.addSightForm.controls["country"].updateValueAndValidity();
     });
-
-
   }
 
-  filteredOptions: Observable<Country[]>;
-
-  ngOnInit(): void {
-  }
-
-
-  countryOptions = [
-    new Country()
-  ];
-
-  public displayFn(country?: Country): string | undefined {
+  public displayCountry(country?: Country): string | undefined {
     return country.name ? country.name : undefined;
   }
 
-  filter(name: string): Country[] {
+  public displayCity(city?: City): string | undefined {
+    return city.name ? city.name : undefined;
+  }
+
+  filterCountry(name: string): Country[] {
     return this.countryOptions.filter(option =>
+        option.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
+  }
+
+  filterCity(name: string): City[] {
+    return this.cityOptions.filter(option =>
         option.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
   }
 
@@ -93,6 +147,5 @@ export class ManageSightDialogComponent implements OnInit {
     let nickname = this.addSightForm.get('nickname').value;
 
   }
-
 
 }

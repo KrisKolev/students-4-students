@@ -4,6 +4,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.s4s.database.model.City;
 import com.s4s.database.model.Country;
+import com.s4s.dto.ResponseHelper;
+import com.s4s.dto.response.Info;
+import com.s4s.dto.response.Response;
+
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
@@ -86,6 +90,20 @@ public class LocationsAccess {
 
     public static List<Country> getCountriesWithCities(){
         return countriesWithCities;
+    }
+
+    public static javax.ws.rs.core.Response getCountryWithCity(String id){
+
+        Country countrySearch = countriesWithCities.stream()
+                .filter(country -> id.equals(country.getUid()))
+                .findAny()
+                .orElse(null);
+
+        if(countrySearch == null)
+            return new ResponseHelper(Info.FAILURE,"Could not find country with ID "+id).build();
+        else{
+            return new ResponseHelper(Info.SUCCESS,countrySearch).build();
+        }
     }
 }
 

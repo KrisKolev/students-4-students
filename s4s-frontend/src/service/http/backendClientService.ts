@@ -21,19 +21,16 @@ export class BackendClientService {
 
     createPostCall<T>(path: string, body: any) {
         console.log('POST:' + environment.baseUrl + path);
-
         return this.http.post<T>(environment.baseUrl + path, body, httpOptions);
     }
 
     createPutCall<T>(path: string, body: any) {
         console.log('PUT:' + environment.baseUrl + path);
-
         return this.http.put<T>(environment.baseUrl + path, body, httpOptions);
     }
 
     createDeleteCall<T>(path: string) {
         console.log('DELETE:' + environment.baseUrl + path);
-
         return this.http.delete<T>(environment.baseUrl + path, httpOptions);
     }
 }
