@@ -27,7 +27,7 @@
                            <mat-form-field class="example-full-width">
                             <input formControlName="country" type="text" placeholder="Country" aria-label="Country" matInput [matAutocomplete]="auto">
                             <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-                              <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                              <mat-option *ngFor="let option of filteredOptions | async" [value]="countryOptions">
                                 {{ option.name }}
                               </mat-option>
                             </mat-autocomplete>
@@ -39,15 +39,6 @@
                           </mat-form-field>
                          </mat-grid-tile>
 
-                    <mat-grid-tile>
-                         <mat-form-field appearance="outline">
-                            <mat-label>Enter postal code</mat-label>
-                            <input formControlName="postalCode" matInput placeholder="1020" required>
-                            <mat-error *ngIf="hasError('postalCode', 'required')">Postal Code is required</mat-error>
-                            <mat-error *ngIf="hasError('postalCode', 'minlength')">City minimum length is 3</mat-error>
-                            <mat-error *ngIf="hasError('postalCode', 'maxlength')">City maximum length is 12</mat-error>
-                        </mat-form-field>
-                     </mat-grid-tile>
 
                     <mat-grid-tile class="form-tile">
                         <mat-form-field appearance="outline">

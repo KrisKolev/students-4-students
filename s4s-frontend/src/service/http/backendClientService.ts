@@ -16,7 +16,6 @@ export class BackendClientService {
 
     createGetCall<T>(path: string) {
         console.log('GET:' + environment.baseUrl + path);
-
         return this.http.get<T>(environment.baseUrl + path);
     }
 

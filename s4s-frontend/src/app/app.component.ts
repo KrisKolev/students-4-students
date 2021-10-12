@@ -28,6 +28,7 @@ export class AppComponent {
     private checkBackendConnection() {
         this.healthCheckService.getEcho().subscribe(res => {
             //TODO React in case of failure
+
         });
     }
 

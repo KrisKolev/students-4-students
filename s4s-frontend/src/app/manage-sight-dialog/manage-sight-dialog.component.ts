@@ -4,6 +4,8 @@ import {Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {map, startWith} from "rxjs/operators";
 import {LocationService} from "../../service/http/backend/locations";
+import {strict} from "assert";
+import {Country} from "../../model/location";
 
 export class UiCountry {
   constructor(public name: string) { }
@@ -31,36 +33,47 @@ export class ManageSightDialogComponent implements OnInit {
     //set the filter options for the country
     this.filteredOptions = this.addSightForm.controls["country"].valueChanges
         .pipe(
-            startWith<string | UiCountry>(''),
+            startWith<string | Country>(''),
             map(value => typeof value === 'string' ? value : value.name),
-            map(name => name ? this.filter(name) : this.options.slice())
+            map(name => name ? this.filter(name) : this.countryOptions.slice())
         );
 
-    var t = locService.getCountries();
+    locService.getCountries().subscribe((res)=>{
+
+      var pulledCountries=[];
+
+      // @ts-ignore
+      var te = res.data as Array;
+      te.forEach(ob=>{
+        var newCountry = new Country();
+        newCountry.name = ob.name;
+        newCountry.id = ob.id;
+        pulledCountries.push(newCountry.name)
+      })
+
+      this.countryOptions = pulledCountries;
+      this.addSightForm.controls["country"].updateValueAndValidity();
+    });
 
 
   }
 
-  filteredOptions: Observable<UiCountry[]>;
+  filteredOptions: Observable<Country[]>;
 
   ngOnInit(): void {
   }
 
 
-  options = [
-    new UiCountry('Mary'),
-    new UiCountry('Shelley'),
-    new UiCountry('Igor')
+  countryOptions = [
+    new Country()
   ];
 
-  selectedCountry: UiCountry;
-
-  public displayFn(country?: UiCountry): string | undefined {
-    return country ? country.name : undefined;
+  public displayFn(country?: Country): string | undefined {
+    return country.name ? country.name : undefined;
   }
 
-  filter(name: string): UiCountry[] {
-    return this.options.filter(option =>
+  filter(name: string): Country[] {
+    return this.countryOptions.filter(option =>
         option.name.toLowerCase().indexOf(name.toLowerCase()) === 0);
   }
 
