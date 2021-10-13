@@ -1,37 +1,39 @@
-<span class="containerAddSight">
+<div class="containerAddSight">
     <mat-card class="mat-elevation-z6">
         <mat-card-title>Add new Sight</mat-card-title>
         <br/>
         <mat-card-content>
             <form (ngSubmit)="onSightAdd()" [formGroup]="addSightForm">
-              <mat-form-field class="autocomplete-container" appearance="outline">
-                <input formControlName="country" type="text" placeholder="Country" aria-label="Country" matInput [matAutocomplete]="auto">
-                <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCountry">
-                  <mat-option *ngFor="let optionCountry of filteredCountryOptions | async" [value]="optionCountry">
-                    {{ optionCountry.name }}
-                  </mat-option>
-                </mat-autocomplete>
+                <mat-form-field class="autocomplete-container" appearance="outline">
+                    <mat-label>Enter the Country</mat-label>
+                    <input formControlName="country" type="text" placeholder="Country" aria-label="Country" matInput [matAutocomplete]="auto" [(ngModel)]="countryValue">
+                    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayCountry">
+                        <mat-option *ngFor="let optionCountry of filteredCountryOptions | async" [value]="optionCountry" >
+                            {{ optionCountry.name }}
+                        </mat-option>
+                    </mat-autocomplete>
 
-               <mat-error *ngIf="hasError('country', 'required')">Country is required</mat-error>
-                <mat-error *ngIf="hasError('country', 'minlength')">Country minimum length is 2</mat-error>
-                <mat-error *ngIf="hasError('country', 'maxlength')">Country maximum length is 50</mat-error>
-              </mat-form-field>
+                    <mat-error *ngIf="hasError('country', 'required')">Country is required</mat-error>
+                    <mat-error *ngIf="hasError('country', 'minlength')">Country minimum length is 2</mat-error>
+                    <mat-error *ngIf="hasError('country', 'maxlength')">Country maximum length is 50</mat-error>
+                </mat-form-field>
 
-              <mat-form-field class="autocomplete-container" appearance="outline">
-                <input formControlName="city" type="text" placeholder="City" aria-label="City" matInput [matAutocomplete]="autoCity" >
-                <mat-autocomplete #autoCity="matAutocomplete" [displayWith]="displayCity">
-                  <mat-option *ngFor="let optionCity of filteredCityOptions | async" [value]="optionCity">
-                    {{ optionCity.name }}
-                  </mat-option>
-                </mat-autocomplete>
+                <mat-form-field class="autocomplete-container" appearance="outline">
+                    <mat-label>Enter the city</mat-label>
+                    <input formControlName="city" type="text" placeholder="City" aria-label="City" matInput [matAutocomplete]="autoCity" [(ngModel)]="cityValue">
+                    <mat-autocomplete #autoCity="matAutocomplete" [displayWith]="displayCity">
+                        <mat-option *ngFor="let optionCity of filteredCityOptions | async" [value]="optionCity">
+                            {{ optionCity.name }}
+                        </mat-option>
+                    </mat-autocomplete>
 
-               <mat-error *ngIf="hasError('city', 'required')">Country is required</mat-error>
-                <mat-error *ngIf="hasError('city', 'minlength')">Country minimum length is 2</mat-error>
-                <mat-error *ngIf="hasError('city', 'maxlength')">Country maximum length is 50</mat-error>
+                    <mat-error *ngIf="hasError('city', 'required')">Country is required</mat-error>
+                    <mat-error *ngIf="hasError('city', 'minlength')">Country minimum length is 2</mat-error>
+                    <mat-error *ngIf="hasError('city', 'maxlength')">Country maximum length is 50</mat-error>
 
-              </mat-form-field>
+                </mat-form-field>
 
-                 <mat-form-field appearance="outline">
+                <mat-form-field appearance="outline">
                     <mat-label>Enter the sight name</mat-label>
                     <input formControlName="sightName" matInput placeholder="Ernst-Happel Stadium" required>
                     <mat-error *ngIf="hasError('sightName', 'required')">Name is required</mat-error>
@@ -53,11 +55,31 @@
                             color="primary" mat-raised-button>
                         Add Sight
                     </button>
-                     <button (click)="onAbort()" color="warn" mat-stroked-button>
-                         Abort
-                     </button>
+                    <button (click)="onAbort()" color="warn" mat-stroked-button>
+                        Abort
+                    </button>
                 </mat-card-actions>
             </form>
+            <mat-button-toggle (click)="onGoToLocation()">
+                Go to your location
+            </mat-button-toggle>
+            <google-map
+                    height="450px"
+                    width="100%"
+                    [zoom]="zoom"
+                    [center]="center"
+                    [options]="options"
+                    (mapClick)="onMapClick($event)">
+                <map-marker
+                        markerElem="mapMarker"
+                        *ngFor="let marker of mapMarkers"
+                        [position]="marker.position"
+                        [label]="marker.label"
+                        [title]="marker.title"
+                        [options]="marker.options"
+                        (mapClick)="openInfo(marker)"></map-marker>
+                <map-info-window>"MyContent"</map-info-window>
+            </google-map>
         </mat-card-content>
     </mat-card>
-</span>
+</div>

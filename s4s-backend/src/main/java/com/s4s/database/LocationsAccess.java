@@ -39,6 +39,8 @@ public class LocationsAccess {
                     //load data from JSON
                     newCountry.setName(newCountryObject.get("name").getAsString());
                     newCountry.setUid(newCountryObject.get("id").getAsString());
+                    newCountry.setLatitude(newCountryObject.get("latitude").getAsString());
+                    newCountry.setLongitude(newCountryObject.get("longitude").getAsString());
                     newCountryCity.setName(newCountryObject.get("name").getAsString());
                     newCountryCity.setUid(newCountryObject.get("id").getAsString());
 

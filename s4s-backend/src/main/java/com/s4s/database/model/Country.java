@@ -8,6 +8,8 @@ public class Country {
     private String Uid;
     private City Capital;
     private String Name;
+    private String Longitude;
+    private String Latitude;
 
     public List<City> getCities() {
         return Cities;
@@ -39,5 +41,21 @@ public class Country {
 
     public void setName(String name) {
         Name = name;
+    }
+
+    public String getLongitude() {
+        return Longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        Longitude = longitude;
+    }
+
+    public String getLatitude() {
+        return Latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        Latitude = latitude;
     }
 }

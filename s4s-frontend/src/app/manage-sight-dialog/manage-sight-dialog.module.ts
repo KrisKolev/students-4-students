@@ -10,6 +10,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {MatCardModule} from '@angular/material/card';
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {GoogleMapsModule} from "@angular/google-maps";
+import {MatButtonToggleModule} from "@angular/material/button-toggle";
 
 @NgModule({
     declarations: [ManageSightDialogComponent],
@@ -24,6 +26,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         MatCardModule,
         MatGridListModule,
         MatAutocompleteModule,
+        GoogleMapsModule,
+        MatButtonToggleModule,
     ]
 })
 export class ManageSightDialogModule { }

@@ -1,6 +1,8 @@
 export class Country {
     uid: string;
     name: string;
+    longitude:string;
+    latitude:string;
 }
 
 export class City {
