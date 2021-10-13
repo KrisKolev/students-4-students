@@ -33,7 +33,7 @@ const app = initializeApp(firebaseConfig);
 @NgModule({
     declarations: [
         AppComponent,
-        LoginDialogComponent,
+        LoginDialogComponent
     ],
     imports: [
         BrowserModule,
@@ -56,6 +56,9 @@ const app = initializeApp(firebaseConfig);
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent],
+    exports: [
+
+    ],
     bootstrap: [AppComponent]
 })
 

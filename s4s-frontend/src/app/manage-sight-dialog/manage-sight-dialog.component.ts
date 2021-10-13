@@ -1,15 +1,13 @@
-import {Component, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {Component, NgZone, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
-import {map, observeOn, startWith} from "rxjs/operators";
+import {map, startWith} from "rxjs/operators";
 import {LocationService} from "../../service/http/backend/locations";
-import {strict} from "assert";
 import {City, Country} from "../../model/location";
 import {GoogleMap, MapInfoWindow, MapMarker} from "@angular/google-maps";
 import {UserAuthService} from "../../service/userAuthService";
 import {GeoLocationService} from "../../service/http/external/geoLocation.service";
-import {addWarning} from "@angular-devkit/build-angular/src/utils/webpack-diagnostics";
 
 @Component({
   selector: 'app-manage-sight-dialog',
@@ -36,7 +34,10 @@ export class ManageSightDialogComponent implements OnInit {
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap
   @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
 
-  constructor(private router: Router,private locService: LocationService, private authService:UserAuthService, private geolocService:GeoLocationService) {
+  constructor(private router: Router,
+              private locService: LocationService,
+              private authService:UserAuthService,
+              private geolocService:GeoLocationService) {
 
     //create form group
     this.addSightForm = new FormGroup({
@@ -46,12 +47,17 @@ export class ManageSightDialogComponent implements OnInit {
       country: new FormControl('', [Validators.required,Validators.minLength(2), Validators.maxLength(200)]),
     });
 
-    //get countries
-    this.onGetCountry();
+    try {
+      //get countries
+      this.onGetCountry();
 
-    this.onSubscribeToCountryChange();
+      this.onSubscribeToCountryChange();
 
-    this.onSubscribeToCityChange();
+      this.onSubscribeToCityChange();
+    }
+    catch {
+
+    }
   }
 
   //variables
@@ -125,8 +131,6 @@ export class ManageSightDialogComponent implements OnInit {
               this.addSightForm.controls["city"].updateValueAndValidity();
               this.setCitiesForCountries(res.city);
             }
-
-
           });
         }));
       }
@@ -310,5 +314,4 @@ export class ManageSightDialogComponent implements OnInit {
     this.infoWindow.close();
     this.infoWindow.open(marker);
   }
-
 }
