@@ -12,10 +12,12 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {GoogleMapsModule} from "@angular/google-maps";
 import {MatButtonToggleModule} from "@angular/material/button-toggle";
-import {AppModule} from "../app.module";
+import {MatTooltipModule} from "@angular/material/tooltip";
+import {AddRatingComponent} from "../add-rating/add-rating.component";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 @NgModule({
-    declarations: [ManageSightDialogComponent],
+    declarations: [ManageSightDialogComponent,AddRatingComponent],
     imports: [
         CommonModule,
         ManageSightDialogRoutingModule,
@@ -29,7 +31,9 @@ import {AppModule} from "../app.module";
         MatAutocompleteModule,
         GoogleMapsModule,
         MatButtonToggleModule,
-        FormsModule,
+        MatTooltipModule,
+        MatExpansionModule,
+        FormsModule
     ]
 })
 export class ManageSightDialogModule { }

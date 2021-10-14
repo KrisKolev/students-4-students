@@ -27,10 +27,10 @@ export class ManageSightDialogComponent implements OnInit {
     minZoom: 1,
   }
   mapMarkers = []
-
   addressValue: string = "";
   private geoCoder;
 
+  rating: any;
 
   @ViewChild(GoogleMap, { static: false }) map: GoogleMap
   @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
@@ -86,6 +86,7 @@ export class ManageSightDialogComponent implements OnInit {
   public hasError = (controlName: string, errorName: string) => {
     return this.addSightForm.controls[controlName].hasError(errorName);
   }
+
 
   onAbort(){
     this.router.navigateByUrl('/');
@@ -187,5 +188,7 @@ export class ManageSightDialogComponent implements OnInit {
     });
   }
 
-
+  onRatingUpdated($event:any){
+    this.rating = $event;
+  }
 }

@@ -19,6 +19,7 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service";
 import {MatCardModule} from "@angular/material/card";
 import { GoogleMapsModule } from '@angular/google-maps'
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -33,7 +34,7 @@ const app = initializeApp(firebaseConfig);
 @NgModule({
     declarations: [
         AppComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
     ],
     imports: [
         BrowserModule,
@@ -53,11 +54,11 @@ const app = initializeApp(firebaseConfig);
         MatInputModule,
         ReactiveFormsModule,
         MatCardModule,
+        MatTooltipModule,
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent],
     exports: [
-
     ],
     bootstrap: [AppComponent]
 })

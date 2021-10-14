@@ -16,7 +16,7 @@
                 <mat-form-field appearance="outline">
                     <mat-label>Enter the street address</mat-label>
                     <input type="text" formControlName="address" class="form-control" matInput (keydown.enter)="$event.preventDefault()" placeholder="Enter the address of the sight" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #addressSearch [(ngModel)]="addressValue">
-                    <mat-error *ngIf="hasError('address', 'required')">Name is required</mat-error>
+                    <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
                     <mat-error *ngIf="hasError('address', 'minlength')">Firstname minimum length is 2</mat-error>
                     <mat-error *ngIf="hasError('address', 'maxlength')">Firstname maximum length is 400</mat-error>>
                 </mat-form-field>
@@ -31,27 +31,35 @@
                     </button>
                 </mat-card-actions>
             </form>
-            <mat-button-toggle (click)="onGoToLocation()">
-                Go to your location
-            </mat-button-toggle>
 
-            <google-map
-                    height="450px"
-                    width="100%"
-                    [zoom]="zoom"
-                    [center]="center"
-                    [options]="options"
-                    (mapClick)="onMapClick($event)">
-                <map-marker
-                        markerElem="mapMarker"
-                        *ngFor="let marker of mapMarkers"
-                        [position]="marker.position"
-                        [label]="marker.label"
-                        [title]="marker.title"
-                        [options]="marker.options"
-                        (mapClick)="openInfo(marker)"></map-marker>
-                <map-info-window>"MyContent"</map-info-window>
-            </google-map>
+
+            <app-add-rating class="add-rating-container" [panelTitle]="'Add initial rating (optional)'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)"></app-add-rating>
+
+            <div class="maps-container">
+                <mat-card-actions>
+                    <mat-button-toggle (click)="onGoToLocation()">
+                        Go to your location
+                    </mat-button-toggle>
+                </mat-card-actions>
+
+                <google-map
+                        height="450px"
+                        width="100%"
+                        [zoom]="zoom"
+                        [center]="center"
+                        [options]="options"
+                        (mapClick)="onMapClick($event)">
+                    <map-marker
+                            markerElem="mapMarker"
+                            *ngFor="let marker of mapMarkers"
+                            [position]="marker.position"
+                            [label]="marker.label"
+                            [title]="marker.title"
+                            [options]="marker.options"
+                            (mapClick)="openInfo(marker)"></map-marker>
+                    <map-info-window>"MyContent"</map-info-window>
+                </google-map>
+            </div>
         </mat-card-content>
     </mat-card>
 </div>
