@@ -29,6 +29,7 @@ import {AppModule} from "../app.module";
         MatAutocompleteModule,
         GoogleMapsModule,
         MatButtonToggleModule,
+        FormsModule,
     ]
 })
 export class ManageSightDialogModule { }

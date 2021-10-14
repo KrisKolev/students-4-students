@@ -25,6 +25,15 @@ public class LocationsEndpoint {
         return new ResponseHelper(Info.SUCCESS, LocationsAccess.getCountries()).build();
     }
 
+    @GET
+    @Path("/allData")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllData() {
+        return new ResponseHelper(Info.SUCCESS, LocationsAccess.getCountriesWithCities()).build();
+    }
+
+
+
     @POST
     @Path("/getCities")
     @Consumes(MediaType.APPLICATION_JSON)

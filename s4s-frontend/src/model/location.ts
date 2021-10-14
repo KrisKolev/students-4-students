@@ -3,6 +3,7 @@ export class Country {
     name: string;
     longitude:string;
     latitude:string;
+    cities:any[];
 }
 
 export class City {
