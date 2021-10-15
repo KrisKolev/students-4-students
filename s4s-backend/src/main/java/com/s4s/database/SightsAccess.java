@@ -47,7 +47,7 @@ public class SightsAccess {
 
             DocumentReference writeResult = DatabaseAccess.saveOrInsertDocument(sight);
             sight.setUid(writeResult.getId());
-            sights.add(sight);
+            sights = DatabaseAccess.retrieveAllDocuments(Sight.class);
         }
         catch (Exception e){
             return new ResponseHelper(Info.FAILURE,"Sight could not be added! "+e.getMessage()).build();
@@ -67,7 +67,7 @@ public class SightsAccess {
 
         try{
             DatabaseAccess.saveOrInsertDocument(label);
-            labels.add(label);
+            labels = DatabaseAccess.retrieveAllDocuments(Label.class);
         }
         catch (Exception e){
             return new ResponseHelper(Info.FAILURE,"An error occurred! "+e.getMessage()).build();
