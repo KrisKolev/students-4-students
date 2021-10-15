@@ -21,7 +21,7 @@
                         <input type="text" formControlName="address" class="form-control" matInput (keydown.enter)="$event.preventDefault()" placeholder="Enter the address of the sight" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #addressSearch [(ngModel)]="addressValue">
                         <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
                         <mat-error *ngIf="hasError('address', 'minlength')">Firstname minimum length is 2</mat-error>
-                        <mat-error *ngIf="hasError('address', 'maxlength')">Firstname maximum length is 400</mat-error>>
+                        <mat-error *ngIf="hasError('address', 'maxlength')">Firstname maximum length is 400</mat-error>
                     </mat-form-field>
 
                     <mat-card-actions>

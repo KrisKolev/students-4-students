@@ -1,5 +1,6 @@
 package com.s4s.database;
 
+import com.google.cloud.firestore.DocumentReference;
 import com.s4s.database.model.Country;
 import com.s4s.database.model.Label;
 import com.s4s.database.model.Sight;
@@ -24,13 +25,34 @@ public class SightsAccess {
         if (instance == null) {
             instance = new SightsAccess();
             labels = DatabaseAccess.retrieveAllDocuments(Label.class);
+            sights = DatabaseAccess.retrieveAllDocuments(Sight.class);
         }
         return instance;
     }
 
     public static javax.ws.rs.core.Response addSights(Sight sight){
+        if(sight.getUid()!=null){
+            return new ResponseHelper(Info.FAILURE,"Sight already exists!").build();
+        }
 
-        return new ResponseHelper(Info.SUCCESS,"Added sight").build();
+        try{
+            List<Sight> sightSearch = sights.stream().filter(x->x.getName().equals(sight.getName()))
+                    .collect(Collectors.toList());
+            List<Sight> sightsAddressSearch = sights.stream().filter(x->x.getAddress().equals(sight.getAddress()))
+                    .collect(Collectors.toList());
+
+            if(!sightSearch.isEmpty() || !sightsAddressSearch.isEmpty()){
+                return new ResponseHelper(Info.FAILURE,"Sight already exists!").build();
+            }
+
+            DocumentReference writeResult = DatabaseAccess.saveOrInsertDocument(sight);
+            sight.setUid(writeResult.getId());
+            sights.add(sight);
+        }
+        catch (Exception e){
+            return new ResponseHelper(Info.FAILURE,"Sight could not be added! "+e.getMessage()).build();
+        }
+        return new ResponseHelper(Info.SUCCESS,"Added sight",sight).build();
     }
 
     public static List<Label> getLabels(){
