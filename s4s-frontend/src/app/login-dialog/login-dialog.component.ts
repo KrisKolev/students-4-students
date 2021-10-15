@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
 import {FirebaseService} from '../../service/http/external/firebase.service';
 import {FormControl, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatDialog, MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {UserAuthService} from "../../service/userAuthService";
+import {ErroPopUpComponent} from "../erro-pop-up/erro-pop-up.component";
 
 @Component({
     selector: 'app-login-dialog',
@@ -16,6 +17,7 @@ export class LoginDialogComponent {
     pw = new FormControl('');
 
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
+                public errorDialogPopUp: MatDialog,
                 private userAuthService: UserAuthService,
                 private router: Router) {
     }
@@ -30,12 +32,17 @@ export class LoginDialogComponent {
                 this.dialogRef.close();
             } else {
                 //Failed
+                this.openLoginErrorDialog();
             }
         });
     }
 
     closeLoginDialog(): void {
         this.dialogRef.close();
+    }
+
+    openLoginErrorDialog():void{
+        const dialog = this.errorDialogPopUp.open(ErroPopUpComponent);
     }
 
     signUp() {

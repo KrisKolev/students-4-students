@@ -17,6 +17,7 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {MatButtonModule} from '@angular/material/button';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service";
+import { ErroPopUpComponent } from './erro-pop-up/erro-pop-up.component';
 
 
 const firebaseConfig = {
@@ -32,7 +33,8 @@ const app = initializeApp(firebaseConfig);
 @NgModule({
     declarations: [
         AppComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
+        ErroPopUpComponent
     ],
     imports: [
         BrowserModule,
