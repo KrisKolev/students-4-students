@@ -15,8 +15,11 @@ export class AddRatingComponent implements OnInit {
   @Input('starCount') starCount: number;
   @Input('color')  color: string;
   @Output()  ratingUpdated = new EventEmitter();
+  @Output() commentUpdated = new EventEmitter();
 
-  constructor() { }
+  constructor() {
+
+  }
 
   ngOnInit(): void {
     for (let index = 0; index < this.starCount; index++) {
@@ -26,6 +29,7 @@ export class AddRatingComponent implements OnInit {
 
 
   initialRating:any;
+  comment: any;
 
   onRatingChanged($event: any) {
     this.initialRating = $event;
@@ -43,6 +47,15 @@ export class AddRatingComponent implements OnInit {
     } else {
       return 'star_border';
     }
+  }
+
+  hasError() {
+    return this.rating ==undefined
+  }
+
+  onCommentChange() {
+    console.log(this.comment)
+    this.commentUpdated.emit(this.comment);
   }
 }
 

@@ -7,16 +7,13 @@ import java.util.Date;
 public class Rating {
     private String uid;
 
-    private long rating;
-    private String title;
-    private String text;
+    private String rating;
+    private String name;
+    private String comment;
 
     private DocumentReference creator;
     private Date createdAt;
     private Date updatedAt;
-
-    public Rating() {
-    }
 
     public String getUid() {
         return uid;
@@ -26,28 +23,28 @@ public class Rating {
         this.uid = uid;
     }
 
-    public long getRating() {
+    public String getRating() {
         return rating;
     }
 
-    public void setRating(long rating) {
+    public void setRating(String rating) {
         this.rating = rating;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getText() {
-        return text;
+    public String getComment() {
+        return comment;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public DocumentReference getCreator() {

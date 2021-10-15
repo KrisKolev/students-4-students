@@ -1,65 +1,103 @@
-<div class="containerAddSight">
-    <mat-card class="mat-elevation-z6">
-        <mat-card-title>Add new Sight</mat-card-title>
-        <br/>
-        <mat-card-content>
-            <form (ngSubmit)="onSightAdd()" [formGroup]="addSightForm">
 
-                <mat-form-field appearance="outline">
-                    <mat-label>Enter the sight name</mat-label>
-                    <input formControlName="sightName" matInput placeholder="Ernst-Happel Stadium" required>
-                    <mat-error *ngIf="hasError('sightName', 'required')">Name is required</mat-error>
-                    <mat-error *ngIf="hasError('sightName', 'minlength')">Firstname minimum length is 2</mat-error>
-                    <mat-error *ngIf="hasError('sightName', 'maxlength')">Firstname maximum length is 200</mat-error>
-                </mat-form-field>
+<div class="outerContainer">
 
-                <mat-form-field appearance="outline">
-                    <mat-label>Enter the street address</mat-label>
-                    <input type="text" formControlName="address" class="form-control" matInput (keydown.enter)="$event.preventDefault()" placeholder="Enter the address of the sight" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #addressSearch [(ngModel)]="addressValue">
-                    <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
-                    <mat-error *ngIf="hasError('address', 'minlength')">Firstname minimum length is 2</mat-error>
-                    <mat-error *ngIf="hasError('address', 'maxlength')">Firstname maximum length is 400</mat-error>>
-                </mat-form-field>
+    <div class="containerAddSight">
+        <mat-card>
+            <mat-card-content>
+                <mat-card-title>Add new Sight</mat-card-title>
+                <br/>
+                <form (ngSubmit)="onSightAdd()" [formGroup]="addSightForm" width="100%">
 
-                <mat-card-actions>
-                    <button [disabled]="!addSightForm.valid"
-                            color="primary" mat-raised-button>
-                        Add Sight
-                    </button>
-                    <button (click)="onAbort()" color="warn" mat-stroked-button>
-                        Abort
-                    </button>
-                </mat-card-actions>
-            </form>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter the sight name</mat-label>
+                        <input formControlName="sightName" matInput placeholder="Ernst-Happel Stadium" required [(ngModel)]="nameValue">
+                        <mat-error *ngIf="hasError('sightName', 'required')">Name is required</mat-error>
+                        <mat-error *ngIf="hasError('sightName', 'minlength')">Firstname minimum length is 2</mat-error>
+                        <mat-error *ngIf="hasError('sightName', 'maxlength')">Firstname maximum length is 200</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter the street address</mat-label>
+                        <input type="text" formControlName="address" class="form-control" matInput (keydown.enter)="$event.preventDefault()" placeholder="Enter the address of the sight" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #addressSearch [(ngModel)]="addressValue">
+                        <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
+                        <mat-error *ngIf="hasError('address', 'minlength')">Firstname minimum length is 2</mat-error>
+                        <mat-error *ngIf="hasError('address', 'maxlength')">Firstname maximum length is 400</mat-error>>
+                    </mat-form-field>
+
+                    <mat-card-actions>
+                        <button [disabled]="!validForm"
+                                color="primary" mat-raised-button>
+                            Add Sight
+                        </button>
+                        <button (click)="onAbort()" color="warn" mat-stroked-button>
+                            Abort
+                        </button>
+                    </mat-card-actions>
+
+                    <mat-form-field class="labels-chip-list" appearance="fill">
+                        <mat-label>Labels for the sight</mat-label>
+                        <mat-chip-list #chipList aria-label="Tag selection">
+                            <mat-chip
+                                    *ngFor="let tag of labels"
+                                    [selectable]="selectable"
+                                    [removable]="removable"
+                                    (removed)="removeTag(tag)">
+                                {{tag.name}}
+                                <button matChipRemove *ngIf="removable">
+                                    <mat-icon>cancel</mat-icon>
+                                </button>
+                            </mat-chip>
+                            <input
+                                    placeholder="New tag..."
+                                    #labelInput
+                                    [formControl]="labelCtrl"
+                                    [matAutocomplete]="auto"
+                                    [matChipInputFor]="chipList"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                    (matChipInputTokenEnd)="addTag($event)">
+                        </mat-chip-list>
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                            <mat-option *ngFor="let label of filteredLabels | async" [value]="label">
+                                {{label.name}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+
+                    <app-add-rating class="add-rating-container" [panelTitle]="'Add initial rating'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)" [color]="'primary'" (commentUpdated)="onCommentUpdated($event)"></app-add-rating>
+
+                </form>
+
+            </mat-card-content>
+        </mat-card>
 
 
-            <app-add-rating class="add-rating-container" [panelTitle]="'Add initial rating (optional)'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)"></app-add-rating>
+        <div class="maps-container">
+            <mat-card-actions>
+                <mat-button-toggle (click)="onGoToLocation()">
+                    Go to your location
+                </mat-button-toggle>
+            </mat-card-actions>
 
-            <div class="maps-container">
-                <mat-card-actions>
-                    <mat-button-toggle (click)="onGoToLocation()">
-                        Go to your location
-                    </mat-button-toggle>
-                </mat-card-actions>
+            <google-map
+                    height="400px"
+                    width="100%"
+                    [zoom]="zoom"
+                    [center]="center"
+                    [options]="options"
+                    (mapClick)="onMapClick($event)">
+                <map-marker
+                        markerElem="mapMarker"
+                        *ngFor="let marker of mapMarkers"
+                        [position]="marker.position"
+                        [label]="marker.label"
+                        [title]="marker.title"
+                        [options]="marker.options"
+                        (mapClick)="openInfo(marker)"></map-marker>
+                <map-info-window>"MyContent"</map-info-window>
+            </google-map>
+        </div>
 
-                <google-map
-                        height="450px"
-                        width="100%"
-                        [zoom]="zoom"
-                        [center]="center"
-                        [options]="options"
-                        (mapClick)="onMapClick($event)">
-                    <map-marker
-                            markerElem="mapMarker"
-                            *ngFor="let marker of mapMarkers"
-                            [position]="marker.position"
-                            [label]="marker.label"
-                            [title]="marker.title"
-                            [options]="marker.options"
-                            (mapClick)="openInfo(marker)"></map-marker>
-                    <map-info-window>"MyContent"</map-info-window>
-                </google-map>
-            </div>
-        </mat-card-content>
-    </mat-card>
+
+    </div>
 </div>
+

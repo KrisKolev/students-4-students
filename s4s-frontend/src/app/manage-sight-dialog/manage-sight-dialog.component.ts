@@ -2,12 +2,19 @@ import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {Observable} from "rxjs";
-import {map, startWith} from "rxjs/operators";
 import {LocationService} from "../../service/http/backend/locations";
-import {City, Country} from "../../model/location";
 import {GoogleMap, MapInfoWindow, MapMarker} from "@angular/google-maps";
 import {UserAuthService} from "../../service/userAuthService";
 import {GeoLocationService} from "../../service/http/external/geoLocation.service";
+import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
+import {MatChipInputEvent} from "@angular/material/chips";
+import {COMMA, ENTER} from "@angular/cdk/keycodes";
+import {map, startWith} from 'rxjs/operators';
+import {SightsService} from "../../service/http/backend/sights";
+import {Label} from "../../model/label";
+import {Sight} from "../../model/sight";
+import {Rating} from "../../model/rating";
+import {$e} from "codelyzer/angular/styles/chars";
 
 @Component({
   selector: 'app-manage-sight-dialog',
@@ -15,6 +22,14 @@ import {GeoLocationService} from "../../service/http/external/geoLocation.servic
   styleUrls: ['./manage-sight-dialog.component.scss']
 })
 export class ManageSightDialogComponent implements OnInit {
+
+
+  @ViewChild('labelInput') tagInput: ElementRef<HTMLInputElement>;
+  @ViewChild(GoogleMap, { static: false }) map: GoogleMap
+  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
+  @ViewChild('addressSearch')
+  public searchElementRef: ElementRef;
+
   addSightForm: FormGroup;
   zoom = 15
   center: google.maps.LatLngLiteral
@@ -27,31 +42,53 @@ export class ManageSightDialogComponent implements OnInit {
     minZoom: 1,
   }
   mapMarkers = []
+  nameValue: any;
   addressValue: string = "";
   private geoCoder;
 
   rating: any;
+  comment: any;
 
-  @ViewChild(GoogleMap, { static: false }) map: GoogleMap
-  @ViewChild(MapInfoWindow, { static: false }) infoWindow: MapInfoWindow;
-  @ViewChild('addressSearch')
-  public searchElementRef: ElementRef;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  labelCtrl = new FormControl();
+  filteredLabels: Observable<Label[]>;
+  labels: Label[] = [];
+  allLabels: Label[] = [];
+
+  validForm: boolean;
+
+  customLongitude:any;
+  customLatitude:any;
+
 
   constructor(private router: Router,
               private locService: LocationService,
               private authService:UserAuthService,
               private geolocService:GeoLocationService,
-              private ngZone: NgZone) {
+              private ngZone: NgZone,
+              private sightService:SightsService) {
 
     //create form group
     this.addSightForm = new FormGroup({
       sightName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
-      address: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)])
+      address: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
     });
+
+    this.addSightForm.valueChanges.subscribe( ()=>{
+      this.checkFormValidity();
+    })
+
+    this.onLoadLabels();
   }
 
   ngOnInit(): void {
     this.initMap();
+  }
+
+  checkFormValidity(){
+    this.validForm = this.addSightForm.valid && this.rating!=undefined && this.mapMarkers.length>1
   }
 
   ngAfterViewInit() {
@@ -87,17 +124,52 @@ export class ManageSightDialogComponent implements OnInit {
     return this.addSightForm.controls[controlName].hasError(errorName);
   }
 
+  onLoadLabels(){
+
+    this.sightService.getLabels().subscribe((val)=>
+    {
+      var pulledLabels=[];
+      // @ts-ignore
+      var lab = val.data as Array;
+      lab.forEach(ob=>{
+        var newLabel = new Label();
+        newLabel.name = ob.name;
+        newLabel.uid = ob.uid;
+        newLabel.color = ob.color;
+        pulledLabels.push(newLabel)
+      })
+      this.allLabels = pulledLabels;
+      //this.allLabelsObjects = pulledLabels;
+
+      this.filteredLabels = this.labelCtrl.valueChanges.pipe(
+          startWith(null),
+          map((tag: String | null) => tag ? this._filter(tag) : this.allLabels.slice()));
+    });
+
+  }
 
   onAbort(){
     this.router.navigateByUrl('/');
   }
 
   onSightAdd() {
-    let email = this.addSightForm.get('email').value;
-    let password = this.addSightForm.get('password').value;
-    let firstname = this.addSightForm.get('firstname').value;
-    let lastname = this.addSightForm.get('lastname').value;
-    let nickname = this.addSightForm.get('nickname').value;
+    var newSight = new Sight();
+    var newRating = new Rating();
+
+    newRating.rating = this.rating;
+    newRating.comment = this.comment;
+
+    newSight.address = this.addressValue;
+    newSight.name = this.nameValue;
+    newSight.longitude = this.customLongitude.toString();
+    newSight.latitude = this.customLatitude.toString();
+    newSight.labelList = this.labels;
+    newSight.ratingList.push(newRating);
+
+    this.sightService.addSight(newSight).subscribe((res)=>
+    {
+
+    });
 
   }
 
@@ -123,6 +195,8 @@ export class ManageSightDialogComponent implements OnInit {
 
       optimized: false,
     });
+    this.customLatitude = latitude;
+    this.customLongitude = longitude;
     this.getAddress(latitude, longitude);
     this.mapMarkers.push(marker);
   }
@@ -190,5 +264,68 @@ export class ManageSightDialogComponent implements OnInit {
 
   onRatingUpdated($event:any){
     this.rating = $event;
+    this.checkFormValidity();
+  }
+
+  addTag($event: MatChipInputEvent): void {
+    const value = ($event.value || '').trim();
+
+    var label = new Label();
+    label.name = value;
+
+    var findLabel = this.labels.find(x=>x.name == label.name)
+    var findLabelAll = this.allLabels.find(x=>x.name == label.name);
+
+    //add to both
+    if(findLabelAll == undefined && findLabel == undefined){
+      this.allLabels.push(label);
+      this.labels.push(label);
+    }
+
+    //add to labels
+    if(findLabelAll != undefined && findLabel == undefined){
+      this.labels.push(label);
+    }
+
+    //do nothing
+    if(findLabelAll !=undefined && findLabel != undefined){
+    }
+
+    // Clear the input value
+    // @ts-ignore
+    $event.chipInput!.clear();
+    this.labelCtrl.setValue(null);
+  }
+
+  removeTag(label: Label): void {
+    const index = this.labels.indexOf(label);
+    if (index >= 0) {
+      this.labels.splice(index, 1);
+    }
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    var searchLabel = this.allLabels.find(x=>x.name == event.option.viewValue);
+    if(searchLabel==undefined)return;
+
+    var searchInLabels = this.labels.find(x=>x.name == searchLabel.name)
+    if(searchInLabels != undefined)return;
+
+    this.labels.push(searchLabel);
+    this.tagInput.nativeElement.value = '';
+    this.labelCtrl.setValue(null);
+    this.filteredLabels = null;
+    this.filteredLabels = this.labelCtrl.valueChanges.pipe(
+        startWith(null),
+        map((tag: String | null) => tag ? this._filter(tag) : this.allLabels.slice()));
+  }
+
+  private _filter(value: String): Label[] {
+    const filterValue = value.toLowerCase();
+    return this.allLabels.filter(label => label.name.toLowerCase().includes(filterValue));
+  }
+
+  onCommentUpdated($event:any) {
+    this.comment = $event;
   }
 }

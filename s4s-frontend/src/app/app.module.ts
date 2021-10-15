@@ -34,7 +34,7 @@ const app = initializeApp(firebaseConfig);
 @NgModule({
     declarations: [
         AppComponent,
-        LoginDialogComponent,
+        LoginDialogComponent
     ],
     imports: [
         BrowserModule,

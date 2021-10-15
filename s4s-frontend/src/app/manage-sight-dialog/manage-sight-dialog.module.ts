@@ -15,9 +15,13 @@ import {MatButtonToggleModule} from "@angular/material/button-toggle";
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {AddRatingComponent} from "../add-rating/add-rating.component";
 import {MatExpansionModule} from "@angular/material/expansion";
+import {ImageUploadComponent} from "../image-upload/image-upload.component";
+import {FileUploadModule} from "ng2-file-upload";
+import {MatSelectModule} from "@angular/material/select";
+import {MatChipsModule} from "@angular/material/chips";
 
 @NgModule({
-    declarations: [ManageSightDialogComponent,AddRatingComponent],
+    declarations: [ManageSightDialogComponent,AddRatingComponent,ImageUploadComponent],
     imports: [
         CommonModule,
         ManageSightDialogRoutingModule,
@@ -33,7 +37,10 @@ import {MatExpansionModule} from "@angular/material/expansion";
         MatButtonToggleModule,
         MatTooltipModule,
         MatExpansionModule,
-        FormsModule
+        FormsModule,
+        FileUploadModule,
+        MatSelectModule,
+        MatChipsModule
     ]
 })
 export class ManageSightDialogModule { }
