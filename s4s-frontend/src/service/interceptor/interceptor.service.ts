@@ -33,10 +33,8 @@ export class CustomHttpInterceptor implements HttpInterceptor {
             map((event: HttpEvent<any>) => {
                 if (event instanceof HttpResponse) {
                 }
+                console.log(event)
                 return event;
-            }),
-            catchError((error: HttpErrorResponse) => {
-                return throwError(error);
             }));
     }
 }

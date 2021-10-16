@@ -24,18 +24,9 @@
                         <mat-error *ngIf="hasError('address', 'maxlength')">Firstname maximum length is 400</mat-error>
                     </mat-form-field>
 
-                    <mat-card-actions>
-                        <button [disabled]="!validForm"
-                                color="primary" mat-raised-button>
-                            Add Sight
-                        </button>
-                        <button (click)="onAbort()" color="warn" mat-stroked-button>
-                            Abort
-                        </button>
-                    </mat-card-actions>
-
-                    <mat-form-field class="labels-chip-list" appearance="fill">
+                    <mat-form-field class="labels-chip-list" appearance="outline">
                         <mat-label>Labels for the sight</mat-label>
+
                         <mat-chip-list #chipList aria-label="Tag selection">
                             <mat-chip
                                     *ngFor="let tag of labels"
@@ -63,6 +54,22 @@
                         </mat-autocomplete>
                     </mat-form-field>
 
+                    <mat-error *ngIf="labels.length<1" class="error-labels">
+                        You need to add at least <strong>one label</strong> for the sight
+                    </mat-error>
+
+                    <mat-card-actions>
+                        <button [disabled]="!validForm"
+                                color="primary" mat-raised-button>
+                            Add Sight
+                        </button>
+                        <button (click)="onAbort()" color="warn" mat-stroked-button>
+                            Abort
+                        </button>
+                    </mat-card-actions>
+
+
+
                     <app-add-rating class="add-rating-container" [panelTitle]="'Add initial rating'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)" [color]="'primary'" (commentUpdated)="onCommentUpdated($event)"></app-add-rating>
 
                 </form>
@@ -72,13 +79,19 @@
 
 
         <div class="maps-container">
+
             <mat-card-actions>
                 <mat-button-toggle (click)="onGoToLocation()">
                     Go to your location
                 </mat-button-toggle>
             </mat-card-actions>
 
+            <mat-error *ngIf="mapMarkers.length<2" class="error-labels">
+                You need to place a <strong>map marker</strong> to continue
+            </mat-error>
+
             <google-map
+                    #googleMap
                     height="400px"
                     width="100%"
                     [zoom]="zoom"
@@ -93,8 +106,10 @@
                         [title]="marker.title"
                         [options]="marker.options"
                         (mapClick)="openInfo(marker)"></map-marker>
-                <map-info-window>"MyContent"</map-info-window>
+
+                <map-info-window #mapInfo>"MyContent"</map-info-window>
             </google-map>
+
         </div>
 
 

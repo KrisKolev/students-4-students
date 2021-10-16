@@ -32,7 +32,7 @@ public class SightsAccess {
 
     public static javax.ws.rs.core.Response addSights(Sight sight){
         if(sight.getUid()!=null){
-            return new ResponseHelper(Info.FAILURE,"Sight already exists!").build();
+            return new ResponseHelper(Info.FAILURE,"Sight already exists!",sight).build();
         }
 
         try{
@@ -42,7 +42,7 @@ public class SightsAccess {
                     .collect(Collectors.toList());
 
             if(!sightSearch.isEmpty() || !sightsAddressSearch.isEmpty()){
-                return new ResponseHelper(Info.FAILURE,"Sight already exists!").build();
+                return new ResponseHelper(Info.FAILURE,"Sight already exists!",sight).build();
             }
 
             DocumentReference writeResult = DatabaseAccess.saveOrInsertDocument(sight);
@@ -50,7 +50,7 @@ public class SightsAccess {
             sights = DatabaseAccess.retrieveAllDocuments(Sight.class);
         }
         catch (Exception e){
-            return new ResponseHelper(Info.FAILURE,"Sight could not be added! "+e.getMessage()).build();
+            return new ResponseHelper(Info.FAILURE,"Sight could not be added! "+e.getMessage(),sight).build();
         }
         return new ResponseHelper(Info.SUCCESS,"Added sight",sight).build();
     }
