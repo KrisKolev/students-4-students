@@ -37,4 +37,11 @@ public class SightsEndpoint {
     public Response addSight(Sight sight){
         return SightsAccess.addSights(sight);
     }
+
+    @GET
+    @Path("/getAllSights")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getAllSights() {
+        return new ResponseHelper(Info.SUCCESS, SightsAccess.getSights()).build();
+    }
 }

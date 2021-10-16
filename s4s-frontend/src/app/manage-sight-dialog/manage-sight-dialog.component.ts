@@ -15,6 +15,7 @@ import {Label} from "../../model/label";
 import {Sight} from "../../model/sight";
 import {Rating} from "../../model/rating";
 import {$e} from "codelyzer/angular/styles/chars";
+import {getSuggestion} from "codelyzer/util/getSuggestion";
 
 @Component({
   selector: 'app-manage-sight-dialog',
@@ -62,6 +63,8 @@ export class ManageSightDialogComponent implements OnInit {
   customLongitude:any;
   customLatitude:any;
 
+  allSights: Sight[] = [];
+
   mapMarkersSights = []
 
   constructor(private router: Router,
@@ -86,6 +89,7 @@ export class ManageSightDialogComponent implements OnInit {
     })
 
     this.onLoadLabels();
+    this.onLoadSights();
   }
 
   ngOnInit(): void {
@@ -130,7 +134,6 @@ export class ManageSightDialogComponent implements OnInit {
   }
 
   onLoadLabels(){
-
     this.sightService.getLabels().subscribe((val)=>
     {
       var pulledLabels=[];
@@ -151,6 +154,26 @@ export class ManageSightDialogComponent implements OnInit {
           map((tag: String | null) => tag ? this._filter(tag) : this.allLabels.slice()));
     });
 
+  }
+
+  onLoadSights(){
+    this.sightService.getSights().subscribe((val)=>
+    {
+      var pulledSights=[];
+      // @ts-ignore
+      var sights = val.data as Array;
+      sights.forEach(sight=>{
+        var newSight = new Sight();
+        newSight.uid = sight.uid;
+        newSight.name = sight.name;
+        newSight.longitude = sight.longitude;
+        newSight.latitude = sight.latitude;
+
+      })
+
+      this.allSights = pulledSights;
+
+    })
   }
 
   onAbort(){

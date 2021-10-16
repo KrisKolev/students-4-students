@@ -12,4 +12,8 @@ export class SightsService extends BackendClientService {
     getLabels(){
         return this.createGetCall('sights/getLabels');
     }
+
+    getSights(){
+        return this.createGetCall('sights/getAllSights');
+    }
 }

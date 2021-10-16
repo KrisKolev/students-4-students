@@ -48,7 +48,7 @@ public class UserEndpoint {
             dbUser.setNickname(userDTO.getNickname());
             dbUser.setEmail(userDTO.getEmail());
             dbUser.setUid(userRecord.getUid());
-            DatabaseAccess.saveOrInsertDocument(dbUser,dbUser.getUid());
+            DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(dbUser.getClass()),dbUser,dbUser.getUid());
         } catch (FirebaseAuthException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return new ResponseHelper(Info.FAILURE, e.getMessage()).build();
