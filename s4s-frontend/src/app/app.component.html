@@ -18,11 +18,22 @@
     <button mat-button>
         <mat-icon>add_location_alt</mat-icon>
     </button>
-    <a mat-raised-button (click)="openLoginDialog()">Sign In</a>
+
+    <!--profile button-->
+    <ng-template [ngIf]="getLoginStatus()==true" [ngIfElse]="loggedOut">
+    <button mat-button [matMenuTriggerFor]="menu"> <mat-icon>account_circle</mat-icon></button>
+    <mat-menu #menu="matMenu">
+        <button mat-menu-item>Profile</button>
+        <button mat-menu-item (click)="logout()">Logout</button>
+    </mat-menu>
+    </ng-template>
+
+    <!--signin button-->
+    <ng-template #loggedOut>
+        <a mat-raised-button (click)="openLoginDialog()">Sign In</a>
+    </ng-template>
 
 </mat-toolbar>
     <span class="router-container">
     <router-outlet></router-outlet>
         </span>
-
-

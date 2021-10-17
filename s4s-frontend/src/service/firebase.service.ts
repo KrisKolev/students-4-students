@@ -8,7 +8,6 @@ import {UserService} from './user.service';
 export class FirebaseService {
 
     isLoggedIn = false;
-
     constructor(private userService: UserService) {
     }
 
@@ -37,14 +36,18 @@ export class FirebaseService {
     // Function which handles a successfull login
     login(){
         const auth = getAuth();
-
+        this.isLoggedIn = true;
         this.userService.setUserId(auth.currentUser.uid);
         this.userService.setEmail(auth.currentUser.email);
         // this.userService.setAccessToken(auth.currentUser.accessToken);
     }
 
     logout() {
+        this.isLoggedIn = false;
         localStorage.removeItem('loggedInUser');
         getAuth().signOut();
+    }
+    public  getLoginStatus() {
+        return this.isLoggedIn;
     }
 }
