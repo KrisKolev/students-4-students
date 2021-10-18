@@ -5,7 +5,6 @@ import {UserService} from '../service/user.service';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {FirebaseService} from '../service/firebase.service';
-import firebase from 'firebase/compat';
 
 @Component({
     selector: 'app-root',
