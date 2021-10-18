@@ -1,0 +1,17 @@
+<h1 mat-dialog-title  fxLayout="row" fxLayoutAlign="space-between center">
+    {{title}}
+
+    <mat-icon *ngIf="type == 'info'" [style]="{'color': 'green'}">{{type}}</mat-icon>
+    <mat-icon *ngIf="type == 'warning'" [style]="{'color': 'orange'}">{{type}}</mat-icon>
+    <mat-icon *ngIf="type == 'error'" [style]="{'color': 'red'}">{{type}}</mat-icon>
+</h1>
+
+<div mat-dialog-content>
+    <br/>
+    <span style="overflow-wrap: break-word;">{{message}}</span>
+    <br/>
+</div>
+
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end center" >
+    <button mat-raised-button color="primary" mat-dialog-close tabindex="-1">{{cancelButton}}</button>
+</div>
