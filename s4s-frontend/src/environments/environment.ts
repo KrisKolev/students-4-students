@@ -4,7 +4,8 @@
 
 export const environment = {
     production: false,
-    baseUrl: 'http://localhost:8080/s4s-backend/api/'
+    baseUrl: 'http://localhost:8080/s4s-backend/api/',
+    geoLocationServiceUrl: 'https://api.bigdatacloud.net/data/reverse-geocode-client'
 };
 
 /*

@@ -1,8 +1,9 @@
-package com.s4s.dto;
+package com.s4s.dto.request;
 
 public class UserDTO {
     private String firstname;
     private String lastname;
+    private String nickname;
     private String email;
     private String password;
     private String uid;
@@ -24,6 +25,14 @@ public class UserDTO {
 
     public void setLastname(String lastname) {
         this.lastname = lastname;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public String getEmail() {

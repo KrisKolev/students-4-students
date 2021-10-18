@@ -1,33 +1,79 @@
 <span class="container">
-    <mat-card>
+    <mat-card class="mat-elevation-z6">
         <mat-card-title>Sign up</mat-card-title>
+        <br/>
         <mat-card-content>
-            <mat-form-field appearance="fill">
-                <mat-label>Enter your email</mat-label>
-                <input matInput placeholder="johndoe@example.com" [formControl]="email" required>
-                <mat-error *ngIf="email.invalid">{{getErrorMessage()}}</mat-error>
-                <mat-hint>Put your email here</mat-hint>
-            </mat-form-field>
+            <form (ngSubmit)="onSignUp()" [formGroup]="signUpForm">
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter your firstname</mat-label>
+                    <input formControlName="firstname" matInput placeholder="John" required>
+                    <mat-error *ngIf="hasError('firstname', 'required')">Firstname is required</mat-error>
+                    <mat-error *ngIf="hasError('firstname', 'minlength')">Firstname minimum length is 2</mat-error>
+                    <mat-error *ngIf="hasError('firstname', 'maxlength')">Firstname maximum length is 200</mat-error>
+                </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Enter your password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="psw" required>
-                <mat-button mat-icon-button matSuffix (click)="hidePassword = !hidePassword"
-                            [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
-                    <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                </mat-button>
-            </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter your lastname</mat-label>
+                    <input formControlName="lastname" matInput placeholder="Doe" required>
+                    <mat-error *ngIf="hasError('lastname', 'required')">Lastname is required</mat-error>
+                    <mat-error *ngIf="hasError('firstname', 'minlength')">Lastname minimum length is 2</mat-error>
+                    <mat-error *ngIf="hasError('firstname', 'maxlength')">Lastname maximum length is 200</mat-error>
+                </mat-form-field>
 
-            <mat-form-field appearance="fill">
-                <mat-label>Repeat your password</mat-label>
-                <input matInput [type]="hidePassword ? 'password' : 'text'" [formControl]="pswRepeat" required>
-            </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter your nickname</mat-label>
+                    <input formControlName="nickname" matInput placeholder="johndoe" required>
+                    <mat-error *ngIf="hasError('nickname', 'required')">Nickname is required</mat-error>
+                    <mat-error *ngIf="hasError('firstname', 'minlength')">Firstname minimum length is 2</mat-error>
+                    <mat-error *ngIf="hasError('firstname', 'maxlength')">Firstname maximum length is 50</mat-error>
+                </mat-form-field>
 
-            <mat-card-actions>
-                <button mat-raised-button color="primary" (click)="onRegister()">Sign up
-                </button>
-                 <a mat-button routerLink="">Abort</a>
-            </mat-card-actions>
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter your email</mat-label>
+                    <input formControlName="email" matInput placeholder="johndoe@example.com" required>
+                    <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
+                    <mat-error *ngIf="hasError('email', 'email')">Email Syntax is incorrect</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Enter your password</mat-label>
+                    <input [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput required>
+                    <mat-button (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hidePassword"
+                                mat-icon-button matSuffix>
+                        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </mat-button>
+                    <mat-error *ngIf="hasError('password', 'required')">Password is required</mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                    <mat-label>Repeat your password</mat-label>
+                    <input [type]="hidePassword ? 'password' : 'text'" formControlName="passwordRepeat" matInput
+                           required>
+                    <mat-button (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+                                [attr.aria-pressed]="hidePassword"
+                                mat-icon-button matSuffix>
+                        <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </mat-button>
+                    <mat-error *ngIf="hasError('passwordRepeat', 'required')">Password is required</mat-error>
+                </mat-form-field>
+
+                <mat-error *ngIf="signUpForm.controls['password'].value !== ''
+                           && signUpForm.controls['passwordRepeat'].value !== ''
+                           && signUpForm.controls['password'].value !== signUpForm.controls['passwordRepeat'].value">
+                      Passwords are not equal
+               </mat-error>
+
+                <mat-card-actions>
+                    <button [disabled]="!signUpForm.valid || signUpForm.controls['password'].value !== signUpForm.controls['passwordRepeat'].value"
+                            color="primary" mat-raised-button>
+                        Sign up
+                    </button>
+                     <button (click)="onAbort()" color="warn" mat-stroked-button>
+                         Abort
+                     </button>
+                </mat-card-actions>
+            </form>
         </mat-card-content>
     </mat-card>
 </span>
