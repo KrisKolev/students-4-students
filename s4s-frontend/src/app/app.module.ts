@@ -18,7 +18,7 @@ import {MatButtonModule} from '@angular/material/button';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service";
 import {MatMenuModule} from '@angular/material/menu';
-
+import {PopupComponent} from "./popup/popup.component";
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -33,7 +33,8 @@ const app = initializeApp(firebaseConfig);
 @NgModule({
     declarations: [
         AppComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
+        PopupComponent
     ],
     imports: [
         BrowserModule,
@@ -54,7 +55,7 @@ const app = initializeApp(firebaseConfig);
         MatMenuModule
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
-    entryComponents: [LoginDialogComponent],
+    entryComponents: [LoginDialogComponent, PopupComponent],
     bootstrap: [AppComponent]
 })
 

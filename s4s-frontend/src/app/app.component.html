@@ -10,8 +10,10 @@
     <form class="example-form">
         <mat-form-field>
             <span matPrefix> </span>
-            <input type="text" matInput placeholder="Search" name= "search" [(ngModel)]= "search">
-            <button matSuffix mat-button><mat-icon >search</mat-icon></button>
+            <input type="text" matInput placeholder="Search" name="search" [(ngModel)]="search">
+            <button matSuffix mat-button>
+                <mat-icon>search</mat-icon>
+            </button>
         </mat-form-field>
     </form>
 
@@ -36,3 +38,5 @@
 <span class="router-container">
     <router-outlet></router-outlet>
 </span>
+
+

@@ -1,9 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Router} from '@angular/router';
-import {RegistrationService} from "../../service/http/backend/registration.service";
 import {UserAuthService} from "../../service/userAuthService";
-
+import {MatDialog, MatDialogConfig} from "@angular/material/dialog";
+import {PopupComponent} from "../popup/popup.component";
+import {PopupType} from "../../model/popupType";
 
 @Component({
     selector: 'app-register-form',
@@ -18,7 +19,8 @@ export class RegisterFormComponent implements OnInit {
     }
 
     constructor(private router: Router,
-                private userAuthService: UserAuthService) {
+                private userAuthService: UserAuthService,
+                private dialog: MatDialog) {
 
         this.signUpForm = new FormGroup({
             firstname: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
@@ -35,7 +37,7 @@ export class RegisterFormComponent implements OnInit {
         return this.signUpForm.controls[controlName].hasError(errorName);
     }
 
-    onAbort(){
+    onAbort() {
         this.router.navigateByUrl('/');
     }
 
@@ -59,6 +61,17 @@ export class RegisterFormComponent implements OnInit {
                     //Failed
                 }
             });
-        });
+        }, (error => {
+            const dialogConfig = new MatDialogConfig();
+            dialogConfig.autoFocus = true;
+            dialogConfig.maxWidth = 500;
+            dialogConfig.data = {
+                type: PopupType.ERROR,
+                title: 'Error',
+                message: error.error.status.message,
+                cancelButton: 'OK'
+            }
+            const dialogRef = this.dialog.open(PopupComponent, dialogConfig);
+        }));
     }
 }
