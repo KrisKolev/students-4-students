@@ -20,6 +20,14 @@ steps:
     npm install
     ng build --prod
   displayName: 'npm install and build'
+
+- task: CmdLine@2
+  inputs:
+    script: |
+      echo Write your commands here
+      mkdir D:\a\1\s\s4s-backend\src\main\webapp\web
+      echo Hello world
+
 - task: Maven@3
   inputs:
     mavenPomFile: 's4s-backend/pom.xml'
