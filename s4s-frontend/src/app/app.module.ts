@@ -20,6 +20,7 @@ import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service"
 import {MatCardModule} from "@angular/material/card";
 import { GoogleMapsModule } from '@angular/google-maps'
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {PopupComponent} from "./popup/popup.component";
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -34,7 +35,8 @@ const app = initializeApp(firebaseConfig);
 @NgModule({
     declarations: [
         AppComponent,
-        LoginDialogComponent
+        LoginDialogComponent,
+        PopupComponent
     ],
     imports: [
         BrowserModule,
@@ -57,7 +59,7 @@ const app = initializeApp(firebaseConfig);
         MatTooltipModule,
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
-    entryComponents: [LoginDialogComponent],
+    entryComponents: [LoginDialogComponent,PopupComponent],
     exports: [
     ],
     bootstrap: [AppComponent]

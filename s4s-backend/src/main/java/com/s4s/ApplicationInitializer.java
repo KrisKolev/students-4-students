@@ -1,15 +1,8 @@
 package com.s4s;
-
-import com.s4s.database.DatabaseAccess;
-import com.s4s.database.LocationsAccess;
-import com.s4s.database.SightsAccess;
-import com.s4s.database.UniversityAccess;
-import com.s4s.database.model.Country;
-
+import com.s4s.database.*;
 import javax.annotation.PostConstruct;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 @Singleton

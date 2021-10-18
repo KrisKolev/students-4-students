@@ -1,3 +1,9 @@
+/**
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
+
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 

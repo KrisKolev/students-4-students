@@ -8,6 +8,12 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+/**
+ * Endpoint for all location relevant api calls.
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
 @Path("/location")
 public class LocationsEndpoint {
     @GET

@@ -1,6 +1,12 @@
+/**
+ * Helper class for list items.
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
 export class ListItem<T> {
     private list: List<T>;
-    private index: number;
+    private readonly index: number;
 
     public value: T;
 
@@ -19,8 +25,14 @@ export class ListItem<T> {
     }
 }
 
+/**
+ * Helper class to arrange items in lists.
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
 export class List<T> {
-    private items: Array<ListItem<T>>;
+    private readonly items: Array<ListItem<T>>;
 
     constructor() {
         this.items = [];

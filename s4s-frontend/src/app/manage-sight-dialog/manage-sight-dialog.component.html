@@ -1,3 +1,10 @@
+<!--
+/**
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
+-->
 
 <div class="outerContainer">
 
@@ -32,7 +39,7 @@
                                     *ngFor="let tag of labels"
                                     [selectable]="selectable"
                                     [removable]="removable"
-                                    (removed)="removeTag(tag)">
+                                    (removed)="removeLabel(tag)">
                                 {{tag.name}}
                                 <button matChipRemove *ngIf="removable">
                                     <mat-icon>cancel</mat-icon>
@@ -45,9 +52,9 @@
                                     [matAutocomplete]="auto"
                                     [matChipInputFor]="chipList"
                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-                                    (matChipInputTokenEnd)="addTag($event)">
+                                    (matChipInputTokenEnd)="addLabel($event)">
                         </mat-chip-list>
-                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onLabelSelected($event)">
                             <mat-option *ngFor="let label of filteredLabels | async" [value]="label">
                                 {{label.name}}
                             </mat-option>
@@ -59,6 +66,7 @@
                     </mat-error>
 
                     <mat-card-actions>
+                        <mat-progress-spinner mode="indeterminate" class="mat-progress-spinner" diameter="40" color="accent" [hidden]="!addSightInProgress"></mat-progress-spinner>
                         <button [disabled]="!validForm"
                                 color="primary" mat-raised-button>
                             Add Sight
@@ -68,9 +76,7 @@
                         </button>
                     </mat-card-actions>
 
-
-
-                    <app-add-rating class="add-rating-container" [panelTitle]="'Add initial rating'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)" [color]="'primary'" (commentUpdated)="onCommentUpdated($event)"></app-add-rating>
+                    <app-add-rating class="add-rating-container" [panelTitle]="'Add initial rating'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)" [color]="'primary'" (commentUpdated)="onCommentUpdated($event)" (imagesUpdated)="onImagesUpdated($event)"></app-add-rating>
 
                 </form>
 
@@ -98,21 +104,42 @@
                     [center]="center"
                     [options]="options"
                     (mapClick)="onMapClick($event)">
-                <map-marker
-                        markerElem="mapMarker"
-                        *ngFor="let marker of mapMarkers"
-                        [position]="marker.position"
-                        [label]="marker.label"
-                        [title]="marker.title"
-                        [options]="marker.options"
-                        (mapClick)="openInfo(marker)"></map-marker>
+                    <map-marker
+                            markerElem="mapMarker"
+                            *ngFor="let marker of mapMarkers"
+                            [position]="marker.position"
+                            [label]="marker.label"
+                            [title]="marker.title"
+                            [options]="marker.options"></map-marker>
+                    <map-marker
+                            markerElem="mapMarkerExisting"
+                            *ngFor="let marker of mapMarkersSights"
+                            [position]="marker.position"
+                            [label]="marker.label"
+                            [title]="marker.title"
+                            [options]="marker.options"
+                            [icon]="marker.icon"
+                            (mapClick)="openInfo(marker)"></map-marker>
 
-                <map-info-window #mapInfo>"MyContent"</map-info-window>
             </google-map>
+
 
         </div>
 
+        <mat-card class="card-detail" [hidden]="detailWindowHidden">
+            <mat-card-title>Sight Details</mat-card-title>
+            <br/>
+            <mat-label><strong>Sight name: </strong></mat-label>
+            <mat-label [textContent]="detailedSight.name"></mat-label>
+            <br/>
+            <mat-label><strong>Address: </strong></mat-label>
+            <mat-label [textContent]="detailedSight.address"></mat-label>
+            <br/>
+            <button (click)="onCloseDetail()" color="warn" mat-stroked-button>
+                Close
+            </button>
 
+        </mat-card>
     </div>
 </div>
 

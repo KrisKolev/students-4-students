@@ -2,6 +2,7 @@ package com.s4s.database.model;
 
 import com.google.cloud.firestore.DocumentReference;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,11 @@ public class Sight {
 
     private String address;
 
-    private List<Label> labelList;
-    private List<Rating> ratingList;
+    private List<Label> labelList = new ArrayList<>();
+    private List<Rating> ratingList = new ArrayList<>();
+
+    private List<String> labelsAssigned = new ArrayList<>();
+    private List<String> ratingAssigned = new ArrayList<>();
 
     private DocumentReference creator;
     private Date createdAt;
@@ -102,5 +106,21 @@ public class Sight {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public List<String> getRatingAssigned() {
+        return ratingAssigned;
+    }
+
+    public void setRatingAssigned(List<String> ratingAssigned) {
+        this.ratingAssigned = ratingAssigned;
+    }
+
+    public List<String> getLabelsAssigned() {
+        return labelsAssigned;
+    }
+
+    public void setLabelsAssigned(List<String> labelsAssigned) {
+        this.labelsAssigned = labelsAssigned;
     }
 }

@@ -14,6 +14,12 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Access to all country and city relevant data.
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
 public class LocationsAccess {
     private static List<Country> countries;
     private static List<Country> countriesWithCities;

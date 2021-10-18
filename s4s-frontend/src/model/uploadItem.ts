@@ -1,27 +1,26 @@
 /**
- * Model for a country
+ * Model for an upload item.
  * Component written by Michael Fahrafellner
  * creation date: 16.10.2021
  * last change done by: Michael Fahrafellner
  */
-export class Country {
-    uid: string;
+export class UploadItem {
     name: string;
-    longitude:string;
-    latitude:string;
-    cities:any[];
+    filePath: string;
+    file:File;
+    progress: number
 }
 
 /**
- * Model for a city
+ * Model for an upload response.
  * Component written by Michael Fahrafellner
  * creation date: 16.10.2021
  * last change done by: Michael Fahrafellner
  */
-export class City {
-    uid: string;
+export class UploadResponse {
     name: string;
-    centerLongitude: string;
-    centerLatitude: string;
+    filePath: string;
+    finished:boolean;
+    hasErrors:boolean;
+    response:string
 }
-

@@ -5,42 +5,78 @@ import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
   templateUrl: './add-rating.component.html',
   styleUrls: ['./add-rating.component.scss']
 })
+/**
+ * Defines the modular rating component to add and change a rating.
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
 export class AddRatingComponent implements OnInit {
 
+  /**
+   * Input for the expand panel title
+   */
+  @Input('panelTitle') panelTitle: string;
+  /**
+   * Input for the rating value
+   */
+  @Input('rating') rating: number;
+  /**
+   * Input for the star color
+   */
+  @Input('starCount') starCount: number;
+  /**
+   * Input for the star color
+   */
+  @Input('color')  color: string;
+  /**
+   *Fires when rating changes
+   */
+  @Output()  ratingUpdated = new EventEmitter();
+  /**
+   * Fires when comment changes
+   */
+  @Output() commentUpdated = new EventEmitter();
+  /**
+   * Fires when images update.
+   */
+  @Output() imagesUpdated = new EventEmitter();
+
+  /**
+   * Comment of the rating
+   */
+  comment: any;
+  /**
+   * Defines if the extension panel is open
+   */
   panelOpenState = true;
+  /**
+   * Defines the stars array
+   */
   ratingArr = [];
 
-  @Input('panelTitle') panelTitle: string;
-  @Input('rating') rating: number;
-  @Input('starCount') starCount: number;
-  @Input('color')  color: string;
-  @Output()  ratingUpdated = new EventEmitter();
-  @Output() commentUpdated = new EventEmitter();
-
-  constructor() {
-
-  }
-
+  /**
+   * Initialites the component
+   */
   ngOnInit(): void {
     for (let index = 0; index < this.starCount; index++) {
       this.ratingArr.push(index);
     }
   }
 
-
-  initialRating:any;
-  comment: any;
-
-  onRatingChanged($event: any) {
-    this.initialRating = $event;
-  }
-
+  /**
+   * Fires when a star is clicked
+   * @param rating
+   */
   onClick(rating:number) {
-    console.log(rating)
     this.ratingUpdated.emit(rating);
     return false;
   }
 
+  /**
+   * Fires when a star is clicked to create the rating visualization.
+   * @param index
+   */
   showIcon(index:number) {
     if (this.rating >= index + 1) {
       return 'star';
@@ -49,18 +85,25 @@ export class AddRatingComponent implements OnInit {
     }
   }
 
+  /**
+   * Defines if the form has an error.
+   */
   hasError() {
     return this.rating ==undefined
   }
 
+  /**
+   * Fires when the comment changes
+   */
   onCommentChange() {
-    console.log(this.comment)
     this.commentUpdated.emit(this.comment);
   }
-}
 
-enum StarRatingColor {
-  primary = "primary",
-  accent = "accent",
-  warn = "warn"
+  /**
+   * Fires when the images change
+   * @param files
+   */
+  onImagesUpdated(files: File[]) {
+    this.imagesUpdated.emit(files)
+  }
 }

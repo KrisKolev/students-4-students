@@ -12,6 +12,12 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.PublicKey;
 
+/**
+ * Endpoint for all sights relevant api calls.
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
 @Path("/sights")
 public class SightsEndpoint {
 

@@ -19,6 +19,7 @@ import {ImageUploadComponent} from "../image-upload/image-upload.component";
 import {FileUploadModule} from "ng2-file-upload";
 import {MatSelectModule} from "@angular/material/select";
 import {MatChipsModule} from "@angular/material/chips";
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 
 @NgModule({
     declarations: [ManageSightDialogComponent,AddRatingComponent,ImageUploadComponent],
@@ -40,7 +41,14 @@ import {MatChipsModule} from "@angular/material/chips";
         FormsModule,
         FileUploadModule,
         MatSelectModule,
-        MatChipsModule
+        MatChipsModule,
+        MatProgressSpinnerModule
     ]
 })
+/**
+ * Model for manage sight component.
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
 export class ManageSightDialogModule { }
