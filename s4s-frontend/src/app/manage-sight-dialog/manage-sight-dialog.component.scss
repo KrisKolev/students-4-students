@@ -58,10 +58,15 @@
 }
 
 .card-detail{
-  width: 20%;
+  width: 40%;
   align-items: center;
   justify-content: center;
   align-self: center;
+}
+
+.image-wrapper{
+  display: flex;
+
 }
 
 mat-card-actions {

@@ -85,6 +85,10 @@ public class LocationsAccess {
         }
     }
 
+    /**
+     * Creates the instance of the locations access.
+     * @return
+     */
     public static LocationsAccess createInstance() {
         if (instance == null) {
             instance = new LocationsAccess();
@@ -92,14 +96,27 @@ public class LocationsAccess {
         return instance;
     }
 
+    /**
+     * Returns all countries without cities
+     * @return
+     */
     public static List<Country> getCountries() {
         return countries;
     }
 
+    /**
+     * Returns all data available.
+     * @return
+     */
     public static List<Country> getCountriesWithCities(){
         return countriesWithCities;
     }
 
+    /**
+     * Returns all cities for a specific country
+     * @param id
+     * @return
+     */
     public static javax.ws.rs.core.Response getCountryWithCity(String id){
 
         Country countrySearch = countriesWithCities.stream()

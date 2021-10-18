@@ -164,6 +164,7 @@ export class ManageSightDialogComponent implements OnInit {
    */
   detailedSight : Sight = new Sight();
 
+
   /**
    * Constructor for the manage sight component
    * @param router
@@ -331,6 +332,11 @@ export class ManageSightDialogComponent implements OnInit {
             newRating.uid = rating.uid;
             newRating.rating = rating.rating;
             newRating.comment = rating.comment;
+            var images=[];
+            rating.imageNames.forEach(rat=>{
+              images.push(rat)
+            })
+            newRating.imageNames = images;
           }
           catch{}
           newSight.ratingList.push(newRating);
@@ -440,11 +446,15 @@ export class ManageSightDialogComponent implements OnInit {
    * Opens the detailed window for sights.
    * @param marker
    */
-  openInfo(marker: google.maps.Marker) {
+  async openInfo(marker: google.maps.Marker) {
     this.detailWindowHidden = false;
     try {
       const test = this.allSights.find(x=>x.name==marker.getLabel().text && x.address == marker.getTitle())
       this.detailedSight = test as Sight;
+      this.detailedSight.ratingList.forEach(async rat=>{
+        await this.firebaseService.getRatingImageUrls(rat);
+      })
+
     }
     catch (e)
     {
@@ -601,6 +611,10 @@ export class ManageSightDialogComponent implements OnInit {
 
     newRating.rating = this.rating;
     newRating.comment = this.ratingComment;
+    let i:number;
+    for(i = 0;i<this.ratingImages.length;i++) {
+      newRating.imageNames.push('img_'+i)
+    }
 
     newSight.address = this.addressValue;
     newSight.name = this.nameValue;
@@ -612,11 +626,12 @@ export class ManageSightDialogComponent implements OnInit {
     this.sightService.addSight(newSight).subscribe(async (res)=>
     {
       let i:number;
+      let y:number;
       for(i = 0;i<this.ratingImages.length;i++) {
 
         const uploadItem = new UploadItem();
         // @ts-ignore
-        uploadItem.filePath = 'images/rating/'+res.data.uid+'/img_'+i;
+        uploadItem.filePath = 'images/rating/'+res.data.ratingAssigned[0]+'/img_'+i;
         uploadItem.file = this.ratingImages[i];
         await this.firebaseService.uploadFileToFirestore(uploadItem);
       }

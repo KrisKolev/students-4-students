@@ -20,6 +20,7 @@ import {FileUploadModule} from "ng2-file-upload";
 import {MatSelectModule} from "@angular/material/select";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
 
 @NgModule({
     declarations: [ManageSightDialogComponent,AddRatingComponent,ImageUploadComponent],
@@ -42,7 +43,8 @@ import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
         FileUploadModule,
         MatSelectModule,
         MatChipsModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        NgbCarouselModule
     ]
 })
 /**

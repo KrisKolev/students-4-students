@@ -2,7 +2,9 @@ package com.s4s.database.model;
 
 import com.google.cloud.firestore.DocumentReference;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class Rating {
     private String uid;
@@ -10,6 +12,8 @@ public class Rating {
     private String rating;
     private String name;
     private String comment;
+
+    private List<String> imageNames = new ArrayList<>();
 
     private DocumentReference creator;
     private Date createdAt;
@@ -69,5 +73,13 @@ public class Rating {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<String> getImageNames() {
+        return imageNames;
+    }
+
+    public void setImageNames(List<String> imageNames) {
+        this.imageNames = imageNames;
     }
 }

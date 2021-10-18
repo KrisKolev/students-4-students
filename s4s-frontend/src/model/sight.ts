@@ -8,6 +8,9 @@ import {Rating} from "./rating";
  * last change done by: Michael Fahrafellner
  */
 export class Sight {
+    constructor() {
+        this.ratingList = [];
+    }
     uid: string;
     name: string;
     address: string;
@@ -19,6 +22,7 @@ export class Sight {
 
     labelList: Label[] = [];
     ratingList: Rating[] = [];
+
 
     createdAt:string;
     updatedAt:string;

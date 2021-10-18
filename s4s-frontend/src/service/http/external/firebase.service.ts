@@ -2,6 +2,7 @@ import {Injectable} from '@angular/core';
 import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
 import {UploadItem, UploadResponse} from "../../../model/uploadItem";
+import {Rating} from "../../../model/rating";
 
 @Injectable({providedIn: 'root'})
 export class FirebaseService {
@@ -98,5 +99,18 @@ export class FirebaseService {
         );
 
         return response;
+    }
+
+    /**
+     * Loads all image urls of a rating.
+     * @param uid
+     */
+    public async getRatingImageUrls(rating:Rating){
+        const storage = getStorage();
+        rating.imageNames.forEach(async rat=>{
+            //const pathReference = ref(storage, 'images/rating/'+rating.uid+'/'+rat+'/')
+            rating.imageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rating.uid+'/'+rat+'/')))
+        })
+
     }
 }

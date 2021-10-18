@@ -8,6 +8,8 @@ export class Rating {
     uid: string;
     rating: Number;
     comment: string = "";
+    imageNames: string[] = []
     createdAt:string;
     updatedAt:string;
+    imageUrl: string[] = []
 }
