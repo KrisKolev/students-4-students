@@ -20,7 +20,7 @@
     </button>
 
     <!--profile button-->
-    <ng-template [ngIf]="getLoginStatus()==true" [ngIfElse]="loggedOut">
+    <ng-template [ngIf]="isUserLoggedIn()==true" [ngIfElse]="loggedOut">
     <button mat-button [matMenuTriggerFor]="menu"> <mat-icon>account_circle</mat-icon></button>
     <mat-menu #menu="matMenu">
         <button mat-menu-item>Profile</button>

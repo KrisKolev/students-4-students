@@ -4,7 +4,6 @@ import {GeoLocationService} from '../service/http/external/geoLocation.service';
 import {UserAuthService} from '../service/userAuthService';
 import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
-import {FirebaseService} from '../service/firebase.service';
 
 @Component({
     selector: 'app-root',
@@ -17,7 +16,6 @@ export class AppComponent {
 
     constructor(private healthCheckService: HealthCheckService,
                 private geolocationService: GeoLocationService,
-                private firebaseService: FirebaseService,
                 public userAuthService: UserAuthService,
                 public loginDialog: MatDialog) {
         this.checkBackendConnection();
@@ -51,12 +49,12 @@ export class AppComponent {
     openLoginDialog(): void {
         const dialogRef = this.loginDialog.open(LoginDialogComponent);
     }
-    getLoginStatus()
+    isUserLoggedIn()
     {
-        return this.firebaseService.getLoginStatus();
+        return this.userAuthService.isUserLoggedIn();
     }
     logout()
     {
-        this.firebaseService.logout();
+        this.userAuthService.logout();
     }
 }
