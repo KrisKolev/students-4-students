@@ -1,0 +1,27 @@
+<!--
+/**
+ * Reusable component for displaying ratings.
+ * Component written by Michael Fahrafellner
+ * creation date: 19.10.2021
+ * last change done by: Michael Fahrafellner
+ */
+-->
+<mat-expansion-panel hideToggle expanded="true">
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            <app-star-rating [clickable]="false" [starCount]="5" [rating]="rating.rating"></app-star-rating>
+        </mat-panel-title>
+        <mat-panel-description>
+            <mat-label><strong>Comment:</strong></mat-label>
+            <mat-label [textContent]="rating.comment"></mat-label>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+
+    <table class="image-wrapper">
+        <tr *ngFor="let image of rating.imageUrl">
+            <td><img [src]="image" height="100px" class="image-row"></td>
+        </tr>
+    </table>
+    <!--td><img [src]="image" height="100px" margin="10px"></td-->
+</mat-expansion-panel>

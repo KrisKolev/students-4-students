@@ -139,16 +139,11 @@
             <mat-label><strong>Comments</strong></mat-label>
             <br/>
             <br/>
-            <div *ngFor="let rat of this.detailedSight.ratingList">
-                <mat-label [textContent]="rat.comment"></mat-label>
 
-                <div class="image-wrapper" *ngFor="let image of rat.imageUrl">
-                    <img [src]="image" alt="Random slide" height="160px">
-                </div>
-
-
-
+            <div *ngFor="let rat of detailedSight.ratingList">
+                <app-rating-component [rating]="rat"></app-rating-component>
             </div>
+
 
             <br/>
             <button (click)="onCloseDetail()" color="warn" mat-stroked-button>

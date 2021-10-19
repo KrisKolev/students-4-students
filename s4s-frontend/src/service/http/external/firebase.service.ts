@@ -104,11 +104,13 @@ export class FirebaseService {
     /**
      * Loads all image urls of a rating.
      * @param uid
+     * Component written by Michael Fahrafellner
+     * creation date: 16.10.2021
+     * last change done by: Michael Fahrafellner
      */
     public async getRatingImageUrls(rating:Rating){
         const storage = getStorage();
         rating.imageNames.forEach(async rat=>{
-            //const pathReference = ref(storage, 'images/rating/'+rating.uid+'/'+rat+'/')
             rating.imageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rating.uid+'/'+rat+'/')))
         })
 

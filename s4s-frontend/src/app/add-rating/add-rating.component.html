@@ -17,15 +17,8 @@
             </mat-panel-description>
         </mat-expansion-panel-header>
 
-        <button mat-icon-button [color]="color" *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i" (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above">
-            <mat-icon>
-                {{showIcon(i)}}
-            </mat-icon>
-        </button>
-        <mat-error *ngIf="starCount == null || starCount == 0">
-            Star count is <strong>required</strong> and cannot be zero
-        </mat-error>
-        <mat-error *ngIf="hasError()">A rating is required!</mat-error>
+        <app-star-rating [color]="color" [clickable]="true" [starCount]="5" [rating]="rating" (ratingUpdated)="onClick($event)"></app-star-rating>
+
         <mat-form-field>
             <textarea matInput placeholder="Comment (optional)" [(ngModel)]="comment" (change)="onCommentChange()"></textarea>
         </mat-form-field>

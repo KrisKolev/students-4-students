@@ -31,7 +31,6 @@ import {UploadItem} from "../../model/uploadItem";
  * creation date: 16.10.2021
  * last change done by: Michael Fahrafellner
  */
-
 export class ManageSightDialogComponent implements OnInit {
 
   /**
@@ -627,11 +626,10 @@ export class ManageSightDialogComponent implements OnInit {
     {
       let i:number;
       let y:number;
-      for(i = 0;i<this.ratingImages.length;i++) {
-
+      for(i = 0;i<newRating.imageNames.length;i++) {
         const uploadItem = new UploadItem();
         // @ts-ignore
-        uploadItem.filePath = 'images/rating/'+res.data.ratingAssigned[0]+'/img_'+i;
+        uploadItem.filePath = 'images/rating/'+res.data.ratingAssigned[0]+'/'+newRating.imageNames[i];
         uploadItem.file = this.ratingImages[i];
         await this.firebaseService.uploadFileToFirestore(uploadItem);
       }
