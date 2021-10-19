@@ -19,6 +19,8 @@ import {FlexLayoutModule} from '@angular/flex-layout';
 import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service";
 import {MatMenuModule} from '@angular/material/menu';
 import {PopupComponent} from "./popup/popup.component";
+import { ErroPopUpComponent } from './erro-pop-up/erro-pop-up.component';
+
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -34,7 +36,8 @@ const app = initializeApp(firebaseConfig);
     declarations: [
         AppComponent,
         LoginDialogComponent,
-        PopupComponent
+        PopupComponent,
+        ErroPopUpComponent
     ],
     imports: [
         BrowserModule,
