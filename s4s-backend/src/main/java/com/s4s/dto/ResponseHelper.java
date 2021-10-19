@@ -3,6 +3,8 @@ package com.s4s.dto;
 import com.s4s.dto.response.Info;
 import com.s4s.dto.response.Response;
 
+import javax.ws.rs.core.MediaType;
+
 public class ResponseHelper {
 
     private javax.ws.rs.core.Response.ResponseBuilder jaxResponseBuilder;
@@ -38,6 +40,6 @@ public class ResponseHelper {
     }
 
     public javax.ws.rs.core.Response build(){
-        return this.jaxResponseBuilder.build();
+        return this.jaxResponseBuilder.type(MediaType.APPLICATION_JSON_TYPE).build();
     }
 }

@@ -1,9 +1,10 @@
 import {Component} from '@angular/core';
-import {FirebaseService} from '../../service/http/external/firebase.service';
 import {FormControl, Validators} from '@angular/forms';
-import {MatDialogRef} from '@angular/material/dialog';
+import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {UserAuthService} from "../../service/userAuthService";
+import {PopupType} from "../../model/popupType";
+import {PopupComponent} from "../popup/popup.component";
 
 @Component({
     selector: 'app-login-dialog',
@@ -16,6 +17,7 @@ export class LoginDialogComponent {
     pw = new FormControl('');
 
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
+                public dialog: MatDialog,
                 private userAuthService: UserAuthService,
                 private router: Router) {
     }
@@ -30,6 +32,16 @@ export class LoginDialogComponent {
                 this.dialogRef.close();
             } else {
                 //Failed
+                const dialogConfig = new MatDialogConfig();
+                dialogConfig.autoFocus = true;
+                dialogConfig.maxWidth = 500;
+                dialogConfig.data = {
+                    type: PopupType.ERROR,
+                    title: 'Error',
+                    message: 'Login failed. Please check your credentials.',
+                    cancelButton: 'OK'
+                }
+                const dialogRef = this.dialog.open(PopupComponent, dialogConfig);
             }
         });
     }

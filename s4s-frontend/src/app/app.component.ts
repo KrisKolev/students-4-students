@@ -12,7 +12,7 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 })
 export class AppComponent {
     title = 'Students4Students';
-    search: String = "";
+    search: String ="";
 
     constructor(private healthCheckService: HealthCheckService,
                 private geolocationService: GeoLocationService,
@@ -49,5 +49,13 @@ export class AppComponent {
 
     openLoginDialog(): void {
         const dialogRef = this.loginDialog.open(LoginDialogComponent);
+    }
+    isUserLoggedIn()
+    {
+        return this.userAuthService.isUserLoggedIn();
+    }
+    logout()
+    {
+        this.userAuthService.logout();
     }
 }
