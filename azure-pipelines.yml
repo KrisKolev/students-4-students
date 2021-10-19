@@ -39,9 +39,9 @@ steps:
     mavenVersionOption: 'Default'
     mavenAuthenticateFeed: false
     effectivePomSkip: false
-    sonarQubeRunAnalysis: true
-    isJacocoCoverageReportXML: true
+    sonarQubeRunAnalysis: false
+    isJacocoCoverageReportXML: false
     sqMavenPluginVersionChoice: 'latest'
-    checkStyleRunAnalysis: true
-    pmdRunAnalysis: true
-    findBugsRunAnalysis: true
+    checkStyleRunAnalysis: false
+    pmdRunAnalysis: false
+    findBugsRunAnalysis: false
