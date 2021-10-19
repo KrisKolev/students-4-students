@@ -20,6 +20,7 @@ import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service"
 import {MatCardModule} from "@angular/material/card";
 import { GoogleMapsModule } from '@angular/google-maps'
 import {MatTooltipModule} from "@angular/material/tooltip";
+import {MatMenuModule} from '@angular/material/menu';
 import {PopupComponent} from "./popup/popup.component";
 import firebase from "firebase/compat/app";
 
@@ -58,6 +59,7 @@ firebase.initializeApp(firebaseConfig);
         ReactiveFormsModule,
         MatCardModule,
         MatTooltipModule,
+        MatMenuModule
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent,PopupComponent],
