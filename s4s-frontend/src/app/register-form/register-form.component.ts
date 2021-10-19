@@ -31,6 +31,8 @@ export class RegisterFormComponent implements OnInit {
             passwordRepeat: new FormControl('', [Validators.required, Validators.min(6)])
         });
 
+
+
     }
 
     public hasError = (controlName: string, errorName: string) => {

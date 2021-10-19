@@ -17,9 +17,11 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {MatButtonModule} from '@angular/material/button';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service";
+import {MatCardModule} from "@angular/material/card";
+import { GoogleMapsModule } from '@angular/google-maps'
+import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatMenuModule} from '@angular/material/menu';
 import {PopupComponent} from "./popup/popup.component";
-
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -30,15 +32,16 @@ const firebaseConfig = {
     appId: '1:148128489605:web:fe41a4249539e2b85749ec'
 };
 const app = initializeApp(firebaseConfig);
-
 @NgModule({
     declarations: [
         AppComponent,
         LoginDialogComponent,
-        PopupComponent,
+        PopupComponent
+
     ],
     imports: [
         BrowserModule,
+        GoogleMapsModule,
         AppRoutingModule,
         BrowserAnimationsModule,
         FlexLayoutModule,
@@ -53,10 +56,14 @@ const app = initializeApp(firebaseConfig);
         ReactiveFormsModule,
         MatInputModule,
         ReactiveFormsModule,
+        MatCardModule,
+        MatTooltipModule,
         MatMenuModule
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
-    entryComponents: [LoginDialogComponent, PopupComponent],
+    entryComponents: [LoginDialogComponent,PopupComponent],
+    exports: [
+    ],
     bootstrap: [AppComponent]
 })
 

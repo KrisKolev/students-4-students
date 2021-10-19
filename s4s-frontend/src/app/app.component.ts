@@ -17,7 +17,8 @@ export class AppComponent {
     constructor(private healthCheckService: HealthCheckService,
                 private geolocationService: GeoLocationService,
                 public userAuthService: UserAuthService,
-                public loginDialog: MatDialog) {
+                public loginDialog: MatDialog,
+                public addSightDialog: MatDialog) {
         this.checkBackendConnection();
         this.initGeolocation();
     }

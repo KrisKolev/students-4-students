@@ -2,6 +2,7 @@ package com.s4s.database.model;
 
 import com.google.cloud.firestore.DocumentReference;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,16 +13,13 @@ public class Sight {
     private String latitude;
     private String longitude;
 
-    private String city;
-    private String state;
-    private String street;
-    private String zip;
-    private String buildingnumber;
+    private String address;
 
-    private String[] labels;
-    private List<Label> labelList;
-    private String[] ratings;
-    private List<Rating> ratingList;
+    private List<Label> labelList = new ArrayList<>();
+    private List<Rating> ratingList = new ArrayList<>();
+
+    private List<String> labelsAssigned = new ArrayList<>();
+    private List<String> ratingAssigned = new ArrayList<>();
 
     private DocumentReference creator;
     private Date createdAt;
@@ -62,68 +60,12 @@ public class Sight {
         this.longitude = longitude;
     }
 
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
-    public String getStreet() {
-        return street;
-    }
-
-    public void setStreet(String street) {
-        this.street = street;
-    }
-
-    public String getZip() {
-        return zip;
-    }
-
-    public void setZip(String zip) {
-        this.zip = zip;
-    }
-
-    public String getBuildingnumber() {
-        return buildingnumber;
-    }
-
-    public void setBuildingnumber(String buildingnumber) {
-        this.buildingnumber = buildingnumber;
-    }
-
-    public String[] getLabels() {
-        return labels;
-    }
-
-    public void setLabels(String[] labels) {
-        this.labels = labels;
-    }
-
     public List<Label> getLabelList() {
         return labelList;
     }
 
     public void setLabelList(List<Label> labelList) {
         this.labelList = labelList;
-    }
-
-    public String[] getRatings() {
-        return ratings;
-    }
-
-    public void setRatings(String[] ratings) {
-        this.ratings = ratings;
     }
 
     public List<Rating> getRatingList() {
@@ -156,5 +98,29 @@ public class Sight {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public List<String> getRatingAssigned() {
+        return ratingAssigned;
+    }
+
+    public void setRatingAssigned(List<String> ratingAssigned) {
+        this.ratingAssigned = ratingAssigned;
+    }
+
+    public List<String> getLabelsAssigned() {
+        return labelsAssigned;
+    }
+
+    public void setLabelsAssigned(List<String> labelsAssigned) {
+        this.labelsAssigned = labelsAssigned;
     }
 }

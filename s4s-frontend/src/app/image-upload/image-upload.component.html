@@ -1,0 +1,52 @@
+<!--
+/**
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
+ -->
+
+<mat-form [formGroup]="uploadForm">
+    <mat-card-content>
+        <br>
+        <!--input formControlName="document" type="file" ng2FileSelect accept=".png,.jpg,.jpeg" [uploader]="uploader" formControlName="file" id="file" class="form-control-file" multiple=""
+               (change)="onFileChange($event)"/><br/-->
+
+        <input formControlName="file" id="file2" type="file" class="form-control-file" multiple="" accept=".png,.jpg,.jpeg"
+               (change)="onFileChange($event)">
+        <div *ngIf="formValue.file.touched && formValue.file.invalid" class="alert alert-danger">
+            <div *ngIf="formValue.file.errors && formValue.file.errors.required">File is required.</div>
+        </div>
+
+        <br>
+        <div class="drop-zone">
+            <div ng2FileDrop [uploader]="uploader" class="drop-zone">
+                Drag and drop files to upload
+            </div>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th width="90%">
+                    Image
+                </th>
+                <th width="10%">
+                    Remove
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="preview-wrapper" *ngFor='let url of images'>
+                <th class="img-preview"  width="90%">
+                    <img [src]="url" width="150px">
+                </th>
+                <th class="text-center" width="10%">
+                    <mat-icon (click)="removeImage(url)">delete</mat-icon>
+                </th>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+
+    </mat-card-content>
+</mat-form>

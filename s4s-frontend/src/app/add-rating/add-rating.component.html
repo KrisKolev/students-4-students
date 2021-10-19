@@ -1,0 +1,26 @@
+<!--
+/**
+ * Component written by Michael Fahrafellner
+ * creation date: 16.10.2021
+ * last change done by: Michael Fahrafellner
+ */
+-->
+
+<mat-expansion-panel (opened)="panelOpenState = true"
+                     (closed)="panelOpenState = false" expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title [(ngModel)]="panelTitle">
+                <mat-label [textContent]="panelTitle"></mat-label>
+            </mat-panel-title>
+            <mat-panel-description>
+
+            </mat-panel-description>
+        </mat-expansion-panel-header>
+
+        <app-star-rating [color]="color" [clickable]="true" [starCount]="5" [rating]="rating" (ratingUpdated)="onClick($event)"></app-star-rating>
+
+        <mat-form-field>
+            <textarea matInput placeholder="Comment (optional)" [(ngModel)]="comment" (change)="onCommentChange()"></textarea>
+        </mat-form-field>
+    <app-image-upload (filesUpdated)="onImagesUpdated($event)"></app-image-upload>
+</mat-expansion-panel>

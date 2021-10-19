@@ -1,0 +1,93 @@
+.containerAddSight {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  height: 100%;
+  width: 90%;
+  margin-top: 100px;
+}
+
+#map-canvas {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.map-loader {
+  background-repeat: no-repeat;
+  max-width: 100%;
+  background-position: center;
+  background-size: cover;
+  width: 130px;
+  height: 130px;
+}
+
+.labels-chip-list{
+  margin-bottom: 20px;
+}
+
+.outerContainer{
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.autocomplete-container{
+  margin-bottom: 40px;
+  height: 50px;
+}
+
+.add-rating-container{
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+
+.maps-container{
+  margin: 50px;
+  width: 45%;
+  min-width: 200px;
+}
+
+.error-labels{
+  font-size: 16px;
+}
+
+.card-detail{
+  width: 40%;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+}
+
+mat-card-actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+::ng-deep {
+  .mat-form-field {
+    width: 100% !important;
+  }
+
+  .mat-card {
+    max-width: 80%;
+  }
+
+  .mat-form-field .mat-form-field-flex {
+    background-color: white;
+  }
+
+  .mat-button-toggle {
+    background-color: white;
+  }
+
+  .mat-grid-tile{
+    max-width: 100%;
+  }
+}
