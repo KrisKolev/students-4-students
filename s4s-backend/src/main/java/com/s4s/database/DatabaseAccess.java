@@ -76,7 +76,7 @@ public class DatabaseAccess {
         return reference;
     }
 
-    public static <T> WriteResult UpdateUidOfDocument(String collectionName,String documentName,String uid) throws ExecutionException, InterruptedException {
+    public static <T> WriteResult updateUidOfDocument(String collectionName,String documentName,String uid) throws ExecutionException, InterruptedException {
         DocumentReference docRef = dbInstance.collection(collectionName).document(documentName);
         WriteResult reference = docRef.update("uid",uid).get();
         return reference;

@@ -18,7 +18,7 @@ export class SightsService extends BackendClientService {
      * last change done by: Michael Fahrafellner
      */
     addSight(sight: Sight){
-        return this.createPostCall('sights/addSight',JSON.stringify(sight));
+        return this.createPostCall('sights/sight',JSON.stringify(sight));
     }
 
     /**
@@ -28,7 +28,7 @@ export class SightsService extends BackendClientService {
      * last change done by: Michael Fahrafellner
      */
     getLabels(){
-        return this.createGetCall('sights/getLabels');
+        return this.createGetCall('sights/labels');
     }
 
     /**
@@ -38,6 +38,6 @@ export class SightsService extends BackendClientService {
      * last change done by: Michael Fahrafellner
      */
     getSights(){
-        return this.createGetCall('sights/getAllSights');
+        return this.createGetCall('sights/allsights');
     }
 }

@@ -108,7 +108,7 @@ public class SightsAccess {
 
             DocumentReference writeResult = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(sight.getClass()),sight);
             sight.setUid(writeResult.getId());
-            DatabaseAccess.UpdateUidOfDocument("sight",sight.getUid(),sight.getUid());
+            DatabaseAccess.updateUidOfDocument("sight",sight.getUid(),sight.getUid());
             sights = loadSights();
         }
         catch (Exception e){
@@ -140,7 +140,7 @@ public class SightsAccess {
 
             DocumentReference ref = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(label.getClass()),label);
             label.setUid(ref.getId());
-            DatabaseAccess.UpdateUidOfDocument("label",label.getUid(),label.getUid());
+            DatabaseAccess.updateUidOfDocument("label",label.getUid(),label.getUid());
             labels = loadLabels();
         }
         catch (Exception e){
@@ -222,7 +222,7 @@ public class SightsAccess {
         try{
             DocumentReference ref = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(rating.getClass()),rating);
             rating.setUid(ref.getId());
-            DatabaseAccess.UpdateUidOfDocument("rating",rating.getUid(),rating.getUid());
+            DatabaseAccess.updateUidOfDocument("rating",rating.getUid(),rating.getUid());
         }
         catch (Exception e){
             return new ResponseHelper(Info.FAILURE,"An error occurred! "+e.getMessage()).build();

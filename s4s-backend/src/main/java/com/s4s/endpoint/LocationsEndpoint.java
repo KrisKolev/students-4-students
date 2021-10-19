@@ -17,26 +17,23 @@ import javax.ws.rs.core.Response;
 @Path("/location")
 public class LocationsEndpoint {
     @GET
-    @Path("/getCountries")
+    @Path("/countries")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getCountries() {
         return new ResponseHelper(Info.SUCCESS, LocationsAccess.getCountries()).build();
     }
 
     @GET
-    @Path("/allData")
+    @Path("/combined")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllData() {
         return new ResponseHelper(Info.SUCCESS, LocationsAccess.getCountriesWithCities()).build();
     }
 
-
-
-    @POST
-    @Path("/getCities")
-    @Consumes(MediaType.APPLICATION_JSON)
+    @GET
+    @Path("/cities")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getCities(Country countryId){
-        return LocationsAccess.getCountryWithCity(countryId.getUid());
+    public Response getCities(@QueryParam("id") String id){
+        return LocationsAccess.getCountryWithCity(id);
     }
 }

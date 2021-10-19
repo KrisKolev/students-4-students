@@ -19,7 +19,7 @@ export class LocationService extends BackendClientService {
      * last change done by: Michael Fahrafellner
      */
     getCountries(){
-        return this.createGetCall('location/getCountries');
+        return this.createGetCall('location/countries');
     }
 
     /**
@@ -29,7 +29,7 @@ export class LocationService extends BackendClientService {
      * last change done by: Michael Fahrafellner
      */
     getAllData(){
-        return this.createGetCall('location/allData');
+        return this.createGetCall('location/combined');
     }
 
     /**
@@ -39,8 +39,6 @@ export class LocationService extends BackendClientService {
      * last change done by: Michael Fahrafellner
      */
     getCitiesFromCountry(countryId: string){
-        return this.createPostCall('location/getCities', {
-            'uid': countryId
-        });
+        return this.createGetCall('location/cities?id='+countryId);
     }
 }

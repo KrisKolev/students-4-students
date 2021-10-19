@@ -22,14 +22,14 @@ import java.security.PublicKey;
 public class SightsEndpoint {
 
     @GET
-    @Path("/getLabels")
+    @Path("/labels")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getLabels() {
         return new ResponseHelper(Info.SUCCESS, SightsAccess.getLabels()).build();
     }
 
     @POST
-    @Path("/addLabel")
+    @Path("/label")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addLabel(Label label){
@@ -37,7 +37,7 @@ public class SightsEndpoint {
     }
 
     @POST
-    @Path("/addSight")
+    @Path("/sight")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response addSight(Sight sight){
@@ -45,7 +45,7 @@ public class SightsEndpoint {
     }
 
     @GET
-    @Path("/getAllSights")
+    @Path("/allsights")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSights() {
         return new ResponseHelper(Info.SUCCESS, SightsAccess.getSights()).build();
