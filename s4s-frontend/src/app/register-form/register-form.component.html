@@ -44,6 +44,7 @@
                         <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </mat-button>
                     <mat-error *ngIf="hasError('password', 'required')">Password is required</mat-error>
+                    <mat-error *ngIf="hasError('password', 'minlength')">Password minimum length is 6</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
@@ -56,6 +57,7 @@
                         <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </mat-button>
                     <mat-error *ngIf="hasError('passwordRepeat', 'required')">Password is required</mat-error>
+                    <mat-error *ngIf="hasError('passwordRepeat', 'minlength')">Password minimum length is 6</mat-error>
                 </mat-form-field>
 
                 <mat-error *ngIf="signUpForm.controls['password'].value !== ''
