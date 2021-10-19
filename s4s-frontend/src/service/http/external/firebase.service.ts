@@ -110,6 +110,7 @@ export class FirebaseService {
      */
     public async getRatingImageUrls(rating:Rating){
         const storage = getStorage();
+        rating.imageUrl = [];
         rating.imageNames.forEach(async rat=>{
             rating.imageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rating.uid+'/'+rat+'/')))
         })

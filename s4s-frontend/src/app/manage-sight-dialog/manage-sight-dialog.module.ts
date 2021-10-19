@@ -22,6 +22,9 @@ import {MatChipsModule} from "@angular/material/chips";
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {RatingComponentComponent} from "../rating-component/rating-component.component";
 import {StarRatingComponent} from "../star-rating/star-rating.component";
+import {NgxIonicImageViewerModule} from "ngx-ionic-image-viewer";
+import {IonicModule} from "@ionic/angular";
+import {NgImageFullscreenViewModule} from "ng-image-fullscreen-view";
 
 @NgModule({
     declarations: [ManageSightDialogComponent,AddRatingComponent,ImageUploadComponent,RatingComponentComponent,StarRatingComponent],
@@ -44,7 +47,10 @@ import {StarRatingComponent} from "../star-rating/star-rating.component";
         FileUploadModule,
         MatSelectModule,
         MatChipsModule,
-        MatProgressSpinnerModule
+        MatProgressSpinnerModule,
+        NgxIonicImageViewerModule,
+        IonicModule,
+        NgImageFullscreenViewModule
     ]
 })
 /**

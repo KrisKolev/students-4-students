@@ -37,7 +37,6 @@ const app = initializeApp(firebaseConfig);
         AppComponent,
         LoginDialogComponent,
         PopupComponent
-
     ],
     imports: [
         BrowserModule,
