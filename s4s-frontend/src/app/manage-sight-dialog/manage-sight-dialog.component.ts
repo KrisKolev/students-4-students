@@ -636,7 +636,7 @@ export class ManageSightDialogComponent implements OnInit {
     newSight.labelList = this.labels;
     newSight.ratingList.push(newRating);
 
-    this.sightService.addSight(newSight).subscribe(async (res)=>
+    this.sightService.addSight(newSight,this.authService.getLoggedInUser().uid).subscribe(async (res)=>
     {
       let i:number;
       let y:number;

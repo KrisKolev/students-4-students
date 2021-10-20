@@ -9,11 +9,9 @@ import com.s4s.database.UniversityAccess;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.request.UserDTO;
 import com.s4s.dto.response.Info;
+import com.s4s.filter.JWTTokenRequired;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.concurrent.ExecutionException;
@@ -55,5 +53,17 @@ public class UserEndpoint {
         }
 
         return new ResponseHelper(Info.SUCCESS, userRecord).build();
+    }
+
+    /**
+     * Verifies the user endpoint
+     * @return
+     */
+    @GET
+    @Path("/verify")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @JWTTokenRequired
+    public Response verifyUser(){
+        return new ResponseHelper(Info.SUCCESS,"User verified." ).build();
     }
 }

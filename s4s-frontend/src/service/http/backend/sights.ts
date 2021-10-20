@@ -17,8 +17,8 @@ export class SightsService extends BackendClientService {
      * creation date: 16.10.2021
      * last change done by: Michael Fahrafellner
      */
-    addSight(sight: Sight){
-        return this.createPostCall('sights/sight',JSON.stringify(sight));
+    addSight(sight: Sight,user:String){
+        return this.createPostCall('sights/sight?user='+user,JSON.stringify(sight));
     }
 
     /**

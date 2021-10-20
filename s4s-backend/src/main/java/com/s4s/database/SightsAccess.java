@@ -4,6 +4,7 @@ import com.google.cloud.firestore.DocumentReference;
 import com.s4s.database.model.Label;
 import com.s4s.database.model.Rating;
 import com.s4s.database.model.Sight;
+import com.s4s.database.model.User;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
 
@@ -58,7 +59,7 @@ public class SightsAccess {
      * @param sight
      * @return
      */
-    public static javax.ws.rs.core.Response addSights(Sight sight){
+    public static javax.ws.rs.core.Response addSights(Sight sight, String user){
         try{
             sights = loadSights();
             List<Sight> sightSearch = sights.stream().filter(x->x.getName().equals(sight.getName()))
@@ -73,6 +74,13 @@ public class SightsAccess {
             if(!sightsAddressSearch.isEmpty()){
                 return new ResponseHelper(Info.FAILURE,"Sight already added on address '" + sight.getAddress() + "'!").build();
             }
+            List<User> existingUser = DatabaseAccess.retrieveAllDocuments(User.class).stream().filter(x->x.getUid().equals(user)).collect(Collectors.toList());
+
+            if(existingUser.isEmpty()){
+                return new ResponseHelper(Info.FAILURE,"User could not be verified!").build();
+            }
+
+            sight.setCreator(user);
 
             //check labels
             labels = loadLabels();
@@ -88,6 +96,7 @@ public class SightsAccess {
 
             //write ratings
             for (Rating rating:sight.getRatingList()) {
+                rating.setCreator(user);
                 addRating(rating);
             }
 
