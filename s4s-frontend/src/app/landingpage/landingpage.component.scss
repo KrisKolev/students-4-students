@@ -16,23 +16,12 @@
   justify-content: center;
 }
 .image{
-  height:70%; background-size:cover; width:auto;
+  height:55%; background-size:cover; width:auto;
   background-image: url("https://cdnp.flypgs.com/files/Sehirler-long-tail/Eindhoven/eindhoven-phillips-muze.jpg");
   background-position:50% 50%;
 }
-.mat-card-footer{
-  background: rgba(125, 237, 255, 0.57);
-  color: #6f76e3;
-}
-.neon {
-  color: rgba(0, 0, 0, 0.53);
-  text-shadow:
-          0 0 5px #9fa4f6,
-          0 0 10px #9fa4f6,
-          0 0 20px #9fa4f6,
-          0 0 40px #aeb2f8,
-          0 0 80px #aeb2f8,
-          0 0 90px #aeb2f8,
-          0 0 100px #aeb2f8,
-          0 0 150px #aeb2f8;
+.picsum-img-wrapper{
+  width:400px;
+  height:400px;
+  object-fit:scale-down;
 }

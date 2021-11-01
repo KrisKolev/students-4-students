@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {HealthCheckService} from '../service/http/backend/healthCheck.service';
 import {GeoLocationService} from '../service/http/external/geoLocation.service';
 import {UserAuthService} from '../service/userAuthService';
@@ -7,14 +7,17 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {UserService} from "../service/http/backend/user.service";
 import {FirebaseService} from "../service/http/external/firebase.service";
 
+
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent {
+export class AppComponent{
     title = 'Students4Students';
+    image = 'assets/images/logo.png'
     search: String ="";
+
 
     constructor(private healthCheckService: HealthCheckService,
                 private geolocationService: GeoLocationService,
@@ -75,4 +78,5 @@ export class AppComponent {
     {
         this.userAuthService.logout();
     }
+
 }

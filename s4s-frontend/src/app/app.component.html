@@ -1,20 +1,18 @@
 <mat-toolbar class="mat-elevation-z6" color="primary">
     <div class="topnav-container">
-        <span class="brandText" routerLink="./">{{title}}</span>
+           <span><img src="{{image}}" alt="{{image}}" width="330px" height="330px"/>
+           </span>
     </div>
+
     <div class="spacer"></div>
     <a mat-button routerLink="">Home</a>
     <a mat-button>About Us</a>
 
-
-    <form class="example-form">
-        <mat-form-field>
-            <span matPrefix> </span>
-            <input type="text" matInput placeholder="Search" name="search" [(ngModel)]="search">
-            <button matSuffix mat-button>
-                <mat-icon>search</mat-icon>
-            </button>
-        </mat-form-field>
+    <!--search bar-->
+    <form class="form-inline waves-light" mdbWavesEffect>
+        <div class="md-form mt-0">
+            <input class="form-control mr-sm-2" type="text" placeholder="Search">
+        </div>
     </form>
 
     <ng-template [ngIf]="isUserLoggedIn()==true">
@@ -37,9 +35,15 @@
     <ng-template #loggedOut>
         <a mat-raised-button (click)="openLoginDialog()">Sign In</a>
     </ng-template>
+
 </mat-toolbar>
 <span class="router-container">
     <router-outlet></router-outlet>
 </span>
+<mat-card-footer>
+    <div class="footer-copyright text-center py-3">© 2021 Copyright:
+        <a> Students4Students.com</a>
+    </div>
+</mat-card-footer>
 
 
