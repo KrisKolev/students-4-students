@@ -1,0 +1,143 @@
+
+<div class="card">
+    <mat-card>
+        <div class="container row">
+            <!--Menu for selecting profile change-->
+            <div class="row1">
+                <mat-selection-list [multiple]="false">
+                    <mat-list-option (click)="selectedOption = 'Profile'">Profile</mat-list-option>
+                    <mat-list-option (click)="selectedOption = 'E-mail'">E-mail</mat-list-option>
+                    <mat-list-option (click)="selectedOption = 'Password'">Password</mat-list-option>
+                    <mat-list-option (click)="selectedOption = 'Picture'">Picture</mat-list-option>
+                </mat-selection-list>
+            </div>
+            <!--Profile selected in menu-->
+            <ng-template [ngIf]="selectedOption=='Profile'">
+                <form class="col-lg" [formGroup]="profileForm">
+                    <br/>
+                    <mat-card-title>Profile</mat-card-title>
+                    <br/>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter your firstname</mat-label>
+                        <mat-error *ngIf="hasError('firstname', 'minlength','profileForm')">First name minimum length is 2</mat-error>
+                        <mat-error *ngIf="hasError('firstname', 'maxlength','profileForm')">First name maximum length is 50</mat-error>
+                        <input formControlName="firstname" matInput placeholder="John" required>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter your lastname</mat-label>
+                        <mat-error *ngIf="hasError('lastname', 'minlength','profileForm')">Last name minimum length is 2</mat-error>
+                        <mat-error *ngIf="hasError('lastname', 'maxlength','profileForm')">Last name maximum length is 50</mat-error>
+                        <input formControlName="lastname" matInput placeholder="Doe" required>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field appearance="outline">
+                        <input formControlName="nickname" matInput placeholder="johndoe" required>
+                        <mat-label>Enter your nickname</mat-label>
+                        <mat-error *ngIf="hasError('lastname', 'minlength','profileForm')">Nickname minimum length is 2</mat-error>
+                        <mat-error *ngIf="hasError('lastname', 'maxlength','profileForm')">Nickname maximum length    is 50</mat-error>
+                    </mat-form-field>
+                    <br/>
+
+                    <!--Buttons-->
+                    <mat-card-actions>
+                        <button color="primary" mat-raised-button>
+                            Change
+                        </button>
+                        <button (click)="onAbort()" color="warn" mat-stroked-button>
+                            Abort
+                        </button>
+                    </mat-card-actions>
+                </form>
+            </ng-template>
+            <!--E-mail selected in menu-->
+            <ng-template [ngIf]="selectedOption=='E-mail'">
+                <form class="col-lg" [formGroup]="emailForm">
+                    <br/>
+                    <mat-card-title>Email</mat-card-title>
+                    <br/>
+                    <mat-form-field appearance="outline">
+                        <input formControlName="email" matInput placeholder="johndoe@example.com" required>
+                        <mat-label>Enter your email</mat-label>
+                        <mat-error *ngIf="hasError('email', 'email','emailForm')">Email Syntax is incorrect</mat-error>
+                    </mat-form-field>
+
+                    <!--Buttons-->
+                    <mat-card-actions>
+                        <button color="primary" mat-raised-button>
+                            Change
+                        </button>
+                        <button (click)="onAbort()" color="warn" mat-stroked-button>
+                            Abort
+                        </button>
+                    </mat-card-actions>
+                </form>
+            </ng-template>
+            <!--Password selected in menu-->
+            <ng-template [ngIf]="selectedOption=='Password'">
+                <form class="col-lg" [formGroup]="passwordForm">
+                    <br/>
+                    <mat-card-title>Password</mat-card-title>
+                    <br/>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Enter your password</mat-label>
+                        <input placeholder="Password" [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput required>
+                        <mat-button (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+                                    [attr.aria-pressed]="hidePassword"
+                                    mat-icon-button matSuffix>
+                            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </mat-button>
+                        <mat-error *ngIf="hasError('password', 'minlength','passwordForm')">Password minimum length is 6</mat-error>
+                    </mat-form-field>
+                    <br/>
+                    <mat-form-field appearance="outline">
+                        <mat-label>Repeat your password</mat-label>
+                        <input placeholder="Password" [type]="hidePassword ? 'password' : 'text'" formControlName="passwordRepeat" matInput
+                               required>
+                        <mat-button (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
+                                    [attr.aria-pressed]="hidePassword"
+                                    mat-icon-button matSuffix>
+                            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                            <mat-error *ngIf="hasError('password', 'minlength','passwordForm')">Password minimum length is 6</mat-error>
+                        </mat-button>
+                    </mat-form-field>
+
+                    <!--Buttons-->
+                    <mat-card-actions>
+                        <button color="primary" mat-raised-button>
+                            Change
+                        </button>
+                        <button (click)="onAbort()" color="warn" mat-stroked-button>
+                            Abort
+                        </button>
+                    </mat-card-actions>
+                </form>
+            </ng-template>
+
+            <mat-error *ngIf="passwordForm.controls['password'].value !== ''
+                               && passwordForm.controls['passwordRepeat'].value !== ''
+                               && passwordForm.controls['password'].value !== passwordForm.controls['passwordRepeat'].value">
+                Passwords are not equal
+            </mat-error>
+
+            <!--Picture selected in menu-->
+            <ng-template [ngIf]="selectedOption=='Picture'">
+                <form class="col-lg" [formGroup]="pictureForm">
+                    <br/>
+                    <mat-card-title>Picture</mat-card-title>
+                    <br/>
+                    <input type="file" class="picture" accept="image/png, image/jpeg">
+
+                    <mat-card-actions>
+                        <button color="primary" mat-raised-button>
+                            Change
+                        </button>
+                        <button (click)="onAbort()" color="warn" mat-stroked-button>
+                            Abort
+                        </button>
+                    </mat-card-actions>
+                </form>
+            </ng-template>
+        </div>
+    </mat-card>
+</div>

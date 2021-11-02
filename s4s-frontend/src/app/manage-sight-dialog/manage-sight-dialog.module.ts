@@ -27,7 +27,10 @@ import {IonicModule} from "@ionic/angular";
 import {NgImageFullscreenViewModule} from "ng-image-fullscreen-view";
 
 @NgModule({
-    declarations: [ManageSightDialogComponent,AddRatingComponent,ImageUploadComponent,RatingComponentComponent,StarRatingComponent],
+    declarations: [ManageSightDialogComponent, AddRatingComponent, ImageUploadComponent, RatingComponentComponent, StarRatingComponent],
+    exports: [
+        ImageUploadComponent
+    ],
     imports: [
         CommonModule,
         ManageSightDialogRoutingModule,

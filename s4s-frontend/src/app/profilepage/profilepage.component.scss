@@ -1,0 +1,29 @@
+.row1
+{
+  width: 30%;
+}
+.mat-form-field
+{
+  width: 60%;
+  margin: 3px;
+  padding:3px;
+}
+mat-selection-list.mat-selection-list.mat-list-base.col {
+/*  outline-style: auto;
+  outline-color: #7dedff;*/
+}
+.mat-list-option {
+  color: #6f76e3;
+}
+
+mat-card{
+  text-align: center;
+  min-height: 500px;
+  min-width: 800px;
+  max-width: 1000px;
+  display:grid;
+  align-self: center;
+  vertical-align: center;
+  margin: 20px;
+}
+

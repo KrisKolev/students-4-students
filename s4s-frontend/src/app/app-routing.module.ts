@@ -15,6 +15,10 @@ const routes: Routes = [
         loadChildren: () => import('./manage-sight-dialog/manage-sight-dialog.module').then(m => m.ManageSightDialogModule)
     },
     {
+        path: 'profile',
+        loadChildren: () => import('./profilepage/profilepage.module').then(m => m.ProfilepageModule)
+    },
+    {
         path: '**',
         loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
     }
