@@ -5,6 +5,7 @@ import { LandingpageRoutingModule } from './landingpage-routing.module';
 import {MatCardModule} from "@angular/material/card";
 import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
 
+
 @NgModule({
   declarations: [LandingpageComponent],
     imports: [

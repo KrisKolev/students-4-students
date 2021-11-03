@@ -14,6 +14,7 @@ import {FirebaseService} from "../service/http/external/firebase.service";
 })
 export class AppComponent {
     title = 'Students4Students';
+    image = 'assets/images/logo.png'
     search: String ="";
 
     constructor(private healthCheckService: HealthCheckService,

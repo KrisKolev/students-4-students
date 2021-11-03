@@ -9,6 +9,7 @@ import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 export class LandingpageComponent implements OnInit {
   title = 'Locations';
 
+
   images = [
     {title: 'First Location', short: 'First Locations Short', src:  "./assets/images/1.jpg" },
     {title: 'Second Location', short: 'Second Locations Short', src: "./assets/images/2.jpg"},
@@ -21,6 +22,7 @@ export class LandingpageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
   }
 
 }

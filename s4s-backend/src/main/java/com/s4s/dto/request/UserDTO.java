@@ -1,5 +1,7 @@
 package com.s4s.dto.request;
 
+import com.s4s.database.UniversityAccess;
+
 public class UserDTO {
     private String firstname;
     private String lastname;
@@ -51,7 +53,12 @@ public class UserDTO {
         this.password = password;
     }
 
-    public String getUid(){return uid;}
+    public String getUid() {
+        return uid;
+    }
 
-    public void setUid(String uid){this.uid = uid;}
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
 }

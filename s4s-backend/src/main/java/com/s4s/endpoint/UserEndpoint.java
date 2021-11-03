@@ -2,6 +2,7 @@ package com.s4s.endpoint;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.OidcProviderConfig;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.s4s.database.DatabaseAccess;
@@ -24,8 +25,8 @@ public class UserEndpoint {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response registerUser(UserDTO userDTO) {
-        if(!UniversityAccess.isValidEmailDomain(userDTO.getEmail())){
-            return new ResponseHelper(Info.FAILURE,"Email domain cannot be verified!" ).build();
+        if (!UniversityAccess.isValidEmailDomain(userDTO.getEmail())) {
+            return new ResponseHelper(Info.FAILURE, "Email domain cannot be verified!").build();
         }
 
         UserRecord.CreateRequest request = new CreateRequest()
@@ -46,7 +47,7 @@ public class UserEndpoint {
             dbUser.setNickname(userDTO.getNickname());
             dbUser.setEmail(userDTO.getEmail());
             dbUser.setUid(userRecord.getUid());
-            DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(dbUser.getClass()),dbUser,dbUser.getUid());
+            DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(dbUser.getClass()), dbUser, dbUser.getUid());
         } catch (FirebaseAuthException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return new ResponseHelper(Info.FAILURE, e.getMessage()).build();
@@ -57,13 +58,50 @@ public class UserEndpoint {
 
     /**
      * Verifies the user endpoint
+     *
      * @return
      */
     @GET
     @Path("/verify")
     @Consumes(MediaType.APPLICATION_JSON)
     @JWTTokenRequired
-    public Response verifyUser(){
-        return new ResponseHelper(Info.SUCCESS,"User verified." ).build();
+    public Response verifyUser() {
+        return new ResponseHelper(Info.SUCCESS, "User verified.").build();
+    }
+
+
+    /**
+     * Updates the user endpoint
+     */
+    @POST
+    @Path("/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+
+
+    public Response updateUser(UserDTO userDTO) throws FirebaseAuthException, ExecutionException, InterruptedException {
+               UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
+                       .setEmail(userDTO.getEmail())
+                       .setEmailVerified(true)
+                       .setDisplayName(userDTO.getFirstname() + " " + userDTO.getLastname());
+
+
+
+        UserRecord userRecord;
+        try {
+            com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
+            userRecord=FirebaseAuth.getInstance().updateUser(updateRequest);
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"firstname",userDTO.getFirstname());
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"lastname",userDTO.getLastname());
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"email",userDTO.getEmail());
+
+        }
+        catch (FirebaseAuthException exception)
+        {
+        return new ResponseHelper(Info.FAILURE).build();
+        }
+
+        return new ResponseHelper(Info.SUCCESS).build();
     }
 }
+
