@@ -24,7 +24,12 @@ import {RatingComponentComponent} from "../rating-component/rating-component.com
 import {StarRatingComponent} from "../star-rating/star-rating.component";
 
 @NgModule({
-    declarations: [ManageSightDialogComponent,AddRatingComponent,ImageUploadComponent,RatingComponentComponent,StarRatingComponent],
+    declarations: [ManageSightDialogComponent, AddRatingComponent, ImageUploadComponent, RatingComponentComponent, StarRatingComponent],
+    exports: [
+        StarRatingComponent,
+        RatingComponentComponent,
+        AddRatingComponent
+    ],
     imports: [
         CommonModule,
         ManageSightDialogRoutingModule,

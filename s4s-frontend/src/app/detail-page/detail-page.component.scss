@@ -1,0 +1,56 @@
+.sight-name {
+  display: flex;
+  justify-content: center;
+  flex: auto;
+  font-size: 50px;
+  transition: 0.3s;
+}
+
+.detail-toolbar {
+  padding-block: 50px;
+}
+
+/*.picture {
+  float: left;
+  position: relative;
+  width: 200px;
+  height: 200px;
+  background-color: #6f76e3;
+  margin-left: 100px;
+  margin-top: 50px;
+}*/
+
+.container {
+  float: left;
+  margin-top: 50px;
+  margin-left: 50px;
+}
+
+.big-component {
+  width: 100%;
+  justify-items: center;
+  padding-block: 50px;
+}
+
+.mat-card-content {
+  padding-top: 15px;
+  padding-left: 15px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
+.add-rating-container{
+  padding-left: 50px;
+  width: 50%;
+  align-items: center;
+  justify-items: center;
+}
+
+.reviews {
+  padding-left: 50px;
+  align-items: center;
+  justify-content: center;
+  max-width: 30%;
+  word-wrap: break-word;
+}

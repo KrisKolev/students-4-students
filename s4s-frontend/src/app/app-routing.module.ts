@@ -15,10 +15,13 @@ const routes: Routes = [
         loadChildren: () => import('./manage-sight-dialog/manage-sight-dialog.module').then(m => m.ManageSightDialogModule)
     },
     {
+        path: 'detail',
+        loadChildren: () => import('./detail-page/detail-page.module').then(m => m.DetailPageModule)
+    },
+    {
         path: '**',
         loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
     }
-
 ];
 
 @NgModule({

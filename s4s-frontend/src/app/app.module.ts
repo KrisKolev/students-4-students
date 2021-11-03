@@ -22,6 +22,9 @@ import { GoogleMapsModule } from '@angular/google-maps'
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatMenuModule} from '@angular/material/menu';
 import {PopupComponent} from "./popup/popup.component";
+import { DetailPageComponent } from './detail-page/detail-page.component';
+import {ManageSightDialogModule} from "./manage-sight-dialog/manage-sight-dialog.module";
+import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -36,7 +39,8 @@ const app = initializeApp(firebaseConfig);
     declarations: [
         AppComponent,
         LoginDialogComponent,
-        PopupComponent
+        PopupComponent,
+        DetailPageComponent
 
     ],
     imports: [
@@ -58,7 +62,9 @@ const app = initializeApp(firebaseConfig);
         ReactiveFormsModule,
         MatCardModule,
         MatTooltipModule,
-        MatMenuModule
+        MatMenuModule,
+        ManageSightDialogModule,
+        NgbCarouselModule
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent,PopupComponent],
