@@ -21,9 +21,9 @@
 }*/
 
 .container {
-  float: left;
-  margin-top: 50px;
-  margin-left: 50px;
+  display: grid;
+  justify-content: center;
+  align-items: center;
 }
 
 .big-component {
@@ -53,4 +53,8 @@
   justify-content: center;
   max-width: 30%;
   word-wrap: break-word;
+}
+
+img {
+  border-radius: 15px;
 }
