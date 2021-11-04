@@ -29,6 +29,9 @@ import {NgImageFullscreenViewModule} from "ng-image-fullscreen-view";
 @NgModule({
     declarations: [ManageSightDialogComponent, AddRatingComponent, ImageUploadComponent, RatingComponentComponent, StarRatingComponent],
     exports: [
+        StarRatingComponent,
+        RatingComponentComponent,
+        AddRatingComponent,
         ImageUploadComponent
     ],
     imports: [
