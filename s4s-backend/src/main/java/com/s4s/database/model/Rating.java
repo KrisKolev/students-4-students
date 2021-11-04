@@ -15,7 +15,7 @@ public class Rating {
 
     private List<String> imageNames = new ArrayList<>();
 
-    private DocumentReference creator;
+    private String creator;
     private Date createdAt;
     private Date updatedAt;
 
@@ -51,11 +51,11 @@ public class Rating {
         this.comment = comment;
     }
 
-    public DocumentReference getCreator() {
+    public String getCreator() {
         return creator;
     }
 
-    public void setCreator(DocumentReference creator) {
+    public void setCreator(String creator) {
         this.creator = creator;
     }
 

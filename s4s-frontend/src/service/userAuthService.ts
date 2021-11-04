@@ -5,6 +5,9 @@ import {User} from '../model/user';
 import {FirebaseService} from "./http/external/firebase.service";
 import {RegistrationService} from "./http/backend/registration.service";
 import {getAuth, onAuthStateChanged} from "firebase/auth";
+import {verify} from "crypto";
+import {UserService} from "./http/backend/user.service";
+import {createGunzip} from "zlib";
 
 @Injectable({providedIn: 'root'})
 export class UserAuthService {
@@ -16,9 +19,12 @@ export class UserAuthService {
 
     constructor(public router: Router,
                 private firebaseService: FirebaseService,
-                private registrationService: RegistrationService) {
+                private registrationService: RegistrationService,
+                private userService:UserService) {
         this.userBehaviorSubject = new BehaviorSubject<User>(new User());
         this.userObservable = this.userBehaviorSubject.asObservable();
+
+
     }
 
     public register(email: string, password: string, firstname: string, lastname: string, nickname: string) {

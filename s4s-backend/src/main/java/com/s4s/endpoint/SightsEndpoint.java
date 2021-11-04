@@ -6,6 +6,7 @@ import com.s4s.database.model.Label;
 import com.s4s.database.model.Sight;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
+import com.s4s.filter.JWTTokenRequired;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -38,10 +39,11 @@ public class SightsEndpoint {
 
     @POST
     @Path("/sight")
+    @JWTTokenRequired
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response addSight(Sight sight){
-        return SightsAccess.addSights(sight);
+    public Response addSight(Sight sight,@QueryParam("user") String user){
+        return SightsAccess.addSights(sight,user);
     }
 
     @GET

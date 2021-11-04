@@ -17,11 +17,21 @@
         </mat-panel-description>
     </mat-expansion-panel-header>
 
+    <mat-grid-list cols="3" rowHeight="120px">
+        <mat-grid-tile
+                *ngFor="let image of rating.imageUrl"
+                [colspan]="1"
+                [rowspan]="1">
+            <img [src]="image" height="150px" class="image-row" (click)="showLightbox(image)">
+            <!--img *ngFor="let img of imageObject; let i = index" [src]="img.thumbImage || img.posterImage" (click)="showLightbox(i)" /-->
+        </mat-grid-tile>
+    </mat-grid-list>
 
-    <table class="image-wrapper">
-        <tr *ngFor="let image of rating.imageUrl">
-            <td><img [src]="image" height="100px" class="image-row"></td>
-        </tr>
-    </table>
     <!--td><img [src]="image" height="100px" margin="10px"></td-->
 </mat-expansion-panel>
+
+<ng-image-fullscreen-view
+        [images]="imageObject"
+        [imageIndex]="currentIndex"
+        [show]="showFlag"
+        (close)="closeEventHandler()"></ng-image-fullscreen-view>

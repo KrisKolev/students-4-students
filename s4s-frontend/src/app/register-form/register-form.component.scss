@@ -5,16 +5,13 @@
   height: 100%;
   width: 100%;
 }
-
 mat-card {
   max-width: 350px;
 }
-
 mat-card-actions {
   display: flex;
   justify-content: center;
 }
-
 ::ng-deep {
   .mat-form-field {
     width: 100% !important;

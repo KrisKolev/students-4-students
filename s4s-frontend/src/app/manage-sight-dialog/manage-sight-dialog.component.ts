@@ -20,6 +20,13 @@ import {PopupComponent} from "../popup/popup.component";
 import {FirebaseService} from "../../service/http/external/firebase.service";
 import {UploadItem} from "../../model/uploadItem";
 
+export interface Tile {
+  color: string;
+  cols: number;
+  rows: number;
+  text: string;
+}
+
 @Component({
   selector: 'app-manage-sight-dialog',
   templateUrl: './manage-sight-dialog.component.html',
@@ -162,6 +169,13 @@ export class ManageSightDialogComponent implements OnInit {
    * sight to be shown in the detail view
    */
   detailedSight : Sight = new Sight();
+
+  tiles: Tile[] = [
+    {text: 'One', cols: 3, rows: 1, color: 'lightblue'},
+    {text: 'Two', cols: 1, rows: 2, color: 'lightgreen'},
+    {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
+    {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
+  ];
 
 
   /**
@@ -622,7 +636,7 @@ export class ManageSightDialogComponent implements OnInit {
     newSight.labelList = this.labels;
     newSight.ratingList.push(newRating);
 
-    this.sightService.addSight(newSight).subscribe(async (res)=>
+    this.sightService.addSight(newSight,this.authService.getLoggedInUser().uid).subscribe(async (res)=>
     {
       let i:number;
       let y:number;
