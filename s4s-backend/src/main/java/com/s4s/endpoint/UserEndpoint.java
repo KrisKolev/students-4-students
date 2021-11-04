@@ -77,8 +77,7 @@ public class UserEndpoint {
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-
-
+    @JWTTokenRequired
     public Response updateUser(UserDTO userDTO) throws FirebaseAuthException, ExecutionException, InterruptedException {
                UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
                        .setEmail(userDTO.getEmail())
