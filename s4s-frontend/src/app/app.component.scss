@@ -1,8 +1,27 @@
-.spacer {
-  flex: 1 1 auto;
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+mat-toolbar {
+  height: 50px;
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  * {
+    margin-right: 5px;
+  }
+}
+
+.router-container {
+
 }
 
 .footer-copyright {
   background-color: #3f51b5;
   color: white;
 }
+

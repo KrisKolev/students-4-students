@@ -1,4 +1,4 @@
-<span fxLayout="column" style="height: 100%;">
+<span class="app-container">
     <mat-toolbar class="mat-elevation-z6" color="primary">
         <span routerLink="">
             <img src="{{image}}" alt="{{image}}" width="330px" height="330px"/>
@@ -9,11 +9,11 @@
         <button mat-button>About Us</button>
 
         <!--search bar-->
-        <form class="form-inline waves-light" mdbWavesEffect>
-            <div class="md-form mt-0">
-                <input class="form-control mr-sm-2" type="text" placeholder="Search">
-            </div>
-        </form>
+        <span>
+            <form>
+                <input class="form-control" type="text" placeholder="Search">
+            </form>
+        </span>
 
         <ng-template [ngIf]="isUserLoggedIn()==true">
             <button mat-button routerLink="manageSight">
@@ -27,14 +27,14 @@
                 <mat-icon>account_circle</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item routerLink="./profile">Profile</button>
-                <button mat-menu-item (click)="logout()">Logout</button>
+                <button mat-menu-item routerLink="./profile"><mat-icon>manage_accounts</mat-icon>Profile</button>
+                <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>Logout</button>
             </mat-menu>
         </ng-template>
 
         <!--signin button-->
         <ng-template #loggedOut>
-            <a mat-raised-button (click)="openLoginDialog()">Sign In</a>
+            <button mat-flat-button color="accent" (click)="openLoginDialog()">Sign In</button>
         </ng-template>
     </mat-toolbar>
 
