@@ -1,12 +1,11 @@
 <mat-toolbar class="mat-elevation-z6" color="primary">
-    <div class="topnav-container">
-         <span><img src="{{image}}" alt="{{image}}" width="330px" height="330px"/>
-           </span>
-    </div>
-    <div class="spacer"></div>
-    <a mat-button routerLink="">Home</a>
-    <a mat-button>About Us</a>
+    <span routerLink="">
+        <img src="{{image}}" alt="{{image}}" width="330px" height="330px"/>
+    </span>
 
+    <div class="spacer"></div>
+    <button mat-button routerLink="">Home</button>
+    <button mat-button>About Us</button>
 
     <!--search bar-->
     <form class="form-inline waves-light" mdbWavesEffect>
@@ -21,28 +20,28 @@
         </button>
     </ng-template>
 
-
     <!--profile button-->
     <ng-template [ngIf]="isUserLoggedIn()==true" [ngIfElse]="loggedOut">
-    <button mat-button [matMenuTriggerFor]="menu"> <mat-icon>account_circle</mat-icon></button>
-    <mat-menu #menu="matMenu">
-        <button mat-menu-item routerLink="./profile">Profile</button>
-        <button mat-menu-item (click)="logout()">Logout</button>
-    </mat-menu>
+        <button mat-button [matMenuTriggerFor]="menu">
+            <mat-icon>account_circle</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item routerLink="./profile">Profile</button>
+            <button mat-menu-item (click)="logout()">Logout</button>
+        </mat-menu>
     </ng-template>
 
     <!--signin button-->
     <ng-template #loggedOut>
         <a mat-raised-button (click)="openLoginDialog()">Sign In</a>
     </ng-template>
-
 </mat-toolbar>
+
 <span class="router-container">
     <router-outlet></router-outlet>
 </span>
-<mat-card-footer>
-    <div class="footer-copyright text-center py-3">© 2021 Copyright:
-        <a> Students4Students.com</a>
-    </div>
-</mat-card-footer>
+
+<div class="footer-copyright text-center py-3">© 2021 Copyright:
+    <a> Students4Students.com</a>
+</div>
 
