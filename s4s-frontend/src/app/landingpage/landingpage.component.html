@@ -1,20 +1,64 @@
-<div class="image"></div>
+<!--div class="image"></div-->
 <mat-card-title>Welcome to Students 4 Students!</mat-card-title>
 <mat-card-subtitle> The Helper every newcomer needs!</mat-card-subtitle>
 
+<div class="maps-container" [@extendMap]="isTopLocationsVisible ? 'closed' : 'open'">
+    <google-map
+        #googleMap
+        [zoom]="zoom"
+        width="100%"
+        height="100%"
+        [center]="center"
+        [options]="options"
+        (mapClick)="onMapClick($event)">
+        <map-marker
+                markerElem="mapMarker"
+                *ngFor="let marker of mapMarkers"
+                [position]="marker.position"
+                [label]="marker.label"
+                [title]="marker.title"
+                [options]="marker.options"></map-marker>
+        <map-marker
+                markerElem="mapMarkerExisting"
+                *ngFor="let marker of mapMarkersSights"
+                [position]="marker.position"
+                [label]="marker.label"
+                [title]="marker.title"
+                [options]="marker.options"
+                [icon]="marker.icon"></map-marker>
+    </google-map>
+</div>
 
-<mat-card>
-<mat-card-content>
-    <ngb-carousel>
-        <ng-template ngbSlide *ngFor="let image of images">
-            <div class="picsum-img-wrapper">
-                <img [src]="image.src" alt="Random slide">
-            </div>
-            <div class="carousel-caption">
+<div class="maps-gotolocation">
+    <mat-card-actions>
+        <button class="map-action-button" mat-raised-button (click)="onGoToLocation()" background-color="primary">
+            Go to your location
+        </button>
+    </mat-card-actions>
+</div>
 
-                <p>Example of The most popular places!</p>
-            </div>
-        </ng-template>
-    </ngb-carousel>
-</mat-card-content>
-</mat-card>
+<div class="maps-toggleTopLocations">
+    <mat-card-actions>
+        <button class="map-action-button" mat-raised-button (click)="onToggleTopLocations()" background-color="primary">
+            {{toggleTopLocationsText}}
+        </button>
+    </mat-card-actions>
+</div>
+
+<div class="top-locations-container" *ngIf="initialVisibility">
+    <mat-card [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'">
+        <mat-card-content>
+            <ngb-carousel>
+                <ng-template ngbSlide *ngFor="let image of images">
+                    <div class="picsum-img-wrapper" opacity="0">
+                        <img [src]="image.src" alt="Random slide">
+                    </div>
+                    <div class="carousel-caption">
+
+                        <p>Example of The most popular places!</p>
+                    </div>
+                </ng-template>
+            </ngb-carousel>
+        </mat-card-content>
+    </mat-card>
+</div>
