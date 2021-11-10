@@ -44,10 +44,13 @@
 
 .top-locations-container{
   position: fixed;
-  top: 320px;
   left: 20px;
-  width: 25%;
+  top: 70px;
+  width: 0px;
+  height: 90%;
+  opacity: 0;
   padding: 20px;
+  overflow-y: auto;
 }
 
 .maps-container{
@@ -73,4 +76,38 @@
   color:white;
   margin-left: 5px;
   background-color: #3f51b5;
+}
+
+.map-search-adressbar{
+  z-index: 10;
+  width: 400px;
+  right: 80px;
+  position: fixed;
+  top: 140px;
+
+}
+
+.address-placeholder-label{
+  color: white;
+}
+
+mat-form-field{
+  fill: white;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 100%;
+  color:white;
+  border-color: transparent;
+  text-decoration-color: white;
+  border-radius: 30px;
+  background-color: #3f51b5;
+  outline-color: red;
+}
+
+.card-detail{
+  width: 40%;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
 }

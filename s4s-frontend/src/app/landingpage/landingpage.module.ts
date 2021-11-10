@@ -6,7 +6,12 @@ import {MatCardModule} from "@angular/material/card";
 import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
 import {GoogleMapsModule} from "@angular/google-maps";
 import {MatButtonModule} from "@angular/material/button";
-import {MatFormFieldModule} from "@angular/material/form-field";
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from "@angular/material/form-field";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {MatListModule} from "@angular/material/list";
+import {ManageSightDialogModule} from "../manage-sight-dialog/manage-sight-dialog.module";
+import {MatExpansionModule} from "@angular/material/expansion";
 
 
 @NgModule({
@@ -19,7 +24,12 @@ import {MatFormFieldModule} from "@angular/material/form-field";
         GoogleMapsModule,
         MatButtonModule,
         MatFormFieldModule,
-
+        MatInputModule,
+        ReactiveFormsModule,
+        FormsModule,
+        MatListModule,
+        ManageSightDialogModule,
+        MatExpansionModule
     ]
 })
 export class LandingpageModule { }

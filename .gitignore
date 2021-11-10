@@ -12,3 +12,4 @@
 *.json
 !universities.json
 !countries+cities.json
+open_project_environment.bat

@@ -29,7 +29,7 @@
     </google-map>
 </div>
 
-<div class="maps-gotolocation">
+<div class="maps-gotolocation" [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'">
     <mat-card-actions>
         <button class="map-action-button" mat-raised-button (click)="onGoToLocation()" background-color="primary">
             Go to your location
@@ -37,7 +37,7 @@
     </mat-card-actions>
 </div>
 
-<div class="maps-toggleTopLocations">
+<div class="maps-toggleTopLocations" [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'">
     <mat-card-actions>
         <button class="map-action-button" mat-raised-button (click)="onToggleTopLocations()" background-color="primary">
             {{toggleTopLocationsText}}
@@ -45,20 +45,30 @@
     </mat-card-actions>
 </div>
 
-<div class="top-locations-container" *ngIf="initialVisibility">
-    <mat-card [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'">
-        <mat-card-content>
-            <ngb-carousel>
-                <ng-template ngbSlide *ngFor="let image of images">
-                    <div class="picsum-img-wrapper" opacity="0">
-                        <img [src]="image.src" alt="Random slide">
-                    </div>
-                    <div class="carousel-caption">
+<div class="top-locations-container" *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'">
+    <div>
+        <h2>Here are top-locations near</h2>
+        <h3>Here are top-locations near </h3>
 
-                        <p>Example of The most popular places!</p>
-                    </div>
-                </ng-template>
-            </ngb-carousel>
-        </mat-card-content>
-    </mat-card>
+        <mat-expansion-panel expanded="true" *ngFor="let sight of allSightsSortedByDistance">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    <mat-label [textContent]="sight.name"></mat-label>
+                </mat-panel-title>
+                <mat-panel-description>
+                    <mat-label [textContent]="'     (' + sight.showDistanceString + ')'"></mat-label>
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+        </mat-expansion-panel>
+    </div>
+</div>
+
+
+<div class="map-search-adressbar">
+    <form >
+        <mat-form-field appearance="fill">
+            <mat-label class="address-placeholder-label">Enter an address to search</mat-label>
+            <input width="400px" type="text" matInput  autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #addressSearch [(ngModel)]="addressValue">
+        </mat-form-field>
+    </form>
 </div>
