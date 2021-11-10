@@ -53,12 +53,25 @@
         <mat-expansion-panel expanded="true" *ngFor="let sight of allSightsSortedByDistance">
             <mat-expansion-panel-header>
                 <mat-panel-title>
-                    <mat-label [textContent]="sight.name"></mat-label>
+                    <mat-label >
+                        <strong [textContent]="sight.name"></strong>
+                    </mat-label>
                 </mat-panel-title>
                 <mat-panel-description>
                     <mat-label [textContent]="'     (' + sight.showDistanceString + ')'"></mat-label>
                 </mat-panel-description>
             </mat-expansion-panel-header>
+
+            <div class="card-detail" >
+                <mat-label><strong>Address: </strong></mat-label>
+                <mat-label [textContent]="sight.address"></mat-label>
+                <br/>
+
+                <button class="go-sight-btn" mat-raised-button (click)="onGoToSight(sight)">Go to sight</button>
+
+            </div>
+
+
         </mat-expansion-panel>
     </div>
 </div>

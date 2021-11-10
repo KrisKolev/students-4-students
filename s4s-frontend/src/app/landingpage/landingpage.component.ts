@@ -70,7 +70,7 @@ export class LandingpageComponent implements OnInit {
   /**
    * HTML element of the google maps object.
    */
-  @ViewChild('googleMap', { static: false }) map: GoogleMap
+  @ViewChild('googleMap', {static: false}) map: GoogleMap
   /**
    * HTML element of the address search bar.
    */
@@ -99,7 +99,7 @@ export class LandingpageComponent implements OnInit {
     disableDoubleClickZoom: true,
     maxZoom: 20,
     minZoom: 1,
-    zoom:15
+    zoom: 15
   }
   /**
    * Current map markers for the google maps object.
@@ -119,11 +119,11 @@ export class LandingpageComponent implements OnInit {
   /**
    * Longitude of the new sight
    */
-  customLongitude:any;
+  customLongitude: any;
   /**
    * Latitude of the new sight
    */
-  customLatitude:any;
+  customLatitude: any;
   /**
    * Address of the sight
    */
@@ -139,10 +139,10 @@ export class LandingpageComponent implements OnInit {
    */
   allSights: Sight[] = [];
 
-  allSightsSortedByDistance: SightTopLocation[]= [];
+  allSightsSortedByDistance: SightTopLocation[] = [];
 
   images = [
-    {title: 'First Location', short: 'First Locations Short', src:  "./assets/images/1.jpg" },
+    {title: 'First Location', short: 'First Locations Short', src: "./assets/images/1.jpg"},
     {title: 'Second Location', short: 'Second Locations Short', src: "./assets/images/2.jpg"},
     {title: 'Third Location', short: 'Third Locations Short', src: "./assets/images/3.jpg"}
   ];
@@ -151,16 +151,16 @@ export class LandingpageComponent implements OnInit {
 
   isTopLocationsVisible = false;
   initialVisibility = false;
-  showSightsLocationLongitude :number;
-  showSightsLocationLatitude :number;
+  showSightsLocationLongitude: number;
+  showSightsLocationLatitude: number;
 
 
   constructor(config: NgbCarouselConfig,
               private locService: LocationService,
-              private authService:UserAuthService,
-              private geolocService:GeoLocationService,
+              private authService: UserAuthService,
+              private geolocService: GeoLocationService,
               private ngZone: NgZone,
-              private sightService:SightsService,
+              private sightService: SightsService,
               private dialog: MatDialog,
               private firebaseService: FirebaseService) {
     config.interval = 2000;
@@ -191,7 +191,7 @@ export class LandingpageComponent implements OnInit {
             return;
           }
 
-          this.placeCustomMarker(place.geometry.location.lat(),place.geometry.location.lng())
+          this.placeCustomMarker(place.geometry.location.lat(), place.geometry.location.lng())
           this.zoom = 19;
           this.center = {
             lat: place.geometry.location.lat(),
@@ -206,8 +206,7 @@ export class LandingpageComponent implements OnInit {
         });
       });
 
-    }
-    catch (e) {
+    } catch (e) {
       console.log(e);
     }
   }
@@ -217,9 +216,9 @@ export class LandingpageComponent implements OnInit {
    * @param latitude
    * @param longitude
    */
-  placeCustomMarker(latitude:number, longitude:number){
-    if(this.mapMarkers.length>1){
-      this.mapMarkers.splice(1,this.mapMarkers.length-1)
+  placeCustomMarker(latitude: number, longitude: number) {
+    if (this.mapMarkers.length > 1) {
+      this.mapMarkers.splice(1, this.mapMarkers.length - 1)
     }
 
     const marker = new google.maps.Marker({
@@ -244,7 +243,7 @@ export class LandingpageComponent implements OnInit {
    * @param longitude
    */
   getAddress(latitude, longitude) {
-    this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
+    this.geoCoder.geocode({'location': {lat: latitude, lng: longitude}}, (results, status) => {
       console.log(results);
       console.log(status);
       if (status === 'OK') {
@@ -273,7 +272,7 @@ export class LandingpageComponent implements OnInit {
   /**
    * Initializes the map object.
    */
-  initMap(){
+  initMap() {
     navigator.geolocation.getCurrentPosition((position) => {
 
       this.mapMarkers.pop();
@@ -303,17 +302,15 @@ export class LandingpageComponent implements OnInit {
   }
 
   onToggleTopLocations() {
-    if(!this.initialVisibility)
-    {
+    if (!this.initialVisibility) {
       this.initialVisibility = true;
     }
     this.isTopLocationsVisible = !this.isTopLocationsVisible;
     this.onFilterTopLocations();
 
-    if(this.isTopLocationsVisible){
+    if (this.isTopLocationsVisible) {
       this.toggleTopLocationsText = "Hide Top Locations"
-    }
-    else{
+    } else {
       this.toggleTopLocationsText = "Show top locations in my area"
     }
   }
@@ -321,13 +318,12 @@ export class LandingpageComponent implements OnInit {
   /**
    * Loads all labels from the database.
    */
-  onLoadLabels(){
-    this.sightService.getLabels().subscribe((val)=>
-    {
-      const pulledLabels=[];
+  onLoadLabels() {
+    this.sightService.getLabels().subscribe((val) => {
+      const pulledLabels = [];
       // @ts-ignore
       const lab = val.data as Array;
-      lab.forEach(ob=>{
+      lab.forEach(ob => {
         const newLabel = new Label();
         newLabel.name = ob.name;
         newLabel.uid = ob.uid;
@@ -344,13 +340,12 @@ export class LandingpageComponent implements OnInit {
   /**
    * Loads all sights from the database.
    */
-  onLoadSights(){
-    this.sightService.getSights().subscribe((val)=>
-    {
-      const pulledSights=[];
+  onLoadSights() {
+    this.sightService.getSights().subscribe((val) => {
+      const pulledSights = [];
       // @ts-ignore
       const sights = val.data as Array;
-      sights.forEach(sight=>{
+      sights.forEach(sight => {
         const newSight = new Sight();
         newSight.uid = sight.uid;
         newSight.name = sight.name;
@@ -358,30 +353,30 @@ export class LandingpageComponent implements OnInit {
         newSight.latitude = sight.latitude;
         newSight.address = sight.address;
 
-        sight.ratingList.forEach(rating=>{
+        sight.ratingList.forEach(rating => {
           const newRating = new Rating();
           try {
             newRating.uid = rating.uid;
             newRating.rating = rating.rating;
             newRating.comment = rating.comment;
-            var images=[];
-            rating.imageNames.forEach(rat=>{
+            var images = [];
+            rating.imageNames.forEach(rat => {
               images.push(rat)
             })
             newRating.imageNames = images;
+          } catch {
           }
-          catch{}
           newSight.ratingList.push(newRating);
         })
 
-        sight.labelList.forEach(label=>{
+        sight.labelList.forEach(label => {
           const newLabel = new Label();
           try {
             newLabel.uid = label.uid;
             newLabel.name = label.name;
             newLabel.color = label.color;
+          } catch {
           }
-          catch{}
           newSight.labelList.push(newLabel)
         })
 
@@ -390,7 +385,7 @@ export class LandingpageComponent implements OnInit {
 
       this.allSights = pulledSights;
 
-      this.allSights.forEach((sight)=>{
+      this.allSights.forEach((sight) => {
 
         const svgMarker = {
           path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
@@ -424,24 +419,42 @@ export class LandingpageComponent implements OnInit {
     })
   }
 
-  onFilterTopLocations(){
+  onFilterTopLocations() {
     this.allSightsSortedByDistance = [];
 
-    if(this.showSightsLocationLatitude == undefined || this.showSightsLocationLongitude == undefined)
+    if (this.showSightsLocationLatitude == undefined || this.showSightsLocationLongitude == undefined)
       return;
 
-    this.allSights.forEach((sight)=>{
+    this.allSights.forEach((sight) => {
       this.allSightsSortedByDistance.push(CreateLocationSight(sight))
     })
 
 
-    this.allSightsSortedByDistance.forEach((sight)=>{
-      var num = getDistanceFromLatLonInKm(this.showSightsLocationLatitude,this.showSightsLocationLongitude,sight.latitude,sight.longitude)
+    this.allSightsSortedByDistance.forEach((sight) => {
+      var num = getDistanceFromLatLonInKm(this.showSightsLocationLatitude, this.showSightsLocationLongitude, sight.latitude, sight.longitude)
       sight.onSetDistance(num)
 
     })
 
     this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+  }
+
+  onGoToSight(sight: SightTopLocation) {
+    this.initMapWithPosition(Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude),this.zoom)
+  }
+
+  /**
+   * Inits the map location with specific coordinates and map zoom.
+   * @param latidute
+   * @param longitude
+   * @param zoom
+   */
+  initMapWithPosition(latidute:number, longitude:number,zoom:number){
+    this.center = {
+      lat: latidute,
+      lng: longitude,
+    }
+    this.zoom = zoom;
   }
 }
 
