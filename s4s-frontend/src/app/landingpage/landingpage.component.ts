@@ -297,6 +297,8 @@ export class LandingpageComponent implements OnInit {
 
       this.mapMarkers.push(marker)
       this.isTopLocationsVisible = true;
+      this.onFilterTopLocations();
+
     });
   }
 
