@@ -31,7 +31,7 @@ import {Rating} from "../../model/rating";
       ]),
     trigger('extendLocations', [
       state('open', style({
-        width: '25%',
+        width: '600px',
         opacity: 1
       })),
       state('closed', style({
@@ -44,10 +44,10 @@ import {Rating} from "../../model/rating";
     ]),
     trigger('extendMap', [
       state('open', style({
-        width: '100%',
+        left: '0',
       })),
       state('closed', style({
-        width: '73%',
+        left: '600px',
       })),
       transition('* => *', [
         animate('0.75s')
@@ -55,10 +55,22 @@ import {Rating} from "../../model/rating";
     ]),
     trigger('moveMapButtons', [
       state('open', style({
-        left: '28%',
+        left: '650px',
       })),
       state('closed', style({
         left: '20p',
+      })),
+      transition('* => *', [
+        animate('0.75s')
+      ])
+    ]),trigger('moveLocationButton', [
+      state('open', style({
+        left: '360px',
+        top: '85px'
+      })),
+      state('closed', style({
+        left: '20p',
+        top: '200px'
       })),
       transition('* => *', [
         animate('0.75s')
@@ -200,7 +212,10 @@ export class LandingpageComponent implements OnInit {
 
           this.showSightsLocationLongitude = place.geometry.location.lng()
           this.showSightsLocationLatitude = place.geometry.location.lat()
+
+
           this.isTopLocationsVisible = true;
+          this.onToggleTopLocations(true)
 
           this.onFilterTopLocations();
         });
@@ -263,6 +278,9 @@ export class LandingpageComponent implements OnInit {
    * Resets the map to the user location.
    */
   onGoToLocation() {
+    if(this.isTopLocationsVisible){
+      this.isTopLocationsVisible = false;
+    }
     this.initMap();
   }
 
@@ -295,17 +313,18 @@ export class LandingpageComponent implements OnInit {
       });
 
       this.mapMarkers.push(marker)
-      this.isTopLocationsVisible = true;
-      this.onFilterTopLocations();
-
+      this.onToggleTopLocations(false);
     });
   }
 
-  onToggleTopLocations() {
+  onToggleTopLocations(keepVisibility:boolean) {
     if (!this.initialVisibility) {
       this.initialVisibility = true;
     }
-    this.isTopLocationsVisible = !this.isTopLocationsVisible;
+    if(!keepVisibility)
+    {
+      this.isTopLocationsVisible = !this.isTopLocationsVisible;
+    }
     this.onFilterTopLocations();
 
     if (this.isTopLocationsVisible) {
@@ -432,7 +451,7 @@ export class LandingpageComponent implements OnInit {
 
     this.allSightsSortedByDistance.forEach((sight) => {
       var num = getDistanceFromLatLonInKm(this.showSightsLocationLatitude, this.showSightsLocationLongitude, sight.latitude, sight.longitude)
-      sight.onSetDistance(num)
+      sight.onInit(num)
 
     })
 

@@ -1,5 +1,7 @@
 import {Label} from "./label";
 import {Rating} from "./rating";
+import {coerceNumberProperty} from "@angular/cdk/coercion";
+import {relativePathBetween} from "@angular/compiler-cli/src/ngtsc/util/src/path";
 
 /**
  * Model for a sight
@@ -32,14 +34,24 @@ export class Sight {
 export class SightTopLocation extends Sight{
     relativeDistance: number;
     showDistanceString: string;
+    overallRating: number;
 
-    onSetDistance(distance:number){
+    onInit(distance:number){
         this.relativeDistance = distance;
         if(distance<1){
             this.showDistanceString = (Number(distance.toFixed(3))*1000).toString() + " m away"
         }
         else{
             this.showDistanceString = (Number(distance.toFixed(2))).toString() + " km away"
+        }
+
+        var allRatings=0;
+        this.ratingList.forEach((rat)=>{
+            allRatings += rat.rating;
+        })
+
+        if(this.ratingList.length >0){
+            this.overallRating = allRatings / this.ratingList.length;
         }
 
     }
