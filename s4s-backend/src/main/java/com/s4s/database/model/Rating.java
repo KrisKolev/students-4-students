@@ -1,7 +1,5 @@
 package com.s4s.database.model;
 
-import com.google.cloud.firestore.DocumentReference;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
