@@ -12,6 +12,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MatListModule} from "@angular/material/list";
 import {ManageSightDialogModule} from "../manage-sight-dialog/manage-sight-dialog.module";
 import {MatExpansionModule} from "@angular/material/expansion";
+import {MatGridListModule} from "@angular/material/grid-list";
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import {MatExpansionModule} from "@angular/material/expansion";
         FormsModule,
         MatListModule,
         ManageSightDialogModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatGridListModule
     ]
 })
 export class LandingpageModule { }

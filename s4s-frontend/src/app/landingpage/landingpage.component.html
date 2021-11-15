@@ -27,10 +27,10 @@
     </google-map>
 </div>
 
-<div class="top-locations-container" *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'">
+<div class="top-locations-container" *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'" [@moveSightsDetails]="isSightDetailVisible ? 'open' : 'closed'">
     <div>
-        <h2>Here are top-locations near</h2>
-        <h3>Here are top-locations near </h3>
+        <h2>Here are locations near you</h2>
+        <h3>{{currentLocationAddress}} </h3>
 
         <mat-expansion-panel expanded="true" *ngFor="let sight of allSightsSortedByDistance">
             <mat-expansion-panel-header>
@@ -49,6 +49,22 @@
 
             <div class="card-detail" >
 
+                <mat-grid-list cols="2" rowHeight="2:1">
+                    <mat-grid-tile>
+                        <ngb-carousel>
+                            <ng-template ngbSlide *ngFor="let image of sight.allImageUrl">
+                                <div class="picsum-img-wrapper">
+                                    <img [src]="image" alt="Random slide">
+                                </div>
+                            </ng-template>
+                        </ngb-carousel>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <button class="sight-show-detail-btn" mat-raised-button (click)="onGoToSight(sight)">Details</button>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+
                 <app-star-rating width="100px" [clickable]="true" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>
 
                 <br/>
@@ -56,15 +72,16 @@
                 <mat-label [textContent]="sight.address"></mat-label>
                 <br/>
 
-
-
-                <button class="go-sight-btn" mat-raised-button (click)="onGoToSight(sight)">Go to sight</button>
-
             </div>
-
 
         </mat-expansion-panel>
     </div>
+</div>
+
+<div *ngIf="isSightDetailVisible" [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
+    <label>Details</label>
+    <button mat-raised-button class="close-button-detail"
+    (click)="onCloseSightDetail()">X</button>
 </div>
 
 <div class="maps-gotolocation" [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'">

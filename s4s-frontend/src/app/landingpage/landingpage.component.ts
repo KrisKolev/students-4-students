@@ -31,7 +31,7 @@ import {Rating} from "../../model/rating";
       ]),
     trigger('extendLocations', [
       state('open', style({
-        width: '600px',
+        width: '500px',
         opacity: 1
       })),
       state('closed', style({
@@ -47,7 +47,7 @@ import {Rating} from "../../model/rating";
         left: '0',
       })),
       state('closed', style({
-        left: '600px',
+        left: '510px',
       })),
       transition('* => *', [
         animate('0.75s')
@@ -55,7 +55,7 @@ import {Rating} from "../../model/rating";
     ]),
     trigger('moveMapButtons', [
       state('open', style({
-        left: '650px',
+        left: '550px',
       })),
       state('closed', style({
         left: '20p',
@@ -65,7 +65,7 @@ import {Rating} from "../../model/rating";
       ])
     ]),trigger('moveLocationButton', [
       state('open', style({
-        left: '360px',
+        left: '320px',
         top: '85px'
       })),
       state('closed', style({
@@ -74,6 +74,28 @@ import {Rating} from "../../model/rating";
       })),
       transition('* => *', [
         animate('0.75s')
+      ])
+    ]),trigger('moveSightsDetails', [
+      state('open', style({
+        height:'52%'
+      })),
+      state('closed', style({
+        height:'90%'
+      })),
+      transition('* => *', [
+        animate('0.45s')
+      ])
+    ]),trigger('moveSightsDetailsContainer', [
+      state('open', style({
+        width: '500px',
+        opacity: 1
+      })),
+      state('closed', style({
+        width: '0px',
+        opacity: 0
+      })),
+      transition('* => *', [
+        animate('0.35s')
       ])
     ]),]
 })
@@ -166,6 +188,9 @@ export class LandingpageComponent implements OnInit {
   showSightsLocationLongitude: number;
   showSightsLocationLatitude: number;
 
+  currentLocationAddress: string
+
+  isSightDetailVisible: boolean = false;
 
   constructor(config: NgbCarouselConfig,
               private locService: LocationService,
@@ -449,10 +474,10 @@ export class LandingpageComponent implements OnInit {
     })
 
 
-    this.allSightsSortedByDistance.forEach((sight) => {
+    this.allSightsSortedByDistance.forEach( async sight => {
       var num = getDistanceFromLatLonInKm(this.showSightsLocationLatitude, this.showSightsLocationLongitude, sight.latitude, sight.longitude)
       sight.onInit(num)
-
+      await this.firebaseService.getSightImageUrls(sight);
     })
 
     this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
@@ -460,7 +485,10 @@ export class LandingpageComponent implements OnInit {
 
   onGoToSight(sight: SightTopLocation) {
     this.initMapWithPosition(Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude),this.zoom)
+    this.isSightDetailVisible = true;
   }
+
+  onShowSightDetails
 
   /**
    * Inits the map location with specific coordinates and map zoom.
@@ -475,6 +503,15 @@ export class LandingpageComponent implements OnInit {
     }
     this.zoom = zoom;
   }
+
+  onCloseSightDetail() {
+    this.isSightDetailVisible = false;
+  }
+
+  onOpenSightDetails(){
+    this.isSightDetailVisible = true;
+  }
+
 }
 
 /**
