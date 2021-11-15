@@ -134,6 +134,17 @@ public class SightsAccess {
         return labels;
     }
 
+    public static boolean deleteSight(Sight sight){
+        try {
+            DatabaseAccess.deleteDocument(Sight.class, sight.getUid());
+            return true;
+        }catch (InterruptedException | ExecutionException iex){
+            System.out.println("Error while deleting document rollback is made");
+            System.err.println(iex);
+            return false;
+        }
+    }
+
     /**
      * Adds a label to database.
      * @param label

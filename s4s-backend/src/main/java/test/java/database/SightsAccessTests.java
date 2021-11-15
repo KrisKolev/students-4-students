@@ -27,17 +27,45 @@ public class SightsAccessTests {
 
     @Test
     public void addSight_WithValidSight_AddsSight(){
-        Sight sight = getValidSight();
+        Sight sightToAdd = getValidSight();
         List<Sight> before = SightsAccess.getSights();
         int sightNumberBefore = before.size();
 
-        Response response = SightsAccess.addSights(sight, "5MMOO2DKV3R9jXaRts3IKnRnfpm2");
+        Response response = SightsAccess.addSights(sightToAdd, "5MMOO2DKV3R9jXaRts3IKnRnfpm2");
 
         List<Sight> after = SightsAccess.getSights();
         int sightNumberAfter = after.size();
 
         assert(response.getStatus() == HttpStatusCodes.STATUS_CODE_OK);
         assert(sightNumberAfter == sightNumberBefore+1);
+
+        deleteSight(sightToAdd);
+    }
+
+    @Test
+    public void deleteSight_WithValidSight_DeletesSight(){
+        int sightNumberBefore = CreateSightAndDeleteAfterwards();
+        List<Sight> afterDelete = SightsAccess.getSights();
+        int sightNumberAfterDelete = afterDelete.size();
+
+        assert(sightNumberAfterDelete == sightNumberBefore);
+    }
+
+    private int CreateSightAndDeleteAfterwards() {
+        Sight sightToAddAndDelete = getValidSight();
+        List<Sight> before = SightsAccess.getSights();
+        int sightNumberBefore = before.size();
+
+        Response response = SightsAccess.addSights(sightToAddAndDelete, "5MMOO2DKV3R9jXaRts3IKnRnfpm2");
+
+        List<Sight> after = SightsAccess.getSights();
+        int sightNumberAfter = after.size();
+
+        assert(response.getStatus() == HttpStatusCodes.STATUS_CODE_OK);
+        assert(sightNumberAfter == sightNumberBefore+1);
+
+        SightsAccess.deleteSight(sightToAddAndDelete);
+        return sightNumberBefore;
     }
 
     @Test
@@ -82,5 +110,10 @@ public class SightsAccessTests {
         label.setUpdatedAt(new Date());
         return label;
     }
+
+    private void deleteSight(Sight sight){
+        SightsAccess.deleteSight(sight);
+    }
+
 
 }

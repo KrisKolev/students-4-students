@@ -3,6 +3,8 @@ package com.s4s.database;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.s4s.database.model.Country;
+import com.s4s.database.model.Sight;
 import com.s4s.database.model.University;
 
 import java.io.InputStream;
@@ -10,6 +12,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 public class UniversityAccess {
     private static List<University> universities;
@@ -58,6 +61,17 @@ public class UniversityAccess {
             instance = new UniversityAccess();
         }
         return instance;
+    }
+
+    public static boolean deleteUniversity(University university){
+        try {
+            DatabaseAccess.deleteDocument(University.class, university.getUid());
+            return true;
+        }catch (InterruptedException | ExecutionException iex){
+            System.out.println("Error while deleting document rollback is made");
+            System.err.println(iex);
+            return false;
+        }
     }
 
     public static boolean isValidEmailDomain(String email) {
