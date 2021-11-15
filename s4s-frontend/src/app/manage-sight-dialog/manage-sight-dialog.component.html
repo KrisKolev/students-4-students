@@ -19,16 +19,16 @@
                         <mat-label>Enter the sight name</mat-label>
                         <input formControlName="sightName" matInput placeholder="Ernst-Happel Stadium" required [(ngModel)]="nameValue">
                         <mat-error *ngIf="hasError('sightName', 'required')">Name is required</mat-error>
-                        <mat-error *ngIf="hasError('sightName', 'minlength')">Firstname minimum length is 2</mat-error>
-                        <mat-error *ngIf="hasError('sightName', 'maxlength')">Firstname maximum length is 200</mat-error>
+                        <mat-error *ngIf="hasError('sightName', 'minlength')">Name minimum length is 2</mat-error>
+                        <mat-error *ngIf="hasError('sightName', 'maxlength')">Name maximum length is 200</mat-error>
                     </mat-form-field>
 
                     <mat-form-field appearance="outline">
                         <mat-label>Enter the street address</mat-label>
                         <input type="text" formControlName="address" class="form-control" matInput (keydown.enter)="$event.preventDefault()" placeholder="Enter the address of the sight" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #addressSearch [(ngModel)]="addressValue">
                         <mat-error *ngIf="hasError('address', 'required')">Address is required</mat-error>
-                        <mat-error *ngIf="hasError('address', 'minlength')">Firstname minimum length is 2</mat-error>
-                        <mat-error *ngIf="hasError('address', 'maxlength')">Firstname maximum length is 400</mat-error>
+                        <mat-error *ngIf="hasError('address', 'minlength')">Address minimum length is 2</mat-error>
+                        <mat-error *ngIf="hasError('address', 'maxlength')">Address maximum length is 400</mat-error>
                     </mat-form-field>
 
                     <mat-form-field class="labels-chip-list" appearance="outline">
@@ -61,14 +61,13 @@
                         </mat-autocomplete>
                     </mat-form-field>
 
-                    <mat-error *ngIf="labels.length<1" class="error-labels">
+                    <mat-error *ngIf="labelErrorVisible" class="error-labels">
                         You need to add at least <strong>one label</strong> for the sight
                     </mat-error>
 
                     <mat-card-actions>
                         <mat-progress-spinner mode="indeterminate" class="mat-progress-spinner" diameter="40" color="accent" [hidden]="!addSightInProgress"></mat-progress-spinner>
-                        <button [disabled]="!validForm"
-                                color="primary" mat-raised-button>
+                        <button color="primary" mat-raised-button>
                             Add Sight
                         </button>
                         <button (click)="onAbort()" color="warn" mat-stroked-button>
@@ -92,7 +91,7 @@
                 </mat-button-toggle>
             </mat-card-actions>
 
-            <mat-error *ngIf="mapMarkers.length<2" class="error-labels">
+            <mat-error *ngIf="labelMapErrorVisible" class="error-labels">
                 You need to place a <strong>map marker</strong> to continue
             </mat-error>
 
