@@ -87,11 +87,11 @@ import {Rating} from "../../model/rating";
       ])
     ]),trigger('moveSightsDetailsContainer', [
       state('open', style({
-        width: '500px',
+        left: '0',
         opacity: 1
       })),
       state('closed', style({
-        width: '0px',
+        left: '-100%',
         opacity: 0
       })),
       transition('* => *', [
@@ -190,7 +190,9 @@ export class LandingpageComponent implements OnInit {
 
   currentLocationAddress: string
 
+  isSightDetailContainerVisible: boolean = false;
   isSightDetailVisible: boolean = false;
+
 
   constructor(config: NgbCarouselConfig,
               private locService: LocationService,
@@ -485,7 +487,7 @@ export class LandingpageComponent implements OnInit {
 
   onGoToSight(sight: SightTopLocation) {
     this.initMapWithPosition(Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude),this.zoom)
-    this.isSightDetailVisible = true;
+    this.onOpenSightDetails();
   }
 
   onShowSightDetails
@@ -506,9 +508,11 @@ export class LandingpageComponent implements OnInit {
 
   onCloseSightDetail() {
     this.isSightDetailVisible = false;
+    this.isSightDetailContainerVisible = false;
   }
 
   onOpenSightDetails(){
+    this.isSightDetailContainerVisible = true
     this.isSightDetailVisible = true;
   }
 

@@ -79,7 +79,7 @@
     </div>
 </div>
 
-<div *ngIf="isSightDetailVisible" [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
+<div [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
     <label>Details</label>
     <button mat-raised-button class="close-button-detail"
     (click)="onCloseSightDetail()">X</button>
