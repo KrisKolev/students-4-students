@@ -8,7 +8,6 @@ import com.s4s.database.model.User;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
 
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -38,6 +37,12 @@ public class SightsAccess {
      * All available ratings
      */
     private static List<Rating> ratings = new ArrayList<>();
+
+    /**
+     * Top sights
+     */
+    private static List<Sight>topSight = new ArrayList<>();
+
 
     /**
      * Creates the sight instance
@@ -166,6 +171,8 @@ public class SightsAccess {
         return sights;
     }
 
+
+
     /**
      * Loads all labels from database
      * @return
@@ -222,11 +229,11 @@ public class SightsAccess {
         return loadedSights;
     }
 
-    /**
-     * Adds a rating for a sight
-     * @param rating
-     * @return
-     */
+        /**
+         * Adds a rating for a sight
+         * @param rating
+         * @return
+         */
     public static javax.ws.rs.core.Response addRating(Rating rating){
         try{
             DocumentReference ref = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(rating.getClass()),rating);
@@ -237,5 +244,45 @@ public class SightsAccess {
             return new ResponseHelper(Info.FAILURE,"An error occurred! "+e.getMessage()).build();
         }
         return new ResponseHelper(Info.SUCCESS,"Rating added",rating).build();
+    }
+
+    public static double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2){
+        double R = 6371;
+        double dLat = deg2rad(lat2 - lat1);
+       double dLon = deg2rad(lon2 - lon1);
+
+       double a =
+               Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos(deg2rad(lat1)) *
+                       Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
+
+       double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
+    public static double deg2rad(double deg){
+        return deg * (Math.PI/180);
+    }
+
+    public static List<Sight>getTopSight(double lon, double lat, double radius){
+        List<Sight> sightDistances = new ArrayList<>();
+
+        for (Sight sight : sights) {
+            double averageRating;
+            double allRatings = 0;
+
+            double distance = SightsAccess.getDistanceFromLatLonInKm(
+                    Double.parseDouble(sight.getLatitude()),Double.parseDouble(sight.getLongitude()),lat, lon);
+            if (distance <= radius){
+                for (String rating : sight.getRatingAssigned()){
+                    allRatings += Double.parseDouble(rating);
+                }
+                averageRating = allRatings / ratings.size();
+                sightDistances.add(sight);
+                if (averageRating >= 4){
+                    sightDistances.add(sight);
+                }
+            }
+        }
+        return  sightDistances;
     }
 }
