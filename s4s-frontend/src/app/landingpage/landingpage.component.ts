@@ -189,10 +189,9 @@ export class LandingpageComponent implements OnInit {
   showSightsLocationLatitude: number;
 
   currentLocationAddress: string
-
-  isSightDetailContainerVisible: boolean = false;
   isSightDetailVisible: boolean = false;
 
+  detailedSight: Sight = new Sight();
 
   constructor(config: NgbCarouselConfig,
               private locService: LocationService,
@@ -486,6 +485,7 @@ export class LandingpageComponent implements OnInit {
   }
 
   onGoToSight(sight: SightTopLocation) {
+    this.detailedSight = sight as Sight;
     this.initMapWithPosition(Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude),this.zoom)
     this.onOpenSightDetails();
   }
@@ -508,14 +508,18 @@ export class LandingpageComponent implements OnInit {
 
   onCloseSightDetail() {
     this.isSightDetailVisible = false;
-    this.isSightDetailContainerVisible = false;
   }
 
   onOpenSightDetails(){
-    this.isSightDetailContainerVisible = true
     this.isSightDetailVisible = true;
   }
 
+  showDetailsOfMarker(marker: any) {
+    const sight = this.allSights.find(x=>x.name==marker.getLabel().text && x.address == marker.getTitle())
+    this.detailedSight = sight as Sight;
+    this.initMapWithPosition(Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude),this.zoom)
+    this.onOpenSightDetails();
+  }
 }
 
 /**

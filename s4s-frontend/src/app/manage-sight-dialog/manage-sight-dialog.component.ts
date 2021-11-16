@@ -477,7 +477,6 @@ export class ManageSightDialogComponent implements OnInit {
       this.detailedSight.ratingList.forEach(async rat=>{
         await this.firebaseService.getRatingImageUrls(rat);
       })
-
     }
     catch (e)
     {

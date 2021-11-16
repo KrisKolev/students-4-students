@@ -23,7 +23,8 @@
                 [label]="marker.label"
                 [title]="marker.title"
                 [options]="marker.options"
-                [icon]="marker.icon"></map-marker>
+                [icon]="marker.icon"
+                (mapClick)="showDetailsOfMarker(marker)"></map-marker>
     </google-map>
 </div>
 
@@ -80,9 +81,22 @@
 </div>
 
 <div [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
-    <label>Details</label>
     <button mat-raised-button class="close-button-detail"
     (click)="onCloseSightDetail()">X</button>
+
+    <mat-card-title ><strong>{{detailedSight.name}}</strong></mat-card-title>
+    <mat-label><strong>Address: </strong></mat-label>
+    <mat-label [textContent]="detailedSight.address"></mat-label>
+    <br/>
+    <mat-label><strong>Comments</strong></mat-label>
+    <br/>
+
+    <div *ngFor="let rat of detailedSight.ratingList">
+        <app-rating-component [rating]="rat"></app-rating-component>
+    </div>
+
+
+    <br/>
 </div>
 
 <div class="maps-gotolocation" [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'">
