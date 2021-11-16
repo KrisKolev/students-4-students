@@ -6,7 +6,7 @@
  */
 export class Rating {
     uid: string;
-    rating: Number;
+    rating: number;
     comment: string = "";
     imageNames: string[] = []
     createdAt:string;

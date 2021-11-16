@@ -3,6 +3,7 @@ import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
 import {UploadItem, UploadResponse} from "../../../model/uploadItem";
 import {Rating} from "../../../model/rating";
+import {SightTopLocation} from "../../../model/sight";
 
 @Injectable({providedIn: 'root'})
 export class FirebaseService {
@@ -112,8 +113,32 @@ export class FirebaseService {
         const storage = getStorage();
         rating.imageUrl = [];
         rating.imageNames.forEach(async rat=>{
-            rating.imageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rating.uid+'/'+rat+'/')))
+            try {
+                rating.imageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rating.uid+'/'+rat+'/')))
+            }
+            catch (e) {
+                console.log(e);
+            }
+
         })
 
+    }
+
+    /**
+     * Loads all image urls of a sight.
+     * @param uid
+     * Component written by Michael Fahrafellner
+     * creation date: 16.10.2021
+     * last change done by: Michael Fahrafellner
+     */
+    public async getSightImageUrls(sight:SightTopLocation){
+        const storage = getStorage();
+        sight.allImageUrl = [];
+
+        sight.ratingList.forEach(rat=>{
+            rat.imageNames.forEach(async img=>{
+                sight.allImageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rat.uid+'/'+img+'/')))
+            })
+        })
     }
 }

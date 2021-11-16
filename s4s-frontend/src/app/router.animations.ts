@@ -1,4 +1,5 @@
 import { trigger, transition, style, animate, query, stagger, group, keyframes, state } from '@angular/animations';
+import {Component} from "@angular/core";
 
 //animations to be used
 
