@@ -8,6 +8,7 @@ import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
 import com.s4s.filter.JWTTokenRequired;
 
+import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -51,5 +52,26 @@ public class SightsEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllSights() {
         return new ResponseHelper(Info.SUCCESS, SightsAccess.getSights()).build();
+    }
+
+//    @GET
+//    @Path("/getsight")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Response getSight(String id) {
+//        return new ResponseHelper(Info.SUCCESS, SightsAccess.getSight(id)).build();
+//    }
+
+    @Path("/getsight/{id}")
+    public static class SightResource {
+        @GET
+        @Produces(MediaType.APPLICATION_JSON)
+        public Response getSight(@PathParam("id") String id) {
+            if (SightsAccess.getSightById(id).equals(null)) {
+                return new ResponseHelper(Info.FAILURE, "Error retrieving sight").build();
+            }
+            else {
+                return new ResponseHelper(Info.SUCCESS, SightsAccess.getSightById(id)).build();
+            }
+        }
     }
 }

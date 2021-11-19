@@ -62,7 +62,7 @@
                         <mat-label *ngIf="sight.allImageUrl.length<1">No images available</mat-label>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <button class="sight-show-detail-btn" mat-raised-button (click)="onGoToSight(sight)">Details</button>
+                        <button class="sight-show-detail-btn" mat-raised-button routerLink="detail"> <!--(click)="onGoToSight(sight)"-->Details</button>
                     </mat-grid-tile>
                 </mat-grid-list>
 

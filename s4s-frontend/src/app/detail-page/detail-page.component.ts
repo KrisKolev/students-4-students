@@ -1,6 +1,8 @@
-import {Component, OnInit, ViewEncapsulation} from '@angular/core';
+import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {NgbCarouselConfig} from "@ng-bootstrap/ng-bootstrap";
 import {Rating} from "../../model/rating";
+import {SightsService} from "../../service/http/backend/sights";
+import {Sight} from "../../model/sight";
 
 @Component({
   selector: 'app-detail-page',
@@ -27,6 +29,9 @@ export class DetailPageComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    /*
+    * extract the URL parameter here
+    */
   }
 
 }
