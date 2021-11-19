@@ -79,7 +79,7 @@
 
 .map-search-adressbar{
   z-index: 10;
-  width: 400px;
+  width: 350px;
   right: 80px;
   position: fixed;
   top: 65px;
@@ -136,3 +136,12 @@ mat-form-field{
   left: 390px;
   right: 0;
 }
+
+.sights-search-panel{
+  z-index: 10;
+  width: 350px;
+  right: 450px;
+  position: fixed;
+  top: 65px;
+}
+

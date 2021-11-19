@@ -8,11 +8,13 @@ import {GeoLocationService} from "../../service/http/external/geoLocation.servic
 import {SightsService} from "../../service/http/backend/sights";
 import {MatDialog} from "@angular/material/dialog";
 import {FirebaseService} from "../../service/http/external/firebase.service";
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {Label} from "../../model/label";
-import {startWith} from "rxjs/operators";
+import {startWith, map, filter} from "rxjs/operators";
 import {CreateLocationSight, Sight, SightTopLocation} from "../../model/sight";
 import {Rating} from "../../model/rating";
+import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
+import {Observable} from "rxjs";
 
 @Component({
   selector: 'app-landingpage',
@@ -106,9 +108,10 @@ export class LandingpageComponent implements OnInit {
    */
   @ViewChild('googleMap', {static: false}) map: GoogleMap
   /**
-   * HTML element of the address search bar.
+   * HTML element of the address search bar and then for the sight search of the same bar.
    */
   @ViewChild('addressSearch') public searchElementRef: ElementRef;
+  @ViewChild('sightSearch') sightSearch: ElementRef<HTMLInputElement>;
 
   /**
    * Sight form with all data.
@@ -173,8 +176,14 @@ export class LandingpageComponent implements OnInit {
    */
   allSights: Sight[] = [];
 
-  allSightsSortedByDistance: SightTopLocation[] = [];
+  /*sights which return on searching*/
+  searchedSights: Observable<Sight[]>;
+  /*formcontrol for the sight search*/
+  sightSearchCtrl = new FormControl();
+  searchword;
 
+
+  allSightsSortedByDistance: SightTopLocation[] = [];
   images = [
     {title: 'First Location', short: 'First Locations Short', src: "./assets/images/1.jpg"},
     {title: 'Second Location', short: 'Second Locations Short', src: "./assets/images/2.jpg"},
@@ -192,6 +201,8 @@ export class LandingpageComponent implements OnInit {
   isSightDetailVisible: boolean = false;
 
   detailedSight: Sight = new Sight();
+
+
 
   constructor(config: NgbCarouselConfig,
               private locService: LocationService,
@@ -461,7 +472,17 @@ export class LandingpageComponent implements OnInit {
       })
 
       this.onFilterTopLocations();
+
+      this.searchedSights = this.sightSearchCtrl.valueChanges.pipe(
+          startWith(null),
+          map((tag: String | null) => tag ? this._filterSights(tag) : this.allSightsSortedByDistance.slice()));
     })
+  }
+  //filtering the sights by either name or some label
+  private _filterSights(value: String): Sight[] {
+    const filterValue = value.toLowerCase();
+    this.searchword=filterValue;
+    return this.allSightsSortedByDistance.filter(sight => sight.name.toLowerCase().includes(filterValue) ||  sight.labelList.some(label=>label.name.toLowerCase().includes(filterValue)));
   }
 
   onFilterTopLocations() {
@@ -520,6 +541,12 @@ export class LandingpageComponent implements OnInit {
     this.initMapWithPosition(Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude),this.zoom)
     this.onOpenSightDetails();
   }
+
+  //on clicking something from the autocomplete component
+  onSearchSelected(event: MatAutocompleteSelectedEvent) {
+   //possibly open detailed view page directly or just have a sightdetails open to the left
+  }
+
 }
 
 /**
