@@ -122,7 +122,7 @@
 <div class="map-search-adressbar">
     <form >
         <mat-form-field appearance="fill" >
-            <mat-label class="address-placeholder-label">Enter an address to search</mat-label>
+            <mat-label class="address-placeholder-label">Search by sight, label or address</mat-label>
             <input width="300px"
                    type="text"
                    matInput
@@ -138,8 +138,8 @@
         </mat-form-field>
         <!--each individual field in the sights autocomplete-->
         <!--also, couldn't get the showDistanceString and overallRating not to show as errors, but they do work-->
-        <mat-autocomplete  #auto="matAutocomplete" (optionSelected)="onSearchSelected($event)">
-            <mat-option  *ngFor="let sight of searchedSights | async" [value]="sight">
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSearchSelected($event)" >
+            <mat-option *ngFor="let sight of searchedSights | async" [value]="sight.name">
                 {{sight.name}}
                 <mat-label [textContent]="'(' + sight.showDistanceString + ')'"></mat-label>
                 <!--<app-star-rating class="search-stars"  [clickable]="false" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>-->
