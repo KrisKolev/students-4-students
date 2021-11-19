@@ -1,4 +1,4 @@
-import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, NgZone, OnInit, ViewChild} from '@angular/core';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import {GoogleMap} from "@angular/google-maps";
 import {animate, state, style, transition, trigger} from "@angular/animations";
@@ -13,8 +13,13 @@ import {Label} from "../../model/label";
 import {startWith, map, filter} from "rxjs/operators";
 import {CreateLocationSight, Sight, SightTopLocation} from "../../model/sight";
 import {Rating} from "../../model/rating";
-import {MatAutocompleteSelectedEvent} from "@angular/material/autocomplete";
-import {Observable} from "rxjs";
+import {
+  _MatAutocompleteBase,
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger
+} from "@angular/material/autocomplete";
+import {empty, Observable} from "rxjs";
 
 @Component({
   selector: 'app-landingpage',
@@ -180,7 +185,6 @@ export class LandingpageComponent implements OnInit {
   searchedSights: Observable<Sight[]>;
   /*formcontrol for the sight search*/
   sightSearchCtrl = new FormControl();
-  searchword;
 
 
   allSightsSortedByDistance: SightTopLocation[] = [];
@@ -191,7 +195,6 @@ export class LandingpageComponent implements OnInit {
   ];
 
   toggleTopLocationsText = "";
-
   isTopLocationsVisible = false;
   initialVisibility = false;
   showSightsLocationLongitude: number;
@@ -201,6 +204,7 @@ export class LandingpageComponent implements OnInit {
   isSightDetailVisible: boolean = false;
 
   detailedSight: Sight = new Sight();
+
 
 
 
@@ -475,15 +479,18 @@ export class LandingpageComponent implements OnInit {
 
       this.searchedSights = this.sightSearchCtrl.valueChanges.pipe(
           startWith(null),
-          map((tag: String | null) => tag ? this._filterSights(tag) : this.allSightsSortedByDistance.slice()));
+          map((val: String | null ) =>  val ? this._filterSights(val)  : this.allSightsSortedByDistance.slice()));
     })
   }
   //filtering the sights by either name or some label
   private _filterSights(value: String): Sight[] {
-    const filterValue = value.toLowerCase();
-    this.searchword=filterValue;
-    return this.allSightsSortedByDistance.filter(sight => sight.name.toLowerCase().includes(filterValue) ||  sight.labelList.some(label=>label.name.toLowerCase().includes(filterValue)));
+    if (typeof value === 'string' || value instanceof String){
+      const filterValue = value.toLowerCase();
+
+      return this.allSightsSortedByDistance.filter(sight => sight.name.toLowerCase().includes(filterValue) ||  sight.labelList.some(label=>label.name.toLowerCase().includes(filterValue)));
+    }
   }
+
 
   onFilterTopLocations() {
     this.allSightsSortedByDistance = [];
