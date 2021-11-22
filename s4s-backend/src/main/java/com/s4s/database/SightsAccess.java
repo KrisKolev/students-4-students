@@ -247,7 +247,7 @@ public class SightsAccess {
     }
 
     public static double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2){
-        double R = 6371;
+        final double earthRadius = 6371;
         double dLat = deg2rad(lat2 - lat1);
        double dLon = deg2rad(lon2 - lon1);
 
@@ -256,11 +256,11 @@ public class SightsAccess {
                        Math.cos(deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2);
 
        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return R * c;
+        return earthRadius * c;
     }
 
     public static double deg2rad(double deg){
-        return deg * (Math.PI/180);
+        return Math.toRadians(deg);
     }
 
     public static List<Sight>getTopSight(double lon, double lat, double radius){
@@ -270,8 +270,11 @@ public class SightsAccess {
             double averageRating;
             double allRatings = 0;
 
+            double sightLat = Double.parseDouble(sight.getLatitude());
+            double sightLon = Double.parseDouble(sight.getLongitude());
+
             double distance = SightsAccess.getDistanceFromLatLonInKm(
-                    Double.parseDouble(sight.getLatitude()),Double.parseDouble(sight.getLongitude()),lat, lon);
+                    sightLat,sightLon,lat, lon);
             if (distance <= radius){
                 for (String rating : sight.getRatingAssigned()){
                     allRatings += Double.parseDouble(rating);
