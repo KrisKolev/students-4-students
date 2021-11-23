@@ -54,24 +54,25 @@ public class SightsEndpoint {
         return new ResponseHelper(Info.SUCCESS, SightsAccess.getSights()).build();
     }
 
-//    @GET
-//    @Path("/getsight")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Response getSight(String id) {
-//        return new ResponseHelper(Info.SUCCESS, SightsAccess.getSight(id)).build();
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSightById(@PathParam("id") String id) {
+        return new ResponseHelper(Info.SUCCESS, SightsAccess.getSightById(id)).build();
+    }
+
+//    @Path("/{id}")
+//    public static class SightResource {
+//        @GET
+//        @Produces(MediaType.APPLICATION_JSON)
+//        public Response getSight(@PathParam("id") String id) {
+//            if (SightsAccess.getSightById(id).equals(null)) {
+//                return new ResponseHelper(Info.FAILURE, "Error retrieving sight").build();
+//            }
+//            else {
+//                return new ResponseHelper(Info.SUCCESS, SightsAccess.getSightById(id)).build();
+//            }
+//        }
 //    }
 
-    @Path("/getsight/{id}")
-    public static class SightResource {
-        @GET
-        @Produces(MediaType.APPLICATION_JSON)
-        public Response getSight(@PathParam("id") String id) {
-            if (SightsAccess.getSightById(id).equals(null)) {
-                return new ResponseHelper(Info.FAILURE, "Error retrieving sight").build();
-            }
-            else {
-                return new ResponseHelper(Info.SUCCESS, SightsAccess.getSightById(id)).build();
-            }
-        }
-    }
 }

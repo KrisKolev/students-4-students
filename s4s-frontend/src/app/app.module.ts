@@ -26,6 +26,7 @@ import { DetailPageComponent } from './detail-page/detail-page.component';
 import {ManageSightDialogModule} from "./manage-sight-dialog/manage-sight-dialog.module";
 import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
 import {MatExpansionModule} from "@angular/material/expansion";
+import {MatTableModule} from "@angular/material/table";
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -65,7 +66,8 @@ const app = initializeApp(firebaseConfig);
         MatMenuModule,
         ManageSightDialogModule,
         NgbCarouselModule,
-        MatExpansionModule
+        MatExpansionModule,
+        MatTableModule
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent,PopupComponent],

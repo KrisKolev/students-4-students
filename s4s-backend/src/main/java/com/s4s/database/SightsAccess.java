@@ -244,6 +244,7 @@ public class SightsAccess {
     public static Sight getSightById(String id) {
         for (Sight sight: sights) {
             if (sight.getUid().equals(id)) {
+                System.out.println(sight);
                 return sight;
             }
         }

@@ -15,7 +15,7 @@ const routes: Routes = [
         loadChildren: () => import('./manage-sight-dialog/manage-sight-dialog.module').then(m => m.ManageSightDialogModule)
     },
     {
-        path: 'detail',
+        path: 'sight/:sightId',
         loadChildren: () => import('./detail-page/detail-page.module').then(m => m.DetailPageModule)
     },
     {
