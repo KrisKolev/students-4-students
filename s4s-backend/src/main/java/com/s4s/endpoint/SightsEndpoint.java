@@ -8,7 +8,6 @@ import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
 import com.s4s.filter.JWTTokenRequired;
 
-import javax.print.attribute.standard.Media;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;

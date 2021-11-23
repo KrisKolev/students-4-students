@@ -1,7 +1,7 @@
 import {Component, Input, OnInit, ViewEncapsulation} from '@angular/core';
 import {NgbCarouselConfig} from "@ng-bootstrap/ng-bootstrap";
 import { ActivatedRoute } from "@angular/router";
-import {DetailPageService} from "../../service/detail-page.service";
+import {DetailPageService} from "../../service/http/backend/detail-page.service";
 import {Sight} from "../../model/sight";
 import {HttpClient} from "@angular/common/http";
 
@@ -26,18 +26,6 @@ export class DetailPageComponent implements OnInit {
 
   ngOnInit(): void {
 
-    //The following code is for debugging purposes, that is why it is not erased
-
-    // this.activatedRoute.paramMap.subscribe(params => {
-    //   let sightId = params.get('sightId');
-    //   console.log(sightId);
-    //
-    //   if(sightId) {
-    //     console.log('Sight parameter Found');
-    //   } else {
-    //     console.log('Sight parameter Not Found');
-    //   }
-    // });
   }
 
   constructor(config: NgbCarouselConfig, service: DetailPageService, private activatedRoute: ActivatedRoute) {
