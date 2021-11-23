@@ -20,6 +20,7 @@ import {
   MatAutocompleteTrigger
 } from "@angular/material/autocomplete";
 import {empty, Observable} from "rxjs";
+import {MatOptionSelectionChange} from "@angular/material/core/option/option";
 
 @Component({
   selector: 'app-landingpage',
@@ -182,7 +183,7 @@ export class LandingpageComponent implements OnInit {
   allSights: Sight[] = [];
 
   /*sights which return on searching*/
-  searchedSights: Observable<Sight[]>;
+  searchedSights: Observable<SightTopLocation[]>;
   /*formcontrol for the sight search*/
   sightSearchCtrl = new FormControl();
 
@@ -479,18 +480,21 @@ export class LandingpageComponent implements OnInit {
 
       this.searchedSights = this.sightSearchCtrl.valueChanges.pipe(
           startWith(null),
-          map((val: String | null ) =>  val ? this._filterSights(val)  : this.allSightsSortedByDistance.slice()));
+          map((val: String | null ) =>  val ? this._filterSights(val)  : []));
     })
   }
   //filtering the sights by either name or some label
-  private _filterSights(value: String): Sight[] {
+  private _filterSights(value: String): SightTopLocation[] {
     if (typeof value === 'string' || value instanceof String){
+
+      if(value == '')
+        return [];
+
       const filterValue = value.toLowerCase();
 
       return this.allSightsSortedByDistance.filter(sight => sight.name.toLowerCase().includes(filterValue) ||  sight.labelList.some(label=>label.name.toLowerCase().includes(filterValue)));
     }
   }
-
 
   onFilterTopLocations() {
     this.allSightsSortedByDistance = [];
@@ -518,8 +522,6 @@ export class LandingpageComponent implements OnInit {
     this.onOpenSightDetails();
   }
 
-  onShowSightDetails
-
   /**
    * Inits the map location with specific coordinates and map zoom.
    * @param latidute
@@ -538,6 +540,9 @@ export class LandingpageComponent implements OnInit {
     this.isSightDetailVisible = false;
   }
 
+  /**
+   * opens the sight details small card
+   * **/
   onOpenSightDetails(){
     this.isSightDetailVisible = true;
   }
@@ -549,9 +554,16 @@ export class LandingpageComponent implements OnInit {
     this.onOpenSightDetails();
   }
 
-  //on clicking something from the autocomplete component
-  onSearchSelected(event: MatAutocompleteSelectedEvent) {
-   //possibly open detailed view page directly or just have a sightdetails open to the left
+  onSearchSelectItem(sight: SightTopLocation){
+    this.onGoToSight(sight);
+    this.addressValue = "";
+    this.sightSearchCtrl.setValue("");
+    this.searchedSights = this.sightSearchCtrl.valueChanges.pipe(
+        startWith(null),
+        map((val: String | null ) =>  val ? this._filterSights(val)  : []));
+
+    let htmlElement:HTMLElement = document.getElementById("landingPage_Map");
+    htmlElement.click();
   }
 
 }
