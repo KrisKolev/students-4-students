@@ -77,14 +77,12 @@ public class UserEndpoint {
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    @JWTTokenRequired
+
     public Response updateUser(UserDTO userDTO) throws FirebaseAuthException, ExecutionException, InterruptedException {
                UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
-                       .setEmail(userDTO.getEmail())
-                       .setEmailVerified(true)
+                       .setPassword(userDTO.getPassword())
+                       .setPhotoUrl(userDTO.getPhotoURL())
                        .setDisplayName(userDTO.getFirstname() + " " + userDTO.getLastname());
-
-
 
         UserRecord userRecord;
         try {
@@ -92,7 +90,8 @@ public class UserEndpoint {
             userRecord=FirebaseAuth.getInstance().updateUser(updateRequest);
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"firstname",userDTO.getFirstname());
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"lastname",userDTO.getLastname());
-            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"email",userDTO.getEmail());
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"nickname",userDTO.getNickname());
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"photoURL",userDTO.getPhotoURL());
 
         }
         catch (FirebaseAuthException exception)
