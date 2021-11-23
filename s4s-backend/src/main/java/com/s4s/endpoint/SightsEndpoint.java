@@ -60,19 +60,4 @@ public class SightsEndpoint {
     public Response getSightById(@PathParam("id") String id) {
         return new ResponseHelper(Info.SUCCESS, SightsAccess.getSightById(id)).build();
     }
-
-//    @Path("/{id}")
-//    public static class SightResource {
-//        @GET
-//        @Produces(MediaType.APPLICATION_JSON)
-//        public Response getSight(@PathParam("id") String id) {
-//            if (SightsAccess.getSightById(id).equals(null)) {
-//                return new ResponseHelper(Info.FAILURE, "Error retrieving sight").build();
-//            }
-//            else {
-//                return new ResponseHelper(Info.SUCCESS, SightsAccess.getSightById(id)).build();
-//            }
-//        }
-//    }
-
 }

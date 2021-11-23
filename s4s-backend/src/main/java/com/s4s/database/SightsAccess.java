@@ -240,7 +240,6 @@ public class SightsAccess {
         return new ResponseHelper(Info.SUCCESS,"Rating added",rating).build();
     }
 
-    //Getting sight by ID
     public static Sight getSightById(String id) {
         for (Sight sight: sights) {
             if (sight.getUid().equals(id)) {
