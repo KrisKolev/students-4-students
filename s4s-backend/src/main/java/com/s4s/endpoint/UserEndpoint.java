@@ -2,7 +2,6 @@ package com.s4s.endpoint;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.OidcProviderConfig;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.s4s.database.DatabaseAccess;
@@ -77,26 +76,25 @@ public class UserEndpoint {
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
+    @JWTTokenRequired
 
     public Response updateUser(UserDTO userDTO) throws FirebaseAuthException, ExecutionException, InterruptedException {
-               UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
-                       .setPassword(userDTO.getPassword())
-                       .setPhotoUrl(userDTO.getPhotoURL())
-                       .setDisplayName(userDTO.getFirstname() + " " + userDTO.getLastname());
+        UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
+                .setPassword(userDTO.getPassword())
+                .setPhotoUrl(userDTO.getPhotoURL())
+                .setDisplayName(userDTO.getFirstname() + " " + userDTO.getLastname());
 
         UserRecord userRecord;
         try {
             com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
-            userRecord=FirebaseAuth.getInstance().updateUser(updateRequest);
-            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"firstname",userDTO.getFirstname());
-            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"lastname",userDTO.getLastname());
-            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"nickname",userDTO.getNickname());
-            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()),userDTO.getUid(),"photoURL",userDTO.getPhotoURL());
+            userRecord = FirebaseAuth.getInstance().updateUser(updateRequest);
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "firstname", userDTO.getFirstname());
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "lastname", userDTO.getLastname());
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "nickname", userDTO.getNickname());
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "photoURL", userDTO.getPhotoURL());
 
-        }
-        catch (FirebaseAuthException exception)
-        {
-        return new ResponseHelper(Info.FAILURE).build();
+        } catch (FirebaseAuthException exception) {
+            return new ResponseHelper(Info.FAILURE).build();
         }
 
         return new ResponseHelper(Info.SUCCESS).build();
