@@ -25,6 +25,8 @@ public class Sight {
     private Date createdAt;
     private Date updatedAt;
 
+    private double averageRating;
+
     public Sight() {
     }
 
