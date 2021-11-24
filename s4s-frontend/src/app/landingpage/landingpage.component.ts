@@ -1,4 +1,4 @@
-import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {Component, ElementRef, Input, NgZone, OnInit, ViewChild} from '@angular/core';
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
 import {GoogleMap} from "@angular/google-maps";
 import {animate, state, style, transition, trigger} from "@angular/animations";
@@ -8,11 +8,19 @@ import {GeoLocationService} from "../../service/http/external/geoLocation.servic
 import {SightsService} from "../../service/http/backend/sights";
 import {MatDialog} from "@angular/material/dialog";
 import {FirebaseService} from "../../service/http/external/firebase.service";
-import {FormGroup} from "@angular/forms";
+import {FormControl, FormGroup} from "@angular/forms";
 import {Label} from "../../model/label";
-import {startWith} from "rxjs/operators";
+import {startWith, map, filter} from "rxjs/operators";
 import {CreateLocationSight, Sight, SightTopLocation} from "../../model/sight";
 import {Rating} from "../../model/rating";
+import {
+  _MatAutocompleteBase,
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger
+} from "@angular/material/autocomplete";
+import {empty, Observable} from "rxjs";
+import {MatOptionSelectionChange} from "@angular/material/core/option/option";
 
 @Component({
   selector: 'app-landingpage',
@@ -106,9 +114,10 @@ export class LandingpageComponent implements OnInit {
    */
   @ViewChild('googleMap', {static: false}) map: GoogleMap
   /**
-   * HTML element of the address search bar.
+   * HTML element of the address search bar and then for the sight search of the same bar.
    */
   @ViewChild('addressSearch') public searchElementRef: ElementRef;
+  @ViewChild('sightSearch') sightSearch: ElementRef<HTMLInputElement>;
 
   /**
    * Sight form with all data.
@@ -173,8 +182,13 @@ export class LandingpageComponent implements OnInit {
    */
   allSights: Sight[] = [];
 
-  allSightsSortedByDistance: SightTopLocation[] = [];
+  /*sights which return on searching*/
+  searchedSights: Observable<SightTopLocation[]>;
+  /*formcontrol for the sight search*/
+  sightSearchCtrl = new FormControl();
 
+
+  allSightsSortedByDistance: SightTopLocation[] = [];
   images = [
     {title: 'First Location', short: 'First Locations Short', src: "./assets/images/1.jpg"},
     {title: 'Second Location', short: 'Second Locations Short', src: "./assets/images/2.jpg"},
@@ -182,7 +196,6 @@ export class LandingpageComponent implements OnInit {
   ];
 
   toggleTopLocationsText = "";
-
   isTopLocationsVisible = false;
   initialVisibility = false;
   showSightsLocationLongitude: number;
@@ -192,6 +205,9 @@ export class LandingpageComponent implements OnInit {
   isSightDetailVisible: boolean = false;
 
   detailedSight: Sight = new Sight();
+
+
+
 
   constructor(config: NgbCarouselConfig,
               private locService: LocationService,
@@ -461,7 +477,23 @@ export class LandingpageComponent implements OnInit {
       })
 
       this.onFilterTopLocations();
+
+      this.searchedSights = this.sightSearchCtrl.valueChanges.pipe(
+          startWith(null),
+          map((val: String | null ) =>  val ? this._filterSights(val)  : []));
     })
+  }
+  //filtering the sights by either name or some label
+  private _filterSights(value: String): SightTopLocation[] {
+    if (typeof value === 'string' || value instanceof String){
+
+      if(value == '')
+        return [];
+
+      const filterValue = value.toLowerCase();
+
+      return this.allSightsSortedByDistance.filter(sight => sight.name.toLowerCase().includes(filterValue) ||  sight.labelList.some(label=>label.name.toLowerCase().includes(filterValue)));
+    }
   }
 
   onFilterTopLocations() {
@@ -490,8 +522,6 @@ export class LandingpageComponent implements OnInit {
     this.onOpenSightDetails();
   }
 
-  onShowSightDetails
-
   /**
    * Inits the map location with specific coordinates and map zoom.
    * @param latidute
@@ -510,6 +540,9 @@ export class LandingpageComponent implements OnInit {
     this.isSightDetailVisible = false;
   }
 
+  /**
+   * opens the sight details small card
+   * **/
   onOpenSightDetails(){
     this.isSightDetailVisible = true;
   }
@@ -520,6 +553,19 @@ export class LandingpageComponent implements OnInit {
     this.initMapWithPosition(Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude),this.zoom)
     this.onOpenSightDetails();
   }
+
+  onSearchSelectItem(sight: SightTopLocation){
+    this.onGoToSight(sight);
+    this.addressValue = "";
+    this.sightSearchCtrl.setValue("");
+    this.searchedSights = this.sightSearchCtrl.valueChanges.pipe(
+        startWith(null),
+        map((val: String | null ) =>  val ? this._filterSights(val)  : []));
+
+    let htmlElement:HTMLElement = document.getElementById("landingPage_Map");
+    htmlElement.click();
+  }
+
 }
 
 /**

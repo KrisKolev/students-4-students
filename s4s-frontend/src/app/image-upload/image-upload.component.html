@@ -12,7 +12,7 @@
         <!--input formControlName="document" type="file" ng2FileSelect accept=".png,.jpg,.jpeg" [uploader]="uploader" formControlName="file" id="file" class="form-control-file" multiple=""
                (change)="onFileChange($event)"/><br/-->
 
-        <input formControlName="file" id="file2" type="file" class="form-control-file" multiple="" accept=".png,.jpg,.jpeg"
+        <input id="file2" type="file" class="form-control-file" multiple="" accept=".png,.jpg,.jpeg"
                (change)="onFileChange($event)">
         <div *ngIf="formValue.file.touched && formValue.file.invalid" class="alert alert-danger">
             <div *ngIf="formValue.file.errors && formValue.file.errors.required">File is required.</div>

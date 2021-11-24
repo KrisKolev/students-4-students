@@ -10,12 +10,6 @@
         <button mat-button routerLink="">Home</button>
         <button mat-button>About Us</button>
 
-        <!--search bar-->
-        <span>
-            <form>
-                <input class="form-control" type="text" placeholder="Search">
-            </form>
-        </span>
 
         <ng-template [ngIf]="isUserLoggedIn()==true">
             <button mat-button routerLink="manageSight">
