@@ -298,13 +298,17 @@ public class SightsAccess {
         }
     }
 
-    public static Sight getSightById(String id) {
-        for (Sight sight: sights) {
-            if (sight.getUid().equals(id)) {
-                System.out.println(sight);
-                return sight;
+    public static javax.ws.rs.core.Response getSightById(String id) {
+        try{
+            List<Sight> sightList = sights.stream().filter(x->x.getUid() == id).collect(Collectors.toList());
+            if(sightList.isEmpty())
+            {
+                return new ResponseHelper(Info.FAILURE, "No sight found with id " + id,null).build();
             }
+            return new ResponseHelper(Info.SUCCESS, "Sight found", sightList.get(0)).build();
         }
-        return null;
+        catch (Exception e){
+            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage(),null).build();
+        }
     }
 }

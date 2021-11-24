@@ -59,4 +59,11 @@ public class SightsEndpoint {
     public Response getTopSights(@QueryParam("longitude") String longitude, @QueryParam("latitude") String latitude, @QueryParam("radius") String radius){
         return SightsAccess.getTopSights(Double.parseDouble(longitude),Double.parseDouble(latitude),Double.parseDouble(radius));
     }
+
+    @GET
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSightById(@PathParam("id") String id) {
+        return SightsAccess.getSightById(id);
+    }
 }
