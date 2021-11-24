@@ -61,9 +61,9 @@ public class SightsEndpoint {
     }
 
     @GET
-    @Path("/{id}")
+    @Path("/getsight")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getSightById(@PathParam("id") String id) {
+    public Response getSightById(@QueryParam("id") String id) {
         return SightsAccess.getSightById(id);
     }
 }

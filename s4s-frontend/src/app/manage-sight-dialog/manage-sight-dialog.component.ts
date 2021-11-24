@@ -699,6 +699,6 @@ export class ManageSightDialogComponent implements OnInit {
    * Closes the manage sight form.
    */
   onAbort(){
-    this.router.navigateByUrl('/').then();
+    this.router.navigateByUrl('/');
   }
 }

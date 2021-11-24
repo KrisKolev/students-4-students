@@ -300,7 +300,7 @@ public class SightsAccess {
 
     public static javax.ws.rs.core.Response getSightById(String id) {
         try{
-            List<Sight> sightList = sights.stream().filter(x->x.getUid() == id).collect(Collectors.toList());
+            List<Sight> sightList = sights.stream().filter(x->x.getUid().equals(id)).collect(Collectors.toList());
             if(sightList.isEmpty())
             {
                 return new ResponseHelper(Info.FAILURE, "No sight found with id " + id,null).build();
