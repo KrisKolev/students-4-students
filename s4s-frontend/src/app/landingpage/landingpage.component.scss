@@ -83,11 +83,21 @@
   right: 80px;
   position: fixed;
   top: 65px;
-
 }
 
 .address-placeholder-label{
   color: white;
+}
+
+.address-form{
+}
+
+.address-bar{
+  background-color: #3f51b5;
+}
+
+.address-autocomplete{
+  background-color: #3f51b5;
 }
 
 mat-form-field{

@@ -170,7 +170,6 @@ public class SightsAccess {
         return sights;
     }
 
-
     /**
      * Loads all labels from database
      *
@@ -261,22 +260,40 @@ public class SightsAccess {
         return Math.toRadians(deg);
     }
 
-    public static List<SortedSight> getTopSight(double lon, double lat, double radius) {
-        List<SortedSight> sortedSights = new ArrayList<>();
+    public static javax.ws.rs.core.Response getTopSights(double lon, double lat, double radius){
 
-        for (Sight sight : sights) {
-            double sightLat = Double.parseDouble(sight.getLatitude());
-            double sightLon = Double.parseDouble(sight.getLongitude());
+        try{
+            List<SortedSight> sortedSights = new ArrayList<>();
 
-            double distance = SightsAccess.getDistanceFromLatLonInKm(sightLat, sightLon, lat, lon);
+            for (Sight sight : sights) {
 
-            if (distance <= radius) {
-                sortedSights.add(new SortedSight(sight));
+                //check if parsing of long and lat is possible
+                boolean canParse = true;
+                try{
+                    Double.parseDouble(sight.getLatitude());
+                    Double.parseDouble(sight.getLongitude());
+                }
+                catch (Exception e){
+                    canParse = false;
+                }
+
+                //if parsing fails continue
+                if(!canParse)
+                    continue;
+
+                double sightLat = Double.parseDouble(sight.getLatitude());
+                double sightLon = Double.parseDouble(sight.getLongitude());
+                double distance = SightsAccess.getDistanceFromLatLonInKm(sightLat, sightLon, lat, lon);
+
+                if (distance <= radius) {
+                    sortedSights.add(new SortedSight(sight));
+                }
             }
+            sortedSights.sort(Comparator.comparing(SortedSight::getAverageRating));
+            return new ResponseHelper(Info.SUCCESS, "TopSights sorted", sortedSights).build();
         }
-        sortedSights.sort(Comparator.comparing(SortedSight::getAverageRating));
-        return sortedSights;
+        catch (Exception e){
+            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+        }
     }
 }
-
-

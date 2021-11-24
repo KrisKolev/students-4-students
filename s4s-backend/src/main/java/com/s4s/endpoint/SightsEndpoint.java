@@ -57,7 +57,7 @@ public class SightsEndpoint {
     @Path("/topsights")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getTopSights(@QueryParam("longitude") String longitude, @QueryParam("latitude") String latitude, @QueryParam("radius") String radius){
-        return new ResponseHelper(Info.SUCCESS, SightsAccess.getTopSight(Double.parseDouble(longitude),Double.parseDouble(latitude),Double.parseDouble(radius))).build();
+        return SightsAccess.getTopSights(Double.parseDouble(longitude),Double.parseDouble(latitude),Double.parseDouble(radius));
     }
 
 }

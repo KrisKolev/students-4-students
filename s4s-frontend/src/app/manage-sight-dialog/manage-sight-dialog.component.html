@@ -17,7 +17,7 @@
 
                     <mat-form-field appearance="outline">
                         <mat-label>Enter the sight name</mat-label>
-                        <input formControlName="sightName" matInput placeholder="Ernst-Happel Stadium" required [(ngModel)]="nameValue">
+                        <input formControlName="sightName" matInput  placeholder="Ernst-Happel Stadium" required [(ngModel)]="nameValue">
                         <mat-error *ngIf="hasError('sightName', 'required')">Name is required</mat-error>
                         <mat-error *ngIf="hasError('sightName', 'minlength')">Name minimum length is 2</mat-error>
                         <mat-error *ngIf="hasError('sightName', 'maxlength')">Name maximum length is 200</mat-error>
@@ -33,8 +33,7 @@
 
                     <mat-form-field class="labels-chip-list" appearance="outline">
                         <mat-label>Labels for the sight</mat-label>
-
-                        <mat-chip-list #chipList aria-label="Tag selection">
+                        <mat-chip-list  #chipList aria-label="Tag selection">
                             <mat-chip
                                     *ngFor="let tag of labels"
                                     [selectable]="selectable"

@@ -9,7 +9,7 @@
 <mat-expansion-panel (opened)="panelOpenState = true"
                      (closed)="panelOpenState = false" expanded="true">
         <mat-expansion-panel-header>
-            <mat-panel-title [(ngModel)]="panelTitle">
+            <mat-panel-title [(ngModel)]="panelTitle" ngDefaultControl>
                 <mat-label [textContent]="panelTitle"></mat-label>
             </mat-panel-title>
             <mat-panel-description>

@@ -8,14 +8,18 @@ public class SortedSight {
 
         double allRatings = 0;
 
-        for (String rating : sight.getRatingAssigned()) {
-            allRatings += Double.parseDouble(rating);
+        for (Rating rating : sight.getRatingList()) {
+            allRatings += Double.parseDouble(rating.getRating());
         }
-
+        this.sight = sight;
         averageRating = allRatings / sight.getRatingList().size();
     }
 
     public double getAverageRating() {
         return averageRating;
+    }
+
+    public Sight getSight(){
+        return sight;
     }
 }
