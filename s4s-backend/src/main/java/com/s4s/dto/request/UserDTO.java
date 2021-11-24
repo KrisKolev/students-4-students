@@ -6,6 +6,7 @@ public class UserDTO {
     private String firstname;
     private String lastname;
     private String nickname;
+    private String photoURL;
     private String email;
     private String password;
     private String uid;
@@ -32,6 +33,8 @@ public class UserDTO {
     public String getNickname() {
         return nickname;
     }
+
+    public String getPhotoURL(){return photoURL;}
 
     public void setNickname(String nickname) {
         this.nickname = nickname;

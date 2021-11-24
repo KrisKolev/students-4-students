@@ -1,0 +1,38 @@
+<div class="container">
+    <mat-card>
+        <mat-card-title>Send us a message</mat-card-title>
+        <mat-card-content>
+            <form action="https://formspree.io/f/mayaraka"
+                  method="POST">
+                <div fxLayout="column">
+                    <mat-form-field appearance="outline">
+                        <mat-label>Your Name:</mat-label>
+                        <input formControlName="name" matInput required type="name">
+                        <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
+                        <mat-error *ngIf="hasError('name', 'minlength')">Names minimum length is 2</mat-error>
+                        <mat-error *ngIf="hasError('name', 'maxlength')">Names maximum length is 50</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Your Email:</mat-label>
+                        <input formControlName="email" matInput name="_replyto" required type="email">
+                        <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
+                        <mat-error *ngIf="hasError('email', 'email')">Email Syntax is incorrect</mat-error>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="outline">
+                        <mat-label>Your Message:</mat-label>
+                        <textarea formControlName="message" matInput name="message" required type="message"></textarea>
+                        <mat-error *ngIf="hasError('message', 'required')">A Message is required</mat-error>
+                    </mat-form-field>
+
+                    <button [disabled]="!contactUsForm"
+                            color="primary" mat-raised-button type="submit">
+                        Send
+                    </button>
+                </div>
+            </form>
+
+        </mat-card-content>
+    </mat-card>
+</div>

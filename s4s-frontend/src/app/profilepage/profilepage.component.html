@@ -8,7 +8,6 @@
                     <mat-list-option (click)="selectedOption = 'Profile'">Profile</mat-list-option>
                     <mat-list-option (click)="selectedOption = 'E-mail'">E-mail</mat-list-option>
                     <mat-list-option (click)="selectedOption = 'Password'">Password</mat-list-option>
-                    <mat-list-option (click)="selectedOption = 'Picture'">Picture</mat-list-option>
                 </mat-selection-list>
             </div>
             <!--Profile selected in menu-->
@@ -120,24 +119,7 @@
 
 
 
-            <!--Picture selected in menu-->
-            <ng-template [ngIf]="selectedOption=='Picture'">
-                <form class="col-lg" [formGroup]="pictureForm">
-                    <br/>
-                    <mat-card-title>Picture</mat-card-title>
-                    <br/>
-                    <input type="file" class="picture" accept="image/png, image/jpeg">
 
-                    <mat-card-actions>
-                        <button color="primary" mat-raised-button>
-                            Change
-                        </button>
-                        <button (click)="onAbort()" color="warn" mat-stroked-button>
-                            Abort
-                        </button>
-                    </mat-card-actions>
-                </form>
-            </ng-template>
         </div>
     </mat-card>
 </div>

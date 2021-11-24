@@ -29,6 +29,7 @@
     </google-map>
 </div>
 
+
 <div class="top-locations-container" *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'" [@moveSightsDetails]="isSightDetailVisible ? 'open' : 'closed'">
     <div>
         <h2>Here are locations near you</h2>
@@ -74,9 +75,7 @@
                 <mat-label><strong>Address: </strong></mat-label>
                 <mat-label [textContent]="sight.address"></mat-label>
                 <br/>
-
             </div>
-
         </mat-expansion-panel>
     </div>
 </div>
