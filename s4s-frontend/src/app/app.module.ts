@@ -43,7 +43,6 @@ const app = initializeApp(firebaseConfig);
         LoginDialogComponent,
         PopupComponent,
         DetailPageComponent
-
     ],
     imports: [
         BrowserModule,
@@ -71,7 +70,6 @@ const app = initializeApp(firebaseConfig);
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent, PopupComponent],
-    entryComponents: [LoginDialogComponent,PopupComponent],
     bootstrap: [AppComponent]
 })
 
