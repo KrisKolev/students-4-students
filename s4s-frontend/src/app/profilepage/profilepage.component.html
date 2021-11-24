@@ -100,7 +100,11 @@
                             <mat-error *ngIf="hasError('password', 'minlength','passwordForm')">Password minimum length is 6</mat-error>
                         </mat-button>
                     </mat-form-field>
-
+                    <mat-error *ngIf="passwordForm.controls['password'].value !== ''
+                               && passwordForm.controls['passwordRepeat'].value !== ''
+                               && passwordForm.controls['password'].value !== passwordForm.controls['passwordRepeat'].value">
+                        Passwords are not equal
+                    </mat-error>
                     <!--Buttons-->
                     <mat-card-actions>
                         <button color="primary" mat-raised-button>
@@ -113,11 +117,7 @@
                 </form>
             </ng-template>
 
-            <mat-error *ngIf="passwordForm.controls['password'].value !== ''
-                               && passwordForm.controls['passwordRepeat'].value !== ''
-                               && passwordForm.controls['password'].value !== passwordForm.controls['passwordRepeat'].value">
-                Passwords are not equal
-            </mat-error>
+
 
 
         </div>

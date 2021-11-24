@@ -27,7 +27,6 @@ import {ManageSightDialogModule} from "./manage-sight-dialog/manage-sight-dialog
 import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
 import {MatExpansionModule} from "@angular/material/expansion";
 
-
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
     authDomain: 'students4students-f2e07.firebaseapp.com',
@@ -72,7 +71,7 @@ const app = initializeApp(firebaseConfig);
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
     entryComponents: [LoginDialogComponent, PopupComponent],
-    exports: [],
+    entryComponents: [LoginDialogComponent,PopupComponent],
     bootstrap: [AppComponent]
 })
 

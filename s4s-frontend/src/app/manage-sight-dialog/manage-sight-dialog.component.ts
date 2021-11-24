@@ -177,6 +177,11 @@ export class ManageSightDialogComponent implements OnInit {
     {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
   ];
 
+  isInitialized: boolean = false;
+
+  labelErrorVisible: boolean = false;
+
+  labelMapErrorVisible: boolean = false;
 
   /**
    * Constructor for the manage sight component
@@ -198,22 +203,26 @@ export class ManageSightDialogComponent implements OnInit {
               private dialog: MatDialog,
               private firebaseService: FirebaseService) {
 
+    this.isInitialized = false;
+
     //create form group
     this.addSightForm = new FormGroup({
       sightName: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
       address: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
     });
 
+    this.onLoadLabels();
+    this.onLoadSights();
+
     this.addSightForm.valueChanges.subscribe( ()=>{
+      if(!this.isInitialized)return;
       this.checkFormValidity();
     })
 
     this.labelCtrl.valueChanges.subscribe(()=>{
+      if(!this.isInitialized)return;
       this.checkFormValidity();
     })
-
-    this.onLoadLabels();
-    this.onLoadSights();
   }
 
   /**
@@ -245,6 +254,7 @@ export class ManageSightDialogComponent implements OnInit {
       });
 
       this.mapMarkers.push(marker)
+      this.isInitialized = true;
     });
   }
 
@@ -438,7 +448,7 @@ export class ManageSightDialogComponent implements OnInit {
     this.customLongitude = longitude;
     this.getAddress(latitude, longitude);
     this.mapMarkers.push(marker);
-    this.checkFormValidity();
+    //this.checkFormValidity();
   }
 
   /**
@@ -467,7 +477,6 @@ export class ManageSightDialogComponent implements OnInit {
       this.detailedSight.ratingList.forEach(async rat=>{
         await this.firebaseService.getRatingImageUrls(rat);
       })
-
     }
     catch (e)
     {
@@ -586,7 +595,7 @@ export class ManageSightDialogComponent implements OnInit {
    */
   onRatingUpdated($event:any){
     this.rating = $event;
-    this.checkFormValidity();
+    //this.checkFormValidity();
   }
 
   /**
@@ -609,6 +618,8 @@ export class ManageSightDialogComponent implements OnInit {
    * Checks if the input form is valid
    */
   checkFormValidity(){
+    this.labelErrorVisible = this.labels.length <1;
+    this.labelMapErrorVisible = this.mapMarkers.length<2
     this.validForm = this.addSightForm.valid && this.rating!=undefined && this.mapMarkers.length>1 && this.labels.length>0 && !this.addSightInProgress
   }
 
@@ -616,9 +627,12 @@ export class ManageSightDialogComponent implements OnInit {
    * Adds the current sight that is prepared by the user in the UI. Only available if the form is valid
    */
   onSightAdd() {
-    this.addSightInProgress = true;
     this.checkFormValidity();
 
+    if(!this.validForm)
+      return;
+
+    this.addSightInProgress = true;
     const newSight = new Sight();
     const newRating = new Rating();
 
