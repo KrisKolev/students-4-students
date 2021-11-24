@@ -40,6 +40,7 @@ public class SightsAccess {
      */
     private static List<Rating> ratings = new ArrayList<>();
 
+
     /**
      * Creates the sight instance
      *
@@ -295,5 +296,15 @@ public class SightsAccess {
         catch (Exception e){
             return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
         }
+    }
+
+    public static Sight getSightById(String id) {
+        for (Sight sight: sights) {
+            if (sight.getUid().equals(id)) {
+                System.out.println(sight);
+                return sight;
+            }
+        }
+        return null;
     }
 }

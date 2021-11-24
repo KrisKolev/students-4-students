@@ -59,5 +59,4 @@ public class SightsEndpoint {
     public Response getTopSights(@QueryParam("longitude") String longitude, @QueryParam("latitude") String latitude, @QueryParam("radius") String radius){
         return SightsAccess.getTopSights(Double.parseDouble(longitude),Double.parseDouble(latitude),Double.parseDouble(radius));
     }
-
 }
