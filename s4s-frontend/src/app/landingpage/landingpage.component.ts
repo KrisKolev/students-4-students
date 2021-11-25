@@ -21,6 +21,7 @@ import {
 } from "@angular/material/autocomplete";
 import {empty, Observable} from "rxjs";
 import {MatOptionSelectionChange} from "@angular/material/core/option/option";
+import {List} from "../../model/list";
 
 @Component({
   selector: 'app-landingpage',
@@ -189,11 +190,6 @@ export class LandingpageComponent implements OnInit {
 
 
   allSightsSortedByDistance: SightTopLocation[] = [];
-  images = [
-    {title: 'First Location', short: 'First Locations Short', src: "./assets/images/1.jpg"},
-    {title: 'Second Location', short: 'Second Locations Short', src: "./assets/images/2.jpg"},
-    {title: 'Third Location', short: 'Third Locations Short', src: "./assets/images/3.jpg"}
-  ];
 
   toggleTopLocationsText = "";
   isTopLocationsVisible = false;
@@ -496,7 +492,7 @@ export class LandingpageComponent implements OnInit {
     }
   }
 
-  onFilterTopLocations() {
+  async onFilterTopLocations() {
     this.allSightsSortedByDistance = [];
 
     if (this.showSightsLocationLatitude == undefined || this.showSightsLocationLongitude == undefined)
@@ -506,14 +502,43 @@ export class LandingpageComponent implements OnInit {
       this.allSightsSortedByDistance.push(CreateLocationSight(sight))
     })
 
+    const matrix = new google.maps.DistanceMatrixService();
+    var destinationList = [];
+    this.allSightsSortedByDistance.forEach( sight => {
+      destinationList.push({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)})
+    })
 
-    this.allSightsSortedByDistance.forEach( async sight => {
+    /*this.allSightsSortedByDistance.forEach( async sight => {
       var num = getDistanceFromLatLonInKm(this.showSightsLocationLatitude, this.showSightsLocationLongitude, sight.latitude, sight.longitude)
       sight.onInit(num)
       await this.firebaseService.getSightImageUrls(sight);
+    })*/
+
+    const request = {
+      origins: [{lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}],
+      destinations: destinationList,
+      travelMode: google.maps.TravelMode.WALKING,
+      unitSystem: google.maps.UnitSystem.METRIC,
+      avoidHighways: false,
+      avoidTolls: false,
+    };
+
+
+
+    matrix.getDistanceMatrix(request,response => {
+        var test = response;
+
+        for(var i = 0;i<this.allSightsSortedByDistance.length;i++){
+          this.allSightsSortedByDistance[i].timeToTarget = response.rows[0].elements[i].duration.text;
+          this.allSightsSortedByDistance[i].onInit(response.rows[0].elements[i].distance.value/1000)
+          this.firebaseService.getSightImageUrls(this.allSightsSortedByDistance[i]);
+        }
+
+      this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
     })
 
-    this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+    //this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+
   }
 
   onGoToSight(sight: SightTopLocation) {
@@ -565,7 +590,6 @@ export class LandingpageComponent implements OnInit {
     let htmlElement:HTMLElement = document.getElementById("landingPage_Map");
     htmlElement.click();
   }
-
 }
 
 /**
