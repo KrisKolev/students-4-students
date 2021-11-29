@@ -22,6 +22,7 @@ import {
 import {empty, Observable} from "rxjs";
 import {MatOptionSelectionChange} from "@angular/material/core/option/option";
 import {List} from "../../model/list";
+import {makeTemplateObject} from "@angular/localize/src/utils";
 
 @Component({
   selector: 'app-landingpage',
@@ -202,7 +203,8 @@ export class LandingpageComponent implements OnInit {
 
   detailedSight: Sight = new Sight();
 
-
+  myDirectionsRenderer: google.maps.DirectionsRenderer;
+  directionsService: google.maps.DirectionsService = new google.maps.DirectionsService();
 
 
   constructor(config: NgbCarouselConfig,
@@ -228,7 +230,21 @@ export class LandingpageComponent implements OnInit {
    * Fired when the view is initialized. Sets the autocomplete object and initializes google places.
    */
   ngAfterViewInit() {
+
+    this.myDirectionsRenderer = new google.maps.DirectionsRenderer();
+
+    try {
+      this.myDirectionsRenderer.setMap(this.map.googleMap);
+    }
+    catch (e) {
+      var m = e;
+    }
+
     this.geoCoder = new google.maps.Geocoder;
+    //this.directionsRenderer.setMap(this.map.control.getGMap());
+
+    //var myMap = (document.getElementById('landingPage_Map')) as google.maps.Map
+
     try {
       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
       autocomplete.addListener("place_changed", () => {
@@ -262,6 +278,28 @@ export class LandingpageComponent implements OnInit {
     } catch (e) {
       console.log(e);
     }
+  }
+
+  calcRoute(sight:SightTopLocation) {
+    var request  = {
+      origin: new google.maps.LatLng({lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}),
+      destination: new google.maps.LatLng({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)}),
+      travelMode: google.maps.TravelMode.WALKING
+    };
+
+    //this.myDirectionsRenderer.setMap(this.map.control.getGMap());
+    this.directionsService.route(request, (result, status)=> {
+      if (status == 'OK') {
+        try {
+          this.myDirectionsRenderer.setDirections(result);
+        }
+        catch (e) {
+          var t = e;
+        }
+      }
+      else {
+      }
+    });
   }
 
   /**
@@ -495,24 +533,22 @@ export class LandingpageComponent implements OnInit {
   async onFilterTopLocations() {
     this.allSightsSortedByDistance = [];
 
+    var tempSightList =[];
+
     if (this.showSightsLocationLatitude == undefined || this.showSightsLocationLongitude == undefined)
       return;
 
     this.allSights.forEach((sight) => {
-      this.allSightsSortedByDistance.push(CreateLocationSight(sight))
+      tempSightList.push(CreateLocationSight(sight))
+
+
     })
 
     const matrix = new google.maps.DistanceMatrixService();
     var destinationList = [];
-    this.allSightsSortedByDistance.forEach( sight => {
+    tempSightList.forEach( sight => {
       destinationList.push({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)})
     })
-
-    /*this.allSightsSortedByDistance.forEach( async sight => {
-      var num = getDistanceFromLatLonInKm(this.showSightsLocationLatitude, this.showSightsLocationLongitude, sight.latitude, sight.longitude)
-      sight.onInit(num)
-      await this.firebaseService.getSightImageUrls(sight);
-    })*/
 
     const request = {
       origins: [{lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}],
@@ -523,18 +559,16 @@ export class LandingpageComponent implements OnInit {
       avoidTolls: false,
     };
 
-
-
     matrix.getDistanceMatrix(request,response => {
-        var test = response;
+      for(var i = 0;i<tempSightList.length;i++){
+        tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
+        tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000)
+        this.firebaseService.getSightImageUrls(tempSightList[i]);
+      }
 
-        for(var i = 0;i<this.allSightsSortedByDistance.length;i++){
-          this.allSightsSortedByDistance[i].timeToTarget = response.rows[0].elements[i].duration.text;
-          this.allSightsSortedByDistance[i].onInit(response.rows[0].elements[i].distance.value/1000)
-          this.firebaseService.getSightImageUrls(this.allSightsSortedByDistance[i]);
-        }
+      this.allSightsSortedByDistance = tempSightList.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+      this.allSightsSortedByDistance.forEach(x=>x.headerExpanded = true)
 
-      this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
     })
 
     //this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))

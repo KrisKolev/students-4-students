@@ -37,6 +37,7 @@ export class SightTopLocation extends Sight{
     overallRating: number;
     timeToTarget: string;
     allImageUrl: string[] = [];
+    headerExpanded: boolean = false;
 
     onInit(distance:number){
         this.relativeDistance = distance;
