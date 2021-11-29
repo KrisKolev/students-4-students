@@ -36,6 +36,18 @@
   left: 20px;
 }
 
+.maps-filter-sights-button{
+  position: fixed;
+  top: 200px;
+  left: 550px;
+}
+
+.maps-clear-route{
+  position: fixed;
+  top: 150px;
+  right: 80px;
+}
+
 .maps-toggleTopLocations{
   position: fixed;
   top: 180px;
@@ -74,6 +86,14 @@
 .map-action-button{
   color:white;
   margin-left: 5px;
+  align-self: center;
+  background-color: #3f51b5;
+}
+
+.map-clear-route-button{
+  color:orangered;
+  margin-left: 5px;
+  font-size: x-large;
   background-color: #3f51b5;
 }
 
@@ -92,6 +112,32 @@
 .address-form{
 }
 
+.filter-sights-container{
+  position: fixed;
+  left: 550px;
+
+  top: 250px;
+  background-color: transparent;
+}
+
+.filter-center{
+  display: flex;
+  justify-content: center;
+  margin-bottom: 5px;
+  margin-top: 5px;
+}
+
+.filter-form-field{
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.filter-selector{
+  color:white;
+  border-color: transparent;
+  text-decoration-color: white;
+}
+
 .address-bar{
   background-color: #3f51b5;
 }
@@ -99,6 +145,13 @@
 .address-autocomplete{
   background-color: #3f51b5;
 }
+mat-select{
+  color: white;
+  text-decoration-color: white;
+  outline-color: white;
+}
+
+
 
 mat-form-field{
   fill: white;
@@ -112,6 +165,22 @@ mat-form-field{
   border-radius: 30px;
   background-color: #3f51b5;
   outline-color: red;
+}
+
+.label-select-filter{
+  color: white;
+  outline-color: white;
+  text-decoration-color: white;
+}
+
+#landingPage_Map{
+  height: 100%;
+}
+
+::ng-deep .mat-select-value{
+  color: white;
+  text-decoration-color: white;
+  outline-color: white;
 }
 
 .card-detail{
@@ -129,7 +198,12 @@ mat-form-field{
   margin-bottom: 20px;
   margin-left: 20px;
   width: 500px;
-  background-color: white;
+  background-color: lightgray;
+}
+
+.sight-details-view-rating{
+  background-color: lightgray;
+  margin: 10px;
 }
 
 .sight-show-detail-btn{

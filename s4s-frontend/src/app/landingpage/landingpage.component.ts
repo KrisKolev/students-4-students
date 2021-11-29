@@ -21,6 +21,9 @@ import {
 } from "@angular/material/autocomplete";
 import {empty, Observable} from "rxjs";
 import {MatOptionSelectionChange} from "@angular/material/core/option/option";
+import {List} from "../../model/list";
+import {makeTemplateObject} from "@angular/localize/src/utils";
+import {MatSelectChange} from "@angular/material/select";
 
 @Component({
   selector: 'app-landingpage',
@@ -104,6 +107,18 @@ import {MatOptionSelectionChange} from "@angular/material/core/option/option";
       })),
       transition('* => *', [
         animate('0.35s')
+      ])
+    ]),trigger('moveFilterButtonContainer', [
+      state('open', style({
+        left: '550px',
+        opacity: 1
+      })),
+      state('closed', style({
+        left: '-100%',
+        opacity: 0
+      })),
+      transition('* => *', [
+        animate('0.75s')
       ])
     ]),]
 })
@@ -189,11 +204,6 @@ export class LandingpageComponent implements OnInit {
 
 
   allSightsSortedByDistance: SightTopLocation[] = [];
-  images = [
-    {title: 'First Location', short: 'First Locations Short', src: "./assets/images/1.jpg"},
-    {title: 'Second Location', short: 'Second Locations Short', src: "./assets/images/2.jpg"},
-    {title: 'Third Location', short: 'Third Locations Short', src: "./assets/images/3.jpg"}
-  ];
 
   toggleTopLocationsText = "";
   isTopLocationsVisible = false;
@@ -206,7 +216,15 @@ export class LandingpageComponent implements OnInit {
 
   detailedSight: Sight = new Sight();
 
+  myDirectionsRenderer: google.maps.DirectionsRenderer;
+  directionsService: google.maps.DirectionsService = new google.maps.DirectionsService();
 
+  routeEnabled: boolean = false;
+
+  isFilterVisible:boolean = false;
+
+  filterDistanceValue:number = 20;
+  filterModeValue: any;
 
 
   constructor(config: NgbCarouselConfig,
@@ -218,7 +236,9 @@ export class LandingpageComponent implements OnInit {
               private dialog: MatDialog,
               private firebaseService: FirebaseService) {
     config.interval = 2000;
-    config.pauseOnHover = true;
+    config.pauseOnHover = true
+
+    this.filterModeValue = "distancedescending";
   }
 
   ngOnInit(): void {
@@ -232,7 +252,21 @@ export class LandingpageComponent implements OnInit {
    * Fired when the view is initialized. Sets the autocomplete object and initializes google places.
    */
   ngAfterViewInit() {
+
+    this.myDirectionsRenderer = new google.maps.DirectionsRenderer();
+
+    try {
+      this.myDirectionsRenderer.setMap(this.map.googleMap);
+    }
+    catch (e) {
+      var m = e;
+    }
+
     this.geoCoder = new google.maps.Geocoder;
+    //this.directionsRenderer.setMap(this.map.control.getGMap());
+
+    //var myMap = (document.getElementById('landingPage_Map')) as google.maps.Map
+
     try {
       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
       autocomplete.addListener("place_changed", () => {
@@ -357,6 +391,13 @@ export class LandingpageComponent implements OnInit {
       this.mapMarkers.push(marker)
       this.onToggleTopLocations(false);
     });
+  }
+
+  goToSelectedReferencePoint(){
+    this.center = {
+      lat: this.showSightsLocationLatitude,
+      lng: this.showSightsLocationLongitude,
+    }
   }
 
   onToggleTopLocations(keepVisibility:boolean) {
@@ -496,24 +537,73 @@ export class LandingpageComponent implements OnInit {
     }
   }
 
-  onFilterTopLocations() {
+  async onFilterTopLocations() {
     this.allSightsSortedByDistance = [];
+    this.myDirectionsRenderer.setDirections(new class implements google.maps.DirectionsResult {
+      geocoded_waypoints: google.maps.DirectionsGeocodedWaypoint[]=[];
+      routes: google.maps.DirectionsRoute[] = [];
+    })
+    this.routeEnabled = false;
+    this.goToSelectedReferencePoint();
+
+    var tempSightList =[];
 
     if (this.showSightsLocationLatitude == undefined || this.showSightsLocationLongitude == undefined)
       return;
 
     this.allSights.forEach((sight) => {
-      this.allSightsSortedByDistance.push(CreateLocationSight(sight))
+      tempSightList.push(CreateLocationSight(sight))
+
+
     })
 
-
-    this.allSightsSortedByDistance.forEach( async sight => {
-      var num = getDistanceFromLatLonInKm(this.showSightsLocationLatitude, this.showSightsLocationLongitude, sight.latitude, sight.longitude)
-      sight.onInit(num)
-      await this.firebaseService.getSightImageUrls(sight);
+    const matrix = new google.maps.DistanceMatrixService();
+    var destinationList = [];
+    tempSightList.forEach( sight => {
+      destinationList.push({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)})
     })
 
-    this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+    const request = {
+      origins: [{lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}],
+      destinations: destinationList,
+      travelMode: google.maps.TravelMode.WALKING,
+      unitSystem: google.maps.UnitSystem.METRIC,
+      avoidHighways: false,
+      avoidTolls: false,
+    };
+
+    matrix.getDistanceMatrix(request,response => {
+      for(var i = 0;i<tempSightList.length;i++){
+        tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
+        tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000,this.filterDistanceValue)
+
+        this.firebaseService.getSightImageUrls(tempSightList[i]);
+      }
+
+      if(this.filterModeValue === "distancedescending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+      }
+      if(this.filterModeValue === "distanceascending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.relativeDistance < second.relativeDistance ? 1 : -1))
+      }
+      if(this.filterModeValue === "ratingsdescending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.overallRating < second.overallRating ? 1 : -1))
+      }
+      if(this.filterModeValue === "ratingsascending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.overallRating > second.overallRating ? 1 : -1))
+      }
+
+
+      this.allSightsSortedByDistance.forEach(x=>x.headerExpanded = true)
+
+    })
+
+    //this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+
+  }
+
+  onApplyFilterMode(){
+
   }
 
   onGoToSight(sight: SightTopLocation) {
@@ -566,6 +656,54 @@ export class LandingpageComponent implements OnInit {
     htmlElement.click();
   }
 
+  calcRoute(sight:SightTopLocation) {
+    var request  = {
+      origin: new google.maps.LatLng({lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}),
+      destination: new google.maps.LatLng({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)}),
+      travelMode: google.maps.TravelMode.WALKING
+    };
+
+    //this.myDirectionsRenderer.setMap(this.map.control.getGMap());
+    this.directionsService.route(request, (result, status)=> {
+      if (status == 'OK') {
+        try {
+          this.myDirectionsRenderer.setDirections(result);
+          this.routeEnabled = true;
+        }
+        catch (e) {
+          var t = e;
+        }
+      }
+      else {
+      }
+    });
+  }
+
+  onClearRoutes() {
+
+    this.myDirectionsRenderer.setDirections(new class implements google.maps.DirectionsResult {
+      geocoded_waypoints: google.maps.DirectionsGeocodedWaypoint[]=[];
+      routes: google.maps.DirectionsRoute[] = [];
+    })
+
+    this.goToSelectedReferencePoint();
+
+    this.routeEnabled = false;
+  }
+
+  onShowFilter(){
+    this.isFilterVisible = !this.isFilterVisible;
+  }
+
+  onFilterModeChange($event: MatSelectChange) {
+    var t2 = this.filterModeValue;
+    var t = this.filterDistanceValue;
+  }
+
+  onApplyFilter(radiusInput: HTMLInputElement) {
+    this.filterDistanceValue = Number.parseFloat(radiusInput.value)
+    this.onFilterTopLocations().then();
+  }
 }
 
 /**

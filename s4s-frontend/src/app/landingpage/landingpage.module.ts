@@ -14,6 +14,7 @@ import {ManageSightDialogModule} from "../manage-sight-dialog/manage-sight-dialo
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatSelectModule} from "@angular/material/select";
 
 
 @NgModule({
@@ -33,7 +34,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         ManageSightDialogModule,
         MatExpansionModule,
         MatGridListModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        MatSelectModule
     ]
 })
 export class LandingpageModule { }
