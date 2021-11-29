@@ -38,9 +38,16 @@ export class SightTopLocation extends Sight{
     timeToTarget: string;
     allImageUrl: string[] = [];
     headerExpanded: boolean = false;
+    isVisible: boolean = true;
 
-    onInit(distance:number){
+    onInit(distance:number, filterRadius:number){
         this.relativeDistance = distance;
+        if(distance>filterRadius){
+            this.isVisible = false;
+        }
+        else {
+            this.isVisible = true;
+        }
         if(distance<1){
             this.showDistanceString = (Number(distance.toFixed(3))*1000).toString() + " m away"
         }

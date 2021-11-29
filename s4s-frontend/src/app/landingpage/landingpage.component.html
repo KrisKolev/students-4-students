@@ -29,12 +29,11 @@
     </google-map>
 </div>
 
-
 <div class="top-locations-container" *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'" [@moveSightsDetails]="isSightDetailVisible ? 'open' : 'closed'">
     <div>
+
         <h2>Here are locations near you</h2>
         <h3>{{currentLocationAddress}} </h3>
-
 
 
         <div *ngFor="let sight of allSightsSortedByDistance">
@@ -86,6 +85,7 @@
     </div>
 </div>
 
+
 <div [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
     <button mat-raised-button class="close-button-detail"
     (click)="onCloseSightDetail()">X</button>
@@ -119,6 +119,55 @@
             {{toggleTopLocationsText}}
         </button>
     </mat-card-actions>
+</div>
+
+<div class="maps-filter-sights-button" [@moveFilterButtonContainer]="isTopLocationsVisible ? 'open' : 'closed'">
+    <mat-card-actions>
+        <button class="map-action-button" mat-raised-button (click)="onShowFilter()" background-color="primary"
+        [textContent]="isFilterVisible ? 'Hide Filter':'Show Filter'">
+        </button>
+    </mat-card-actions>
+</div>
+
+<div class="maps-clear-route" *ngIf="routeEnabled">
+    <mat-card-actions>
+        <button class="map-clear-route-button" mat-raised-button (click)="onClearRoutes()" background-color="primary">
+            Clear route
+        </button>
+    </mat-card-actions>
+</div>
+
+<div class="filter-sights-container" *ngIf="isFilterVisible">
+    <form class="filter-form">
+        <mat-form-field appearance="fill" class="mat--fo">
+            <mat-label class="label-select-filter">Distance (km)</mat-label>
+            <input type="number" matInput
+                   placeholder="10"
+                   matNativeControl
+                   #radiusInput
+                   value="20"
+                   class="label-select-filter">
+        </mat-form-field>
+    </form>
+
+    <mat-form-field appearance="fill" class="filter-form-field">
+        <mat-label class="label-select-filter">Sorting mode</mat-label>
+        <mat-select matNativeControl required class="mat-select-content" [(value)]="filterModeValue" (selectionChange)="onFilterModeChange($event)">
+            <mat-option value="distancedescending" >Distance descending</mat-option>
+            <mat-option value="distanceascending">Distance ascending</mat-option>
+            <mat-option value="ratingsdescending">Ratings descending</mat-option>
+            <mat-option value="ratingsascending">Ratings ascending</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <div class="filter-center">
+        <button class="map-action-button" mat-raised-button (click)="onApplyFilter(radiusInput)" background-color="primary"
+        >Apply
+        </button>
+    </div>
+
+
+
 </div>
 
 <!--div which css moves the autocomplete to the left of the searchbar-->

@@ -23,6 +23,7 @@ import {empty, Observable} from "rxjs";
 import {MatOptionSelectionChange} from "@angular/material/core/option/option";
 import {List} from "../../model/list";
 import {makeTemplateObject} from "@angular/localize/src/utils";
+import {MatSelectChange} from "@angular/material/select";
 
 @Component({
   selector: 'app-landingpage',
@@ -106,6 +107,18 @@ import {makeTemplateObject} from "@angular/localize/src/utils";
       })),
       transition('* => *', [
         animate('0.35s')
+      ])
+    ]),trigger('moveFilterButtonContainer', [
+      state('open', style({
+        left: '550px',
+        opacity: 1
+      })),
+      state('closed', style({
+        left: '-100%',
+        opacity: 0
+      })),
+      transition('* => *', [
+        animate('0.75s')
       ])
     ]),]
 })
@@ -206,6 +219,13 @@ export class LandingpageComponent implements OnInit {
   myDirectionsRenderer: google.maps.DirectionsRenderer;
   directionsService: google.maps.DirectionsService = new google.maps.DirectionsService();
 
+  routeEnabled: boolean = false;
+
+  isFilterVisible:boolean = false;
+
+  filterDistanceValue:number = 20;
+  filterModeValue: any;
+
 
   constructor(config: NgbCarouselConfig,
               private locService: LocationService,
@@ -216,7 +236,9 @@ export class LandingpageComponent implements OnInit {
               private dialog: MatDialog,
               private firebaseService: FirebaseService) {
     config.interval = 2000;
-    config.pauseOnHover = true;
+    config.pauseOnHover = true
+
+    this.filterModeValue = "distancedescending";
   }
 
   ngOnInit(): void {
@@ -278,28 +300,6 @@ export class LandingpageComponent implements OnInit {
     } catch (e) {
       console.log(e);
     }
-  }
-
-  calcRoute(sight:SightTopLocation) {
-    var request  = {
-      origin: new google.maps.LatLng({lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}),
-      destination: new google.maps.LatLng({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)}),
-      travelMode: google.maps.TravelMode.WALKING
-    };
-
-    //this.myDirectionsRenderer.setMap(this.map.control.getGMap());
-    this.directionsService.route(request, (result, status)=> {
-      if (status == 'OK') {
-        try {
-          this.myDirectionsRenderer.setDirections(result);
-        }
-        catch (e) {
-          var t = e;
-        }
-      }
-      else {
-      }
-    });
   }
 
   /**
@@ -391,6 +391,13 @@ export class LandingpageComponent implements OnInit {
       this.mapMarkers.push(marker)
       this.onToggleTopLocations(false);
     });
+  }
+
+  goToSelectedReferencePoint(){
+    this.center = {
+      lat: this.showSightsLocationLatitude,
+      lng: this.showSightsLocationLongitude,
+    }
   }
 
   onToggleTopLocations(keepVisibility:boolean) {
@@ -532,6 +539,12 @@ export class LandingpageComponent implements OnInit {
 
   async onFilterTopLocations() {
     this.allSightsSortedByDistance = [];
+    this.myDirectionsRenderer.setDirections(new class implements google.maps.DirectionsResult {
+      geocoded_waypoints: google.maps.DirectionsGeocodedWaypoint[]=[];
+      routes: google.maps.DirectionsRoute[] = [];
+    })
+    this.routeEnabled = false;
+    this.goToSelectedReferencePoint();
 
     var tempSightList =[];
 
@@ -562,16 +575,34 @@ export class LandingpageComponent implements OnInit {
     matrix.getDistanceMatrix(request,response => {
       for(var i = 0;i<tempSightList.length;i++){
         tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
-        tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000)
+        tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000,this.filterDistanceValue)
+
         this.firebaseService.getSightImageUrls(tempSightList[i]);
       }
 
-      this.allSightsSortedByDistance = tempSightList.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+      if(this.filterModeValue === "distancedescending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+      }
+      if(this.filterModeValue === "distanceascending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.relativeDistance < second.relativeDistance ? 1 : -1))
+      }
+      if(this.filterModeValue === "ratingsdescending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.overallRating < second.overallRating ? 1 : -1))
+      }
+      if(this.filterModeValue === "ratingsascending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.overallRating > second.overallRating ? 1 : -1))
+      }
+
+
       this.allSightsSortedByDistance.forEach(x=>x.headerExpanded = true)
 
     })
 
     //this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+
+  }
+
+  onApplyFilterMode(){
 
   }
 
@@ -623,6 +654,55 @@ export class LandingpageComponent implements OnInit {
 
     let htmlElement:HTMLElement = document.getElementById("landingPage_Map");
     htmlElement.click();
+  }
+
+  calcRoute(sight:SightTopLocation) {
+    var request  = {
+      origin: new google.maps.LatLng({lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}),
+      destination: new google.maps.LatLng({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)}),
+      travelMode: google.maps.TravelMode.WALKING
+    };
+
+    //this.myDirectionsRenderer.setMap(this.map.control.getGMap());
+    this.directionsService.route(request, (result, status)=> {
+      if (status == 'OK') {
+        try {
+          this.myDirectionsRenderer.setDirections(result);
+          this.routeEnabled = true;
+        }
+        catch (e) {
+          var t = e;
+        }
+      }
+      else {
+      }
+    });
+  }
+
+  onClearRoutes() {
+
+    this.myDirectionsRenderer.setDirections(new class implements google.maps.DirectionsResult {
+      geocoded_waypoints: google.maps.DirectionsGeocodedWaypoint[]=[];
+      routes: google.maps.DirectionsRoute[] = [];
+    })
+
+    this.goToSelectedReferencePoint();
+
+    this.routeEnabled = false;
+  }
+
+  onShowFilter(){
+    this.isFilterVisible = !this.isFilterVisible;
+  }
+
+  onFilterModeChange($event: MatSelectChange) {
+    var t2 = this.filterModeValue;
+    var t = this.filterDistanceValue;
+  }
+
+  onApplyFilter(radiusInput: HTMLInputElement) {
+    this.filterDistanceValue = Number.parseFloat(radiusInput.value)
+    this.onFilterTopLocations().then();
   }
 }
 
