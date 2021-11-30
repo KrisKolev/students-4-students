@@ -1,6 +1,8 @@
 package com.s4s.database;
 
+import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.WriteResult;
 import com.s4s.database.model.*;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
@@ -10,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Access all sight relevant functions
@@ -238,27 +241,47 @@ public class SightsAccess {
             DocumentReference ref = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(rating.getClass()), rating);
             rating.setUid(ref.getId());
             DatabaseAccess.updateUidOfDocument("rating", rating.getUid(), rating.getUid());
+
+            if(!rating.sightId.equals("")){
+                Sight sight = sights.stream().filter(x->x.getUid()== rating.sightId).findFirst().get();
+                if(sight!=null){
+                    sight.getRatingAssigned().add(rating.getUid());
+                    sight.getRatingList().add(rating);
+                    DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get("sight"), rating.sightId, "ratingAssigned", (String[]) sight.getRatingAssigned().toArray());
+                }
+            }
+
         } catch (Exception e) {
             return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
         }
         return new ResponseHelper(Info.SUCCESS, "Rating added", rating).build();
     }
 
-    public static double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
-        final double earthRadius = 6371;
-        double dLat = deg2rad(lat2 - lat1);
-        double dLon = deg2rad(lon2 - lon1);
+    /**
+     * Deletes a rating
+     *
+     * @return
+     */
+    public static javax.ws.rs.core.Response deleteRating(String ratingId){
+        try {
+            WriteResult t = DatabaseAccess.deleteDocument("rating", ratingId).get();
 
-        double a =
-                Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) *
-                        Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            List<Sight> sightSearch = sights.stream().filter(x -> x.getRatingList().stream().anyMatch(y->y.getUid().equals(ratingId)))
+                    .collect(Collectors.toList());
 
-        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        return earthRadius * c;
-    }
+            for (Sight sight: sightSearch
+                 ) {
+                List <Rating> ratings = sight.getRatingList().stream().filter(x->x.getUid() == ratingId).collect(Collectors.toList());
+                sight.getRatingList().remove(ratings);
+                List <String> ratingsAssigned = sight.getRatingAssigned().stream().filter(x->x.equals(ratingId)).collect(Collectors.toList());
+                sight.getRatingAssigned().remove(ratingsAssigned);
+                DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get("sight"), sight.getUid(), "ratingAssigned", (String[]) sight.getRatingAssigned().toArray());
+            }
 
-    public static double deg2rad(double deg) {
-        return Math.toRadians(deg);
+        } catch (Exception e) {
+            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+        }
+        return new ResponseHelper(Info.SUCCESS, "Rating deleted", ratingId).build();
     }
 
     public static javax.ws.rs.core.Response getTopSights(double lon, double lat, double radius){
@@ -298,6 +321,9 @@ public class SightsAccess {
         }
     }
 
+    /**
+     * Gets a sight by its id
+     * */
     public static javax.ws.rs.core.Response getSightById(String id) {
         try{
             List<Sight> sightList = sights.stream().filter(x->x.getUid().equals(id)).collect(Collectors.toList());
@@ -310,5 +336,82 @@ public class SightsAccess {
         catch (Exception e){
             return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage(),null).build();
         }
+    }
+
+    /**
+     * Gets all sights that a user has created
+     * */
+    public static javax.ws.rs.core.Response getSightsForUser(String userId){
+        try{
+            List<Sight> sightList = sights.stream().filter(x->x.getCreator().equals(userId)).collect(Collectors.toList());
+            if(sightList.isEmpty())
+            {
+                return new ResponseHelper(Info.FAILURE, "No sights found for user " + userId,null).build();
+            }
+            return new ResponseHelper(Info.SUCCESS, "Sights found", sightList).build();
+        }
+        catch (Exception e){
+            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage(),null).build();
+        }
+    }
+
+    /**
+     * Get all ratings for users
+     * */
+    public static javax.ws.rs.core.Response getRatingsForUser(String userId){
+        try{
+
+            List<Rating> ratingList = new ArrayList<>();
+            for (Sight sight: sights) {
+                List<Rating> ratings = sight.getRatingList().stream().filter(x->x.getCreator().equals(userId)).collect(Collectors.toList());
+                ratingList.addAll(ratings);
+            }
+
+            return new ResponseHelper(Info.SUCCESS, "Ratings found", ratingList).build();
+        }
+        catch (Exception e){
+            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage(),null).build();
+        }
+    }
+
+    /**
+     * Deletes a sight
+     * */
+    public static javax.ws.rs.core.Response deleteSight(String sightId){
+        try {
+            WriteResult t = DatabaseAccess.deleteDocument("sight", sightId).get();
+            Sight sightSearch = sights.stream().filter(x->x.getUid().equals(sightId)).collect(Collectors.toList()).stream().findFirst().get();
+
+            if(sightSearch.equals(null)){
+                return new ResponseHelper(Info.FAILURE, "Sight not found!").build();
+            }
+            for (Rating rating: sightSearch.getRatingList()
+                 ) {
+                deleteRating(rating.getUid());
+            }
+
+            sights.remove(sightSearch);
+
+        } catch (Exception e) {
+            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+        }
+        return new ResponseHelper(Info.SUCCESS, "Sight deleted", sightId).build();
+    }
+
+    public static double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
+        final double earthRadius = 6371;
+        double dLat = deg2rad(lat2 - lat1);
+        double dLon = deg2rad(lon2 - lon1);
+
+        double a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) + Math.cos(deg2rad(lat1)) *
+                        Math.cos(deg2rad(lat2)) * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return earthRadius * c;
+    }
+
+    public static double deg2rad(double deg) {
+        return Math.toRadians(deg);
     }
 }

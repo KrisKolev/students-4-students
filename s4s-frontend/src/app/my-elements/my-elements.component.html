@@ -1,0 +1,55 @@
+<div class="tab-container">
+    <mat-tab-group class="tab-container">
+        <mat-tab label="My Created Sights" >
+            <div>
+                <table mat-table #sightsSort [dataSource]="dataSource" class="mat-elevation-z8 " matSort (matSortChange)="announceSortChange($event)">
+                <!-- Position Column -->
+                <ng-container matColumnDef="position">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number">No.</th>
+                    <td mat-cell *matCellDef="let element">{{mySights.indexOf(element) +1}}</td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="name" >
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name">Name</th>
+                    <td mat-cell *matCellDef="let element">{{element.name}}</td>
+                </ng-container>
+
+                <!-- Weight Column -->
+                <ng-container matColumnDef="address">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by address">Address</th>
+                    <td mat-cell *matCellDef="let element">{{element.address}}</td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="rating">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by number of ratings">Number of ratings</th>
+                    <td mat-cell *matCellDef="let element">{{element.ratingList.length}}</td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="manage">
+                    <th mat-header-cell *matHeaderCellDef>Manage</th>
+                    <td mat-cell *matCellDef="let element">
+                        <button mat-raised-button>
+                            Change
+                        </button>
+                        <button mat-raised-button class="delete-button" (click)="onDeleteClick(element.uid)">
+                            Delete
+                        </button>
+                    </td>
+                </ng-container>
+
+
+                <tr mat-header-row *matHeaderRowDef="mySightsDisplayedColumns"></tr>
+                <tr
+                        mat-row
+                        *matRowDef="let row; columns: mySightsDisplayedColumns;"
+                ></tr>
+            </table>
+            </div>
+        </mat-tab>
+        <mat-tab label="My Reviews">
+        </mat-tab>
+    </mat-tab-group>
+</div>

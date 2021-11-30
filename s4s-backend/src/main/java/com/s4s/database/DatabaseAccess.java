@@ -86,6 +86,11 @@ public class DatabaseAccess {
         WriteResult reference = docRef.update(attributeName,newValue).get();
         return reference;
     }
+    public static <T> WriteResult updateStringAttribute(String collectionName,String documentName,String attributeName,String[] newValue) throws ExecutionException, InterruptedException {
+        DocumentReference docRef = dbInstance.collection(collectionName).document(documentName);
+        WriteResult reference = docRef.update(attributeName,newValue).get();
+        return reference;
+    }
 
     public static <T> T retrieveDocument(Class<T> documentType, String documentId)
             throws ExecutionException, InterruptedException {
@@ -113,9 +118,9 @@ public class DatabaseAccess {
         return result;
     }
 
-    public static <T> void deleteDocument(Class<T> documentType, String documentId)
+    public static ApiFuture<WriteResult> deleteDocument(String documentPath, String documentId)
             throws InterruptedException, ExecutionException {
-        DocumentReference document = dbInstance.collection(documentMap.get(documentType)).document(documentId);
-        ApiFuture<WriteResult> writeResult = document.delete();
+        DocumentReference document = dbInstance.collection(documentPath).document(documentId);
+        return document.delete();
     }
 }

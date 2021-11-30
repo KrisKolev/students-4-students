@@ -27,6 +27,10 @@ const routes: Routes = [
         loadChildren: () => import('./profilepage/profilepage.module').then(m => m.ProfilepageModule)
     },
     {
+        path: 'myelements',
+        loadChildren: () => import('./my-elements/my-elements.module').then(m => m.MyElementsModule)
+    },
+    {
         path: '**',
         loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
     }

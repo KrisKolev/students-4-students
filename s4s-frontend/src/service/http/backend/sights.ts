@@ -40,4 +40,44 @@ export class SightsService extends BackendClientService {
     getSights(){
         return this.createGetCall('sights/allsights');
     }
+
+    /**
+     * Gets all ratings of a user
+     * Component written by Michael Fahrafellner
+     * creation date: 30.11.2021
+     * last change done by: Michael Fahrafellner
+     **/
+    getUserRatings(user:String){
+        return this.createGetCall('sights/myratings?id='+user)
+    }
+
+    /**
+     * Deletes a single rating
+     * Component written by Michael Fahrafellner
+     * creation date: 30.11.2021
+     * last change done by: Michael Fahrafellner
+     **/
+    deleteRating(ratingId: String){
+        return this.createGetCall('sights/deleteRating?id='+ratingId)
+    }
+
+    /**
+     * Gets all sights of a user
+     * Component written by Michael Fahrafellner
+     * creation date: 30.11.2021
+     * last change done by: Michael Fahrafellner
+     **/
+    getUserSights(user:String){
+        return this.createGetCall('sights/mysights?id='+user)
+    }
+
+    /**
+     * Gets all sights of a user
+     * Component written by Michael Fahrafellner
+     * creation date: 30.11.2021
+     * last change done by: Michael Fahrafellner
+     **/
+    deleteSight(sightId: String){
+        return this.createGetCall('sights/deleteSight?id='+sightId)
+    }
 }
