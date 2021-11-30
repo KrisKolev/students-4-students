@@ -15,6 +15,7 @@ import {CreateLocationSight, Sight, SightTopLocation} from "../../model/sight";
 import {Rating} from "../../model/rating";
 import {Observable} from "rxjs";
 import TravelMode = google.maps.TravelMode;
+import {resolve} from "path";
 
 @Component({
   selector: 'app-landingpage',
@@ -772,23 +773,26 @@ export class LandingpageComponent implements OnInit {
             avoidTolls: false,
           };
 
-          matrix.getDistanceMatrix(requestDist,response => {
+          matrix.getDistanceMatrix(requestDist,async response => {
             try {
               this.routeDuration = response.rows[0].elements[0].duration.text;
               let dist = "";
-              if(response.rows[0].elements[0].distance.value/1000<1){
-                dist = (Number((response.rows[0].elements[0].distance.value/1000).toFixed(3))*1000).toString() + " m away"
-              }
-              else{
-                dist = (Number((response.rows[0].elements[0].distance.value/1000).toFixed(2))).toString() + " km away"
+              if (response.rows[0].elements[0].distance.value / 1000 < 1) {
+                dist = (Number((response.rows[0].elements[0].distance.value / 1000).toFixed(3)) * 1000).toString() + " m away"
+              } else {
+                dist = (Number((response.rows[0].elements[0].distance.value / 1000).toFixed(2))).toString() + " km away"
               }
               this.routeDistance = dist;
-            }
-            catch (e) {
+            } catch (e) {
               this.routeDuration = "no route found";
-              this.routeDistance = (getDistanceFromLatLonInKm(this.showSightsLocationLatitude,this.showSightsLocationLongitude,
-                  Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude))).toString()
+              this.routeDistance = (getDistanceFromLatLonInKm(this.showSightsLocationLatitude, this.showSightsLocationLongitude,
+                  Number.parseFloat(sight.latitude), Number.parseFloat(sight.longitude))).toString()
             }
+
+            let htmlElement: HTMLElement = document.getElementById("landingPage_Map");
+            let htmlElement2: HTMLElement = document.getElementById("routedetails");
+            htmlElement2.focus();
+            htmlElement.focus();
           })
 
 
@@ -888,4 +892,9 @@ function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
 }
 function deg2rad(deg) {
   return deg * (Math.PI/180)
+}
+function sleep(ms: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  } );
 }

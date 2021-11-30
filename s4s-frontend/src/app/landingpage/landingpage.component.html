@@ -4,6 +4,7 @@
 <div class="maps-container" [@extendMap]="isTopLocationsVisible ? 'closed' : 'open'">
     <google-map
         #googleMap
+        id="landingPage_Map"
         [zoom]="zoom"
         width="100%"
         height="100%"
@@ -128,7 +129,7 @@
     </mat-card-actions>
 </div>
 
-<div class="filter-sights-container"  [@visibilityAnimationContainer]="isFilterVisible ? 'open' : 'closed'">
+<div class="filter-sights-container" [@visibilityAnimationContainer]="isFilterVisible ? 'open' : 'closed'">
     <form class="filter-form">
         <mat-form-field appearance="fill" class="mat--fo">
             <mat-label class="label-select-filter">Distance (km)</mat-label>
@@ -136,6 +137,7 @@
                    placeholder="10"
                    matNativeControl
                    #radiusInput
+                   id="routedetails"
                    value="20"
                    class="label-select-filter">
         </mat-form-field>
@@ -206,11 +208,10 @@
 </div>
 
 <div class="route-option-container" [@routeContainerVisibility]="routeEnabled ? 'open' : 'closed'">
-    <div class="route-details">
+    <div class="route-details" >
         <div>
             <mat-label class="label-route-detail" [textContent]="'Start: '"></mat-label>
             <mat-label class="label-route-detail-address" [textContent]="' '+routeStart"></mat-label>
-
         </div>
         <br/>
         <div>
