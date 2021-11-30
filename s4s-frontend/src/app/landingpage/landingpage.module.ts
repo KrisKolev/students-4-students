@@ -15,6 +15,7 @@ import {MatExpansionModule} from "@angular/material/expansion";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatSelectModule} from "@angular/material/select";
+import {MatSliderModule} from "@angular/material/slider";
 
 
 @NgModule({
@@ -35,7 +36,8 @@ import {MatSelectModule} from "@angular/material/select";
         MatExpansionModule,
         MatGridListModule,
         MatAutocompleteModule,
-        MatSelectModule
+        MatSelectModule,
+        MatSliderModule
     ]
 })
 export class LandingpageModule { }

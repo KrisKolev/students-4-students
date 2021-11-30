@@ -40,14 +40,9 @@ export class SightTopLocation extends Sight{
     headerExpanded: boolean = false;
     isVisible: boolean = true;
 
-    onInit(distance:number, filterRadius:number){
+    onInit(distance:number, filterRadius:number,minimumRating:number,maximumRating:number){
         this.relativeDistance = distance;
-        if(distance>filterRadius){
-            this.isVisible = false;
-        }
-        else {
-            this.isVisible = true;
-        }
+
         if(distance<1){
             this.showDistanceString = (Number(distance.toFixed(3))*1000).toString() + " m away"
         }
@@ -62,6 +57,13 @@ export class SightTopLocation extends Sight{
 
         if(this.ratingList.length >0){
             this.overallRating = allRatings / this.ratingList.length;
+        }
+
+        if(distance>filterRadius || minimumRating>this.overallRating || maximumRating<this.overallRating){
+            this.isVisible = false;
+        }
+        else {
+            this.isVisible = true;
         }
 
     }

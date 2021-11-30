@@ -39,13 +39,7 @@
 .maps-filter-sights-button{
   position: fixed;
   top: 200px;
-  left: 550px;
-}
-
-.maps-clear-route{
-  position: fixed;
-  top: 150px;
-  right: 80px;
+  left: -100px;
 }
 
 .maps-toggleTopLocations{
@@ -91,7 +85,7 @@
 }
 
 .map-clear-route-button{
-  color:orangered;
+  color:white;
   margin-left: 5px;
   font-size: x-large;
   background-color: #3f51b5;
@@ -115,7 +109,8 @@
 .filter-sights-container{
   position: fixed;
   left: 550px;
-
+  text-align: center;
+  opacity: 0;
   top: 250px;
   background-color: transparent;
 }
@@ -130,6 +125,7 @@
 .filter-form-field{
   margin-top: 5px;
   margin-bottom: 5px;
+  width: 250px;
 }
 
 .filter-selector{
@@ -183,6 +179,24 @@ mat-form-field{
   outline-color: white;
 }
 
+.slider-container{
+  background-color: #3f51b5;
+  border-radius: 20px;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  display: flex;
+}
+
+mat-slider{
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
 .card-detail{
   width: 100%;
   align-items: center;
@@ -229,3 +243,38 @@ mat-form-field{
   top: 65px;
 }
 
+.route-option-container{
+  background-color: transparent;
+  position: fixed;
+  width: 220px;
+  text-align: end;
+  top:150px;
+  opacity: 0;
+  right: 80px;
+}
+
+.route-details{
+  background-color: #3f51b5;
+  text-align: start;
+  border-radius: 40px;
+  padding: 15px;
+}
+
+.label-route-detail{
+  color: white;
+  font-size: medium;
+  outline-color: white;
+  text-decoration-color: white;
+}
+.label-route-detail-distance{
+  color: white;
+  font-size: small;
+  outline-color: white;
+  text-decoration-color: white;
+}
+.label-route-detail-address{
+  color: white;
+  font-size: smaller;
+  outline-color: white;
+  text-decoration-color: white;
+}

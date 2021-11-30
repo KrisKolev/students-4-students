@@ -1,5 +1,5 @@
-import {Component, ElementRef, Input, NgZone, OnInit, ViewChild} from '@angular/core';
-import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
+import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
+import {NgbCarouselConfig} from '@ng-bootstrap/ng-bootstrap';
 import {GoogleMap} from "@angular/google-maps";
 import {animate, state, style, transition, trigger} from "@angular/animations";
 import {LocationService} from "../../service/http/backend/locations";
@@ -10,20 +10,11 @@ import {MatDialog} from "@angular/material/dialog";
 import {FirebaseService} from "../../service/http/external/firebase.service";
 import {FormControl, FormGroup} from "@angular/forms";
 import {Label} from "../../model/label";
-import {startWith, map, filter} from "rxjs/operators";
+import {map, startWith} from "rxjs/operators";
 import {CreateLocationSight, Sight, SightTopLocation} from "../../model/sight";
 import {Rating} from "../../model/rating";
-import {
-  _MatAutocompleteBase,
-  MatAutocomplete,
-  MatAutocompleteSelectedEvent,
-  MatAutocompleteTrigger
-} from "@angular/material/autocomplete";
-import {empty, Observable} from "rxjs";
-import {MatOptionSelectionChange} from "@angular/material/core/option/option";
-import {List} from "../../model/list";
-import {makeTemplateObject} from "@angular/localize/src/utils";
-import {MatSelectChange} from "@angular/material/select";
+import {Observable} from "rxjs";
+import TravelMode = google.maps.TravelMode;
 
 @Component({
   selector: 'app-landingpage',
@@ -119,6 +110,30 @@ import {MatSelectChange} from "@angular/material/select";
       })),
       transition('* => *', [
         animate('0.75s')
+      ])
+    ]),trigger('visibilityAnimationContainer', [
+      state('open', style({
+        opacity: 1,
+        left:'550px'
+      })),
+      state('closed', style({
+        opacity: 0,
+        left:'-500px'
+      })),
+      transition('* => *', [
+        animate('0.5s')
+      ])
+    ]),trigger('routeContainerVisibility', [
+      state('open', style({
+        opacity: 1,
+        right:'80px'
+      })),
+      state('closed', style({
+        opacity: 0,
+        right:'-300px'
+      })),
+      transition('* => *', [
+        animate('0.5s')
       ])
     ]),]
 })
@@ -225,7 +240,19 @@ export class LandingpageComponent implements OnInit {
 
   filterDistanceValue:number = 20;
   filterModeValue: any;
+  filterRatingSliderMinimumValue: any;
+  filterRatingSliderMaximumValue: any;
+  sightsDistanceCalculation:any;
+  sightsDistanceCalculationMode: google.maps.TravelMode;
 
+
+  routeMode: any;
+  routeTravelMode: google.maps.TravelMode;
+
+  routeStart: string;
+  routeTarget: string;
+  routeDistance: string;
+  routeDuration: string
 
   constructor(config: NgbCarouselConfig,
               private locService: LocationService,
@@ -237,8 +264,13 @@ export class LandingpageComponent implements OnInit {
               private firebaseService: FirebaseService) {
     config.interval = 2000;
     config.pauseOnHover = true
-
+    this.filterRatingSliderMinimumValue = 1
+    this.filterRatingSliderMaximumValue = 5
     this.filterModeValue = "distancedescending";
+    this.routeMode = "walking"
+    this.routeTravelMode = TravelMode.WALKING
+    this.sightsDistanceCalculation = "walking"
+    this.sightsDistanceCalculationMode = TravelMode.WALKING;
   }
 
   ngOnInit(): void {
@@ -414,6 +446,7 @@ export class LandingpageComponent implements OnInit {
       this.toggleTopLocationsText = "Hide Top Locations"
     } else {
       this.toggleTopLocationsText = "Show top locations in my area"
+      this.isFilterVisible = false;
     }
   }
 
@@ -563,10 +596,11 @@ export class LandingpageComponent implements OnInit {
       destinationList.push({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)})
     })
 
-    const request = {
+
+    let request = {
       origins: [{lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}],
       destinations: destinationList,
-      travelMode: google.maps.TravelMode.WALKING,
+      travelMode: this.sightsDistanceCalculationMode,
       unitSystem: google.maps.UnitSystem.METRIC,
       avoidHighways: false,
       avoidTolls: false,
@@ -574,10 +608,19 @@ export class LandingpageComponent implements OnInit {
 
     matrix.getDistanceMatrix(request,response => {
       for(var i = 0;i<tempSightList.length;i++){
-        tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
-        tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000,this.filterDistanceValue)
+        try {
+          this.firebaseService.getSightImageUrls(tempSightList[i]);
+          tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
+          tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000,
+              this.filterDistanceValue,this.filterRatingSliderMinimumValue,this.filterRatingSliderMaximumValue)
+        }
+        catch (e) {
+          tempSightList[i].timeToTarget = "no route found";
+          var distance = getDistanceFromLatLonInKm(this.showSightsLocationLatitude,this.showSightsLocationLongitude,Number.parseFloat(tempSightList[i].latitude),Number.parseFloat(tempSightList[i].longitude))
+          tempSightList[i].onInit(distance,
+              this.filterDistanceValue,this.filterRatingSliderMinimumValue,this.filterRatingSliderMaximumValue)
+        }
 
-        this.firebaseService.getSightImageUrls(tempSightList[i]);
       }
 
       if(this.filterModeValue === "distancedescending"){
@@ -593,17 +636,39 @@ export class LandingpageComponent implements OnInit {
         this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.overallRating > second.overallRating ? 1 : -1))
       }
 
+      this.mapMarkersSights = [];
+      this.allSightsSortedByDistance.forEach((sight) => {
 
-      this.allSightsSortedByDistance.forEach(x=>x.headerExpanded = true)
+        sight.headerExpanded = true;
+        const svgMarker = {
+          path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
+          fillColor: "blue",
+          fillOpacity: 0.6,
+          strokeWeight: 0,
+          rotation: 0,
+          scale: 2,
+          anchor: new google.maps.Point(15, 30),
+        };
+
+        const existingMarker = new google.maps.Marker({
+          position: {
+            lat: Number.parseFloat(sight.latitude),
+            lng: Number.parseFloat(sight.longitude),
+          },
+          title: sight.address,
+          label: {
+            text: sight.name,
+            color: "blue",
+            fontSize: "20px"
+          },
+          icon: svgMarker,
+          optimized: false,
+
+        })
+        this.mapMarkersSights.push(existingMarker)
+      })
 
     })
-
-    //this.allSightsSortedByDistance.sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
-
-  }
-
-  onApplyFilterMode(){
-
   }
 
   onGoToSight(sight: SightTopLocation) {
@@ -657,17 +722,77 @@ export class LandingpageComponent implements OnInit {
   }
 
   calcRoute(sight:SightTopLocation) {
+    this.lastRouteTopSight = sight;
     var request  = {
       origin: new google.maps.LatLng({lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}),
       destination: new google.maps.LatLng({lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)}),
-      travelMode: google.maps.TravelMode.WALKING
+      travelMode: this.routeTravelMode
     };
+
+    this.geoCoder.geocode({'location': {lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}}, (results, status) => {
+      console.log(results);
+      console.log(status);
+      if (status === 'OK') {
+        if (results[0]) {
+          this.routeStart = results[0].formatted_address;
+        } else {
+          this.routeStart = "no address found"
+        }
+      } else {
+        this.routeStart = "no address found"
+      }
+    });
+    this.geoCoder.geocode({'location': {lat: Number.parseFloat(sight.latitude), lng: Number.parseFloat(sight.longitude)}}, (results, status) => {
+      console.log(results);
+      console.log(status);
+      if (status === 'OK') {
+        if (results[0]) {
+          this.routeTarget = results[0].formatted_address;
+        } else {
+          this.routeTarget ="no address found"
+        }
+      } else {
+        this.routeTarget ="no address found"
+      }
+    });
 
     //this.myDirectionsRenderer.setMap(this.map.control.getGMap());
     this.directionsService.route(request, (result, status)=> {
       if (status == 'OK') {
         try {
           this.myDirectionsRenderer.setDirections(result);
+
+          let matrix = new google.maps.DistanceMatrixService();
+          let requestDist = {
+            origins: [{lat: this.showSightsLocationLatitude, lng: this.showSightsLocationLongitude}],
+            destinations: [{lat: Number.parseFloat(sight.latitude), lng:Number.parseFloat(sight.longitude)}],
+            travelMode: this.routeTravelMode,
+            unitSystem: google.maps.UnitSystem.METRIC,
+            avoidHighways: false,
+            avoidTolls: false,
+          };
+
+          matrix.getDistanceMatrix(requestDist,response => {
+            try {
+              this.routeDuration = response.rows[0].elements[0].duration.text;
+              let dist = "";
+              if(response.rows[0].elements[0].distance.value/1000<1){
+                dist = (Number((response.rows[0].elements[0].distance.value/1000).toFixed(3))*1000).toString() + " m away"
+              }
+              else{
+                dist = (Number((response.rows[0].elements[0].distance.value/1000).toFixed(2))).toString() + " km away"
+              }
+              this.routeDistance = dist;
+            }
+            catch (e) {
+              this.routeDuration = "no route found";
+              this.routeDistance = (getDistanceFromLatLonInKm(this.showSightsLocationLatitude,this.showSightsLocationLongitude,
+                  Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude))).toString()
+            }
+          })
+
+
+
           this.routeEnabled = true;
         }
         catch (e) {
@@ -678,6 +803,8 @@ export class LandingpageComponent implements OnInit {
       }
     });
   }
+
+  lastRouteTopSight:SightTopLocation;
 
   onClearRoutes() {
 
@@ -695,14 +822,44 @@ export class LandingpageComponent implements OnInit {
     this.isFilterVisible = !this.isFilterVisible;
   }
 
-  onFilterModeChange($event: MatSelectChange) {
-    var t2 = this.filterModeValue;
-    var t = this.filterDistanceValue;
-  }
-
   onApplyFilter(radiusInput: HTMLInputElement) {
     this.filterDistanceValue = Number.parseFloat(radiusInput.value)
+
+    if(this.sightsDistanceCalculation === "walking"){
+      this.sightsDistanceCalculationMode = TravelMode.WALKING;
+    }
+    if(this.sightsDistanceCalculation === "bicycle"){
+      this.sightsDistanceCalculationMode = TravelMode.BICYCLING;
+    }
+    if(this.sightsDistanceCalculation === "transit"){
+      this.sightsDistanceCalculationMode = TravelMode.TRANSIT;
+    }
+    if(this.sightsDistanceCalculation === "driving"){
+      this.sightsDistanceCalculationMode = TravelMode.DRIVING;
+    }
+
     this.onFilterTopLocations().then();
+  }
+
+  formatLabel(value: number) {
+    return value;
+  }
+
+  onApplyRouteMode() {
+    if(this.routeMode === "walking"){
+      this.routeTravelMode = TravelMode.WALKING;
+    }
+    if(this.routeMode === "bicycle"){
+      this.routeTravelMode = TravelMode.BICYCLING;
+    }
+    if(this.routeMode === "transit"){
+      this.routeTravelMode = TravelMode.TRANSIT;
+    }
+    if(this.routeMode === "driving"){
+      this.routeTravelMode = TravelMode.DRIVING;
+    }
+
+    this.calcRoute(this.lastRouteTopSight);
   }
 }
 
@@ -729,7 +886,6 @@ function getDistanceFromLatLonInKm(lat1,lon1,lat2,lon2) {
   var d = R * c; // Distance in km
   return d;
 }
-
 function deg2rad(deg) {
   return deg * (Math.PI/180)
 }
