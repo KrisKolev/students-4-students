@@ -44,7 +44,7 @@
 
 .maps-toggleTopLocations{
   position: fixed;
-  top: 180px;
+  top: 100px;
   left: 20px;
 }
 
@@ -53,9 +53,9 @@
   left: 20px;
   top: 70px;
   width: 0px;
-  height: 90%;
+  height: 100%;
+  padding-right: 20px;
   opacity: 0;
-  padding: 20px;
   overflow-y: auto;
 }
 

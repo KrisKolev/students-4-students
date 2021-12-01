@@ -6,14 +6,18 @@
  * last change done by: Michael Fahrafellner
  */
 -->
-<div>
-    <button mat-icon-button [color]="color" *ngFor="let ratingId of ratingArr;index as i" [id]="'star_'+i" (click)="onClick(i+1)" [matTooltip]="ratingId+1" matTooltipPosition="above" [disabled]="!clickable">
-        <mat-icon>
-            {{showIcon(i)}}
-        </mat-icon>
-    </button>
+<span>
+    <div class="star-container">
+        <button (click)="onClick(i+1)" *ngFor="let ratingId of ratingArr;index as i" [color]="color" [disabled]="!clickable"
+                [id]="'star_'+i" class="star-button" mat-icon-button
+                matTooltipPosition="above">
+            <mat-icon>
+                {{showIcon(i)}}
+            </mat-icon>
+        </button>
+    </div>
     <mat-error *ngIf="starCount == null || starCount == 0">
         Star count is <strong>required</strong> and cannot be zero
     </mat-error>
     <mat-error *ngIf="hasError()">Please select a rating!</mat-error>
-</div>
+</span>

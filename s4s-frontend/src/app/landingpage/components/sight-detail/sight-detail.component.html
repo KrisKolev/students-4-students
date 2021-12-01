@@ -1,0 +1,53 @@
+<mat-card class="sight-panel">
+    <mat-card-title>
+        <span class="card-title" fxLayout="row">
+            <p [textContent]="sight.name"></p>
+            <span>
+                <button mat-mini-fab (click)="onCalcRoute(sight)">
+                    <mat-icon>explore</mat-icon>
+                </button>
+                <button mat-mini-fab (click)="onClose()" class="close-button-detail">
+                    <mat-icon>close</mat-icon>
+                </button>
+            </span>
+        </span>
+    </mat-card-title>
+    <mat-card-subtitle>
+        <span class="card-subtitle" fxLayout="row">
+            <span class="card-subtitle-ratings" fxLayout="row">
+                <app-star-rating [clickable]="true" [rating]="sight.overallRating" [starCount]="5"></app-star-rating>
+                <span>&nbsp;({{sight.ratingList.length}})</span>
+            </span>
+            <p [textContent]="'(' + sight.showDistanceString + '  /  ' + sight.timeToTarget + ')'"></p>
+        </span>
+    </mat-card-subtitle>
+    <div class="card-detail">
+        <mat-grid-list cols="2" rowHeight="2:1">
+            <mat-grid-tile>
+                <ngb-carousel>
+                    <ng-template *ngFor="let image of sight.allImageUrl" ngbSlide>
+                        <div class="picsum-img-wrapper">
+                            <img [src]="image" alt="Random slide">
+                        </div>
+                    </ng-template>
+                </ngb-carousel>
+                <mat-label *ngIf="sight.allImageUrl.length<1">No images available</mat-label>
+            </mat-grid-tile>
+        </mat-grid-list>
+        <br/>
+        <span>
+            <mat-label><strong>Address: </strong></mat-label>
+            <mat-label [textContent]="sight.address"></mat-label>
+        </span>
+    </div>
+</mat-card>
+
+
+
+
+
+
+
+
+
+

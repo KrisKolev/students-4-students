@@ -15,6 +15,8 @@ import {CreateLocationSight, Sight, SightTopLocation} from "../../model/sight";
 import {Rating} from "../../model/rating";
 import {Observable} from "rxjs";
 import TravelMode = google.maps.TravelMode;
+import {SightListItemComponent} from "./components/sight-list-item/sight-list-item.component";
+import {SightDetailComponent} from "./components/sight-detail/sight-detail.component";
 
 @Component({
   selector: 'app-landingpage',
@@ -148,6 +150,7 @@ export class LandingpageComponent implements OnInit {
    */
   @ViewChild('addressSearch') public searchElementRef: ElementRef;
   @ViewChild('sightSearch') sightSearch: ElementRef<HTMLInputElement>;
+  @ViewChild('sightDetail') sightDetail: SightDetailComponent;
 
   /**
    * Sight form with all data.
@@ -673,6 +676,7 @@ export class LandingpageComponent implements OnInit {
 
   onGoToSight(sight: SightTopLocation) {
     this.detailedSight = sight as Sight;
+    this.sightDetail.sight = sight;
     this.initMapWithPosition(Number.parseFloat(sight.latitude),Number.parseFloat(sight.longitude),this.zoom)
     this.onOpenSightDetails();
   }
