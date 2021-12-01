@@ -43,7 +43,7 @@ import {SightDetailComponent} from "./components/sight-detail/sight-detail.compo
         opacity: 0
       })),
       transition('* => *', [
-        animate('0.75s')
+        animate('0.35s')
       ])
     ]),
     trigger('extendMap', [
@@ -62,32 +62,23 @@ import {SightDetailComponent} from "./components/sight-detail/sight-detail.compo
         left: '550px',
       })),
       state('closed', style({
-        left: '20p',
+        left: '20px',
       })),
       transition('* => *', [
         animate('0.75s')
       ])
     ]),trigger('moveLocationButton', [
       state('open', style({
-        left: '320px',
-        top: '85px'
+        left: '0px',
+        top: '-100px',
+        opacity: 0
       })),
       state('closed', style({
-        left: '20p',
+        left: '5px',
         top: '200px'
       })),
       transition('* => *', [
         animate('0.75s')
-      ])
-    ]),trigger('moveSightsDetails', [
-      state('open', style({
-        height:'52%'
-      })),
-      state('closed', style({
-        height:'90%'
-      })),
-      transition('* => *', [
-        animate('0.45s')
       ])
     ]),trigger('moveSightsDetailsContainer', [
       state('open', style({
@@ -103,11 +94,12 @@ import {SightDetailComponent} from "./components/sight-detail/sight-detail.compo
       ])
     ]),trigger('moveFilterButtonContainer', [
       state('open', style({
+        top: '200px',
         left: '550px',
         opacity: 1
       })),
       state('closed', style({
-        left: '-100%',
+        top: '-100px',
         opacity: 0
       })),
       transition('* => *', [
@@ -225,7 +217,7 @@ export class LandingpageComponent implements OnInit {
 
   toggleTopLocationsText = "";
   isTopLocationsVisible = false;
-  initialVisibility = false;
+  initialVisibility = true;
   showSightsLocationLongitude: number;
   showSightsLocationLatitude: number;
 
@@ -437,7 +429,7 @@ export class LandingpageComponent implements OnInit {
 
   onToggleTopLocations(keepVisibility:boolean) {
     if (!this.initialVisibility) {
-      this.initialVisibility = true;
+      this.initialVisibility = false;
     }
     if(!keepVisibility)
     {

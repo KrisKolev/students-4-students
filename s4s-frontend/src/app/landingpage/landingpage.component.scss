@@ -38,14 +38,14 @@
 
 .maps-filter-sights-button{
   position: fixed;
-  top: 200px;
-  left: -100px;
+  top: -100px;
+  left: 0px;
 }
 
 .maps-toggleTopLocations{
   position: fixed;
-  top: 100px;
-  left: 20px;
+  top: -100px;
+  left: 0px;
 }
 
 .top-locations-container{
@@ -204,15 +204,15 @@ mat-slider{
   align-self: center;
 }
 
-.sight-details-view{
-  height: 38%;
+.sight-details-view {
   position: fixed;
-  top: 60%;
-  opacity: 0;
-  margin-bottom: 20px;
-  margin-left: 20px;
+  top: 60px;
+  padding-bottom:20px;
+  padding-left: 20px;
+  height: calc(100% - 20px - 60px);
   width: 500px;
-  background-color: lightgray;
+
+  background-color: white;
 }
 
 .sight-details-view-rating{

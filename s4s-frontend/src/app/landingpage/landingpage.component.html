@@ -27,21 +27,23 @@
 </div>
 
 <div *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'"
-     [@moveSightsDetails]="isSightDetailVisible ? 'open' : 'closed'"
      class="top-locations-container">
-    <div>
-        <h2>Here are locations near you</h2>
-        <h3>{{currentLocationAddress}} </h3>
+    <div fxLayout="row" [style]="'display: flex;align-items: center;justify-content: space-between;'" >
+        <h2>Top Sights near you:</h2>
+        <button (click)="onToggleTopLocations(false)" mat-mini-fab color="primary">
+            <mat-icon>keyboard_double_arrow_left</mat-icon>
+        </button>
+    </div>
 
-        <div *ngFor="let sight of allSightsSortedByDistance">
-            <app-sight-list-item (calcRouteEventEmitter)="calcRoute(sight)" (goToSightEventEmitter)="onGoToSight(sight)"
+    <div *ngFor="let sight of allSightsSortedByDistance">
+        <app-sight-list-item (calcRouteEventEmitter)="calcRoute(sight)" (goToSightEventEmitter)="onGoToSight(sight)"
                              [sight]="sight"></app-sight-list-item>
-        </div>
     </div>
 </div>
 
 <div [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
-    <app-sight-detail #sightDetail (calcRouteEventEmitter)="calcRoute(sightDetail.sight)" (closeEvent)="onCloseSightDetail()">
+    <app-sight-detail #sightDetail (calcRouteEventEmitter)="calcRoute(sightDetail.sight)"
+                      (closeEvent)="onCloseSightDetail()">
     </app-sight-detail>
 </div>
 
@@ -62,7 +64,9 @@
 
 <div [@moveFilterButtonContainer]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-filter-sights-button">
     <mat-card-actions>
-        <button (click)="onShowFilter()" [textContent]="isFilterVisible ? 'Hide Advanced Options':'Show Advanced Options'" background-color="primary" class="map-action-button"
+        <button (click)="onShowFilter()"
+                [textContent]="isFilterVisible ? 'Hide Advanced Options':'Show Advanced Options'"
+                background-color="primary" class="map-action-button"
                 mat-raised-button>
         </button>
     </mat-card-actions>
@@ -168,7 +172,8 @@
 
     <mat-form-field appearance="fill" class="filter-form-field">
         <mat-label class="label-select-filter">Route Mode</mat-label>
-        <mat-select (selectionChange)="onApplyRouteMode()" [(value)]="routeMode" class="mat-select-content" matNativeControl
+        <mat-select (selectionChange)="onApplyRouteMode()" [(value)]="routeMode" class="mat-select-content"
+                    matNativeControl
                     required>
             <mat-option value="walking">Walking</mat-option>
             <mat-option value="bicycle">Bicycle</mat-option>
