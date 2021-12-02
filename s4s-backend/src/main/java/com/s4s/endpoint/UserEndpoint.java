@@ -104,13 +104,13 @@ public class UserEndpoint {
     @JWTTokenRequired
     public Response updateProfilePicture(UserDTO userDTO) throws FirebaseAuthException, ExecutionException, InterruptedException {
         UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
-                .setPhotoUrl(userDTO.getPhotoURL());
+                .setPhotoUrl(userDTO.getPhotoUrl());
 
         UserRecord userRecord;
         try {
             com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
             userRecord = FirebaseAuth.getInstance().updateUser(updateRequest);
-            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "photoUrl", userDTO.getPhotoURL());
+            DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "photoUrl", userDTO.getPhotoUrl());
 
         } catch (FirebaseAuthException exception) {
             return new ResponseHelper(Info.FAILURE).build();

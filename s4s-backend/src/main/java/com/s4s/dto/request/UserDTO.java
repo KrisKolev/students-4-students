@@ -34,9 +34,9 @@ public class UserDTO {
         return nickname;
     }
 
-    public String getPhotoURL(){return photoUrl;}
+    public String getPhotoUrl(){return photoUrl;}
 
-    public void setPhotoURL(String photoURL) {
+    public void setPhotoUrl(String photoURL) {
         this.photoUrl = photoURL;
     }
 
