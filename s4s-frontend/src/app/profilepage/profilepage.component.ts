@@ -120,9 +120,13 @@ export class ProfilepageComponent implements OnInit {
         uploadItem.filePath = 'images/avatars/'+this.loggedInUser.uid +"/img_0";
         uploadItem.file = this.profilePicture;
 
-        this.firebaseService.uploadFileToFirestore(uploadItem);
-        this.profileService.updateUserAvatar("img_0",this.loggedInUser.uid).subscribe((res:Response)=>{
+        this.firebaseService.uploadFileToFirestore(uploadItem).then(res=>{
             console.log(res);
+            if(res.hasErrors) {return;}
+
+            this.profileService.updateUserAvatar(res.response,this.loggedInUser.uid).subscribe((res:Response)=>{
+                console.log(res);
+        });
         });
     }
 
