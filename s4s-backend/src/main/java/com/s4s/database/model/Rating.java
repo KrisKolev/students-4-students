@@ -20,6 +20,9 @@ public class Rating {
     private Date updatedAt;
 
     public String sightId;
+    public String sightName;
+
+    public String getSightId(){return  sightId;}
 
     public String getUid() {
         return uid;

@@ -86,7 +86,7 @@ public class DatabaseAccess {
         WriteResult reference = docRef.update(attributeName,newValue).get();
         return reference;
     }
-    public static <T> WriteResult updateStringAttribute(String collectionName,String documentName,String attributeName,String[] newValue) throws ExecutionException, InterruptedException {
+    public static <T> WriteResult updateStringAttribute(String collectionName,String documentName,String attributeName,List<String> newValue) throws ExecutionException, InterruptedException {
         DocumentReference docRef = dbInstance.collection(collectionName).document(documentName);
         WriteResult reference = docRef.update(attributeName,newValue).get();
         return reference;

@@ -22,11 +22,17 @@ export class MyElementsComponent implements OnInit {
    * Columes of the my sights table
    * */
   mySightsDisplayedColumns: string[] = ['position', 'name', 'address', 'rating', 'manage'];
-  myRatingsdDisplayedColumns: string[] = ['position', 'name', 'address', 'rating', 'manage'];
-  dataSource: any;
-  dataSourceRating: any;
+  myRatingsdDisplayedColumns: string[] = ['position', 'comment', 'sightName',  'manage'];
+
+  sightsDataSource: any;
+  ratingDataSource: any;
+
   mySights: Sight[];
   myRatings: Rating[];
+
+
+  @ViewChild('sightsTable', { read: MatSort, static: true }) sightsTableSort: MatSort;
+  @ViewChild('ratingsTable', { read: MatSort, static: true }) ratingsTableSort: MatSort;
 
   constructor(private sightService:SightsService,
               private authService:UserAuthService,
@@ -36,6 +42,11 @@ export class MyElementsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sightsDataSource = new MatTableDataSource();
+    this.ratingDataSource = new MatTableDataSource();
+
+
+
     this.sightService.getUserSights(this.authService.getLoggedInUser().uid).subscribe(res=>{
       this.mySights = [];
       // @ts-ignore
@@ -77,9 +88,8 @@ export class MyElementsComponent implements OnInit {
 
         this.mySights.push(newSight);
     })
-
-      this.dataSource = new MatTableDataSource(this.mySights);
-      this.dataSource.sort = this.sort;
+      this.sightsDataSource = new MatTableDataSource(this.mySights);
+      this.sightsDataSource.sort = this.sightsTableSort;
     });
 
     this.sightService.getUserRatings(this.authService.getLoggedInUser().uid).subscribe(res=>{
@@ -92,6 +102,8 @@ export class MyElementsComponent implements OnInit {
           newRating.uid = rating.uid;
           newRating.rating = rating.rating;
           newRating.comment = rating.comment;
+          newRating.sightId = rating.sightId;
+          newRating.sightName = rating.sightName;
           var images = [];
           rating.imageNames.forEach(rat => {
             images.push(rat)
@@ -101,6 +113,10 @@ export class MyElementsComponent implements OnInit {
         } catch {
         }
       })
+
+      this.ratingDataSource = new MatTableDataSource(this.myRatings);
+      this.ratingDataSource.sort = this.ratingsTableSort;
+
     })
   }
 
@@ -150,6 +166,21 @@ export class MyElementsComponent implements OnInit {
 
   }
 
+  onDeleteRatingClick(element:any){
+    const dialogRef = this.dialog.open(MyElementsDeleteConfirmDialog, {
+      width: '250px',
+      data: {message: "Do you really want to delete this rating?"}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result === "yes"){
+        this.sightService.deleteRating(element).subscribe(x=>{
+          var res = x;
+          this.ngOnInit();
+        })
+      }
+    });
+  }
 
 
 }

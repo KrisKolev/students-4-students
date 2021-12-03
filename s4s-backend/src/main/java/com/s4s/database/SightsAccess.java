@@ -247,7 +247,7 @@ public class SightsAccess {
                 if(sight!=null){
                     sight.getRatingAssigned().add(rating.getUid());
                     sight.getRatingList().add(rating);
-                    DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get("sight"), rating.sightId, "ratingAssigned", (String[]) sight.getRatingAssigned().toArray());
+                    DatabaseAccess.updateStringAttribute("sight", rating.sightId, "ratingAssigned", sight.getRatingAssigned());
                 }
             }
 
@@ -269,13 +269,24 @@ public class SightsAccess {
             List<Sight> sightSearch = sights.stream().filter(x -> x.getRatingList().stream().anyMatch(y->y.getUid().equals(ratingId)))
                     .collect(Collectors.toList());
 
+            Rating deleteRating = ratings.stream().filter(x->x.getUid().equals(ratingId)).findFirst().get();
+            ratings.remove(deleteRating);
+
             for (Sight sight: sightSearch
                  ) {
                 List <Rating> ratings = sight.getRatingList().stream().filter(x->x.getUid() == ratingId).collect(Collectors.toList());
                 sight.getRatingList().remove(ratings);
                 List <String> ratingsAssigned = sight.getRatingAssigned().stream().filter(x->x.equals(ratingId)).collect(Collectors.toList());
-                sight.getRatingAssigned().remove(ratingsAssigned);
-                DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get("sight"), sight.getUid(), "ratingAssigned", (String[]) sight.getRatingAssigned().toArray());
+                for (String sightRat:ratingsAssigned) {
+                    sight.getRatingAssigned().remove(sightRat);
+                }
+
+                List<String> ratingsId = new ArrayList<>();
+                for (Rating rating:sight.getRatingList()) {
+                    ratingsId.add(rating.getUid());
+                }
+
+                DatabaseAccess.updateStringAttribute("sight", sight.getUid(), "ratingAssigned", ratingsId);
             }
 
         } catch (Exception e) {
@@ -360,12 +371,19 @@ public class SightsAccess {
      * */
     public static javax.ws.rs.core.Response getRatingsForUser(String userId){
         try{
-
             List<Rating> ratingList = new ArrayList<>();
             for (Sight sight: sights) {
                 List<Rating> ratings = sight.getRatingList().stream().filter(x->x.getCreator().equals(userId)).collect(Collectors.toList());
+
+                for (Rating sightRating: ratings) {
+                    sightRating.sightId = sight.getUid();
+                    sightRating.sightName = sight.getName();
+                }
+
                 ratingList.addAll(ratings);
             }
+
+
 
             return new ResponseHelper(Info.SUCCESS, "Ratings found", ratingList).build();
         }
