@@ -36,14 +36,18 @@
     </div>
 
     <div *ngFor="let sight of allSightsSortedByDistance">
-        <app-sight-list-item (calcRouteEventEmitter)="calcRoute(sight)" (goToSightEventEmitter)="onGoToSight(sight)"
-                             [sight]="sight"></app-sight-list-item>
+        <app-sight-list-item (calcRouteEventEmitter)="calcRoute(sight)"
+                             (goToSightEventEmitter)="onGoToSight(sight)"
+                             [sight]="sight">
+        </app-sight-list-item>
     </div>
 </div>
 
 <div [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
-    <app-sight-detail #sightDetail (calcRouteEventEmitter)="calcRoute(sightDetail.sight)"
-                      (closeEvent)="onCloseSightDetail()">
+    <app-sight-detail #sightDetail
+                      (calcRouteEventEmitter)="calcRoute(sightDetail.sight)"
+                      (closeEvent)="onCloseSightDetail()"
+                      [isDetailView]="true">
     </app-sight-detail>
 </div>
 

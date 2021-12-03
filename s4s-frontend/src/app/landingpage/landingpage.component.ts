@@ -23,27 +23,17 @@ import {SightDetailComponent} from "./components/sight-detail/sight-detail.compo
   templateUrl: './landingpage.component.html',
   styleUrls: ['./landingpage.component.scss'],
   animations:[
-      trigger('showTopLocationsList', [
-        state('open', style({
-          opacity: 1
-        })),
-        state('closed',   style({
-          opacity: 0
-        })),
-        transition('open => closed', animate('750ms ease-out')),
-        transition('closed => open', animate('750ms ease-in'))
-      ]),
     trigger('extendLocations', [
       state('open', style({
-        width: '500px',
+        left: '0',
         opacity: 1
       })),
       state('closed', style({
-        width: '0%',
+        left: '-100%',
         opacity: 0
       })),
       transition('* => *', [
-        animate('0.35s')
+        animate('0.5s')
       ])
     ]),
     trigger('extendMap', [
@@ -51,7 +41,7 @@ import {SightDetailComponent} from "./components/sight-detail/sight-detail.compo
         left: '0',
       })),
       state('closed', style({
-        left: '510px',
+        left: '500px',
       })),
       transition('* => *', [
         animate('0.75s')

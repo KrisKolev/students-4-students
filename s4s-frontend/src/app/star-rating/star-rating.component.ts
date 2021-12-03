@@ -29,6 +29,8 @@ export class StarRatingComponent implements OnInit {
    * Defines if the rating can be changed
    */
   @Input('clickable')  clickable: boolean;
+
+  @Input('showRatingValue') showRatingValue: boolean
   /**
    *Fires when rating changes
    */

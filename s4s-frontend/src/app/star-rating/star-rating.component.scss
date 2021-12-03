@@ -18,5 +18,9 @@
     height: 20px;
     width: 20px;
   }
+
+  .star-button[disabled]{
+    color: black;
+  }
 }
 

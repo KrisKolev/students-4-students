@@ -16,8 +16,8 @@
             </mat-icon>
         </button>
     </div>
-    <mat-error *ngIf="starCount == null || starCount == 0">
+    <mat-error *ngIf="clickable && (starCount == null || starCount == 0)">
         Star count is <strong>required</strong> and cannot be zero
     </mat-error>
-    <mat-error *ngIf="hasError()">Please select a rating!</mat-error>
+    <mat-error *ngIf="clickable && hasError()">Please select a rating!</mat-error>
 </span>

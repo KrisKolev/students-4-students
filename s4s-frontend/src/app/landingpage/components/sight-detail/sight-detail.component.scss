@@ -1,8 +1,15 @@
-.sight-panel {
-  margin-bottom: 10px;
-  padding: 10px;
+mat-card {
+  margin-right: 10px;
+  margin-left: 10px;
   max-width: 100% !important;
+  margin-bottom: 2px;
+}
 
+mat-chip {
+  height: 10px
+}
+
+.sight-panel {
   .card-title {
     display: flex;
     justify-content: space-between;
@@ -38,3 +45,20 @@
   }
 }
 
+.fxRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fxColumn {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.comment {
+  padding-top: 15px;
+}

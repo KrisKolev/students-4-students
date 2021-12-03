@@ -19,6 +19,7 @@ import {MatSliderModule} from "@angular/material/slider";
 import {SightListItemComponent} from "./components/sight-list-item/sight-list-item.component";
 import {MatIconModule} from "@angular/material/icon";
 import { SightDetailComponent } from './components/sight-detail/sight-detail.component';
+import {MatChipsModule} from "@angular/material/chips";
 
 @NgModule({
   declarations: [LandingpageComponent, SightListItemComponent, SightDetailComponent],
@@ -40,7 +41,8 @@ import { SightDetailComponent } from './components/sight-detail/sight-detail.com
         MatAutocompleteModule,
         MatSelectModule,
         MatSliderModule,
-        MatIconModule
+        MatIconModule,
+        MatChipsModule
     ]
 })
 export class LandingpageModule { }

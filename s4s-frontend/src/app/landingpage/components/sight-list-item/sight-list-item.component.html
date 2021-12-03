@@ -1,42 +1,5 @@
-<mat-card class="sight-panel">
-    <mat-card-title>
-        <span class="card-title" fxLayout="row">
-            <p [textContent]="sight.name"></p>
-            <span>
-                <button (click)="onCalcRoute(sight)" mat-mini-fab>
-                    <mat-icon>explore</mat-icon>
-                </button>
-                <button (click)="onGoToSight(sight)" mat-mini-fab>
-                    <mat-icon>open_in_new</mat-icon>
-                </button>
-            </span>
-        </span>
-    </mat-card-title>
-    <mat-card-subtitle>
-        <span class="card-subtitle" fxLayout="row">
-            <span class="card-subtitle-ratings" fxLayout="row">
-                <app-star-rating [clickable]="true" [rating]="sight.overallRating" [starCount]="5"></app-star-rating>
-                <span>&nbsp;({{sight.ratingList.length}})</span>
-            </span>
-            <p [textContent]="'(' + sight.showDistanceString + '  /  ' + sight.timeToTarget + ')'"></p>
-        </span>
-    </mat-card-subtitle>
-    <div class="card-detail">
-        <mat-grid-list cols="2" rowHeight="2:1">
-            <mat-grid-tile>
-                <ngb-carousel>
-                    <ng-template *ngFor="let image of sight.allImageUrl" ngbSlide>
-                        <div class="picsum-img-wrapper">
-                            <img [src]="image" alt="Random slide">
-                        </div>
-                    </ng-template>
-                </ngb-carousel>
-                <mat-label *ngIf="sight.allImageUrl.length<1">No images available</mat-label>
-            </mat-grid-tile>
-        </mat-grid-list>
-        <span>
-            <mat-label><strong>Address: </strong></mat-label>
-            <mat-label [textContent]="sight.address"></mat-label>
-        </span>
-    </div>
-</mat-card>
+<app-sight-detail [sight]="sight"
+                  [isDetailView]="false"
+                  (calcRouteEventEmitter)="onCalcRoute(sight)"
+                  (goToSightEventEmitter)="onGoToSight(sight)">
+</app-sight-detail>
