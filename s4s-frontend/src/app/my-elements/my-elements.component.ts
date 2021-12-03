@@ -45,8 +45,6 @@ export class MyElementsComponent implements OnInit {
     this.sightsDataSource = new MatTableDataSource();
     this.ratingDataSource = new MatTableDataSource();
 
-
-
     this.sightService.getUserSights(this.authService.getLoggedInUser().uid).subscribe(res=>{
       this.mySights = [];
       // @ts-ignore

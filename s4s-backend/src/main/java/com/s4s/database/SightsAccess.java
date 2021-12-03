@@ -287,6 +287,7 @@ public class SightsAccess {
                 }
 
                 DatabaseAccess.updateStringAttribute("sight", sight.getUid(), "ratingAssigned", ratingsId);
+                sights = loadSights();
             }
 
         } catch (Exception e) {
@@ -379,7 +380,6 @@ public class SightsAccess {
                     sightRating.sightId = sight.getUid();
                     sightRating.sightName = sight.getName();
                 }
-
                 ratingList.addAll(ratings);
             }
 
@@ -408,7 +408,7 @@ public class SightsAccess {
                 deleteRating(rating.getUid());
             }
 
-            sights.remove(sightSearch);
+            sights = loadSights();
 
         } catch (Exception e) {
             return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
