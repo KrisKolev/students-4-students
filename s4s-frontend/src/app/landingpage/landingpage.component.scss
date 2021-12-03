@@ -29,24 +29,26 @@
   width: 50vw;
   height: 50vw;
 }
-
+/* Aniamted landingpage buttons */
 .maps-gotolocation{
   position: fixed;
   top: 150px;
-  left: 20px;
+  left: 10px;
 }
 
 .maps-filter-sights-button{
   position: fixed;
-  top: -100px;
-  left: 0px;
+  top: 200px;
+  left: 10px;
 }
 
 .maps-toggleTopLocations{
   position: fixed;
-  top: -100px;
-  left: 0px;
+  top: 206px;
+  left: 11px;
+  z-index: 10;
 }
+/* Aniamted landingpage buttons */
 
 .top-locations-container{
   position: fixed;
@@ -112,11 +114,21 @@
 
 .filter-sights-container{
   position: fixed;
-  left: 550px;
-  text-align: center;
+  left: 547px;
+  top: 208px;
   opacity: 0;
-  top: 250px;
-  background-color: transparent;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  text-align: left;
+
+  background-color: #3f51b5;
+  border-radius: 20px;
+
+  padding: 10px;
 }
 
 .filter-center{
@@ -181,19 +193,6 @@ mat-form-field{
   color: white;
   text-decoration-color: white;
   outline-color: white;
-}
-
-.slider-container{
-  background-color: #3f51b5;
-  border-radius: 20px;
-  margin-bottom: 5px;
-  margin-top: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
-  display: flex;
 }
 
 mat-slider{

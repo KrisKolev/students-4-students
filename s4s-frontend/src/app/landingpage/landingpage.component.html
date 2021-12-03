@@ -26,11 +26,12 @@
     </google-map>
 </div>
 
+<!-- locations list -->
 <div *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'"
      class="top-locations-container">
-    <div fxLayout="row" [style]="'display: flex;align-items: center;justify-content: space-between;'" >
+    <div [style]="'display: flex;align-items: center;justify-content: space-between;'" fxLayout="row">
         <h2>Top Sights near you:</h2>
-        <button (click)="onToggleTopLocations(false)" mat-mini-fab color="primary">
+        <button (click)="onToggleTopLocations(false)" color="primary" mat-mini-fab>
             <mat-icon>keyboard_double_arrow_left</mat-icon>
         </button>
     </div>
@@ -43,6 +44,7 @@
     </div>
 </div>
 
+<!-- location detail -->
 <div [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
     <app-sight-detail #sightDetail
                       (calcRouteEventEmitter)="calcRoute(sightDetail.sight)"
@@ -51,34 +53,38 @@
     </app-sight-detail>
 </div>
 
-<div [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-gotolocation">
-    <mat-card-actions>
-        <button (click)="onGoToLocation()" background-color="primary" class="map-action-button" mat-raised-button>
-            Go to your location
+<!-- Animated Buttons -->
+<span>
+    <div [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-gotolocation">
+        <mat-card-actions>
+            <button (click)="onGoToLocation()" background-color="primary" class="map-action-button" color="primary"
+                    mat-mini-fab>
+                <mat-icon>location_on</mat-icon>
+            </button>
+        </mat-card-actions>
+    </div>
+
+    <div [@moveFilterButtonContainer]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-filter-sights-button">
+        <mat-card-actions>
+            <button (click)="onShowFilter()" class="map-action-button" color="primary" mat-mini-fab>
+                <mat-icon *ngIf="!isFilterVisible">tune</mat-icon>
+                <mat-icon *ngIf="isFilterVisible">close</mat-icon>
+            </button>
+        </mat-card-actions>
+    </div>
+
+    <div [@moveLocationButton]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-toggleTopLocations">
+        <button (click)="onToggleTopLocations(false)" class="map-action-button" color="primary" mat-mini-fab>
+            <mat-icon>keyboard_double_arrow_right</mat-icon>
         </button>
-    </mat-card-actions>
-</div>
+    </div>
+</span>
 
-<div [@moveLocationButton]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-toggleTopLocations">
-    <button (click)="onToggleTopLocations(false)" background-color="primary" class="map-action-button"
-            mat-raised-button>
-        {{toggleTopLocationsText}}
-    </button>
-</div>
-
-<div [@moveFilterButtonContainer]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-filter-sights-button">
-    <mat-card-actions>
-        <button (click)="onShowFilter()"
-                [textContent]="isFilterVisible ? 'Hide Advanced Options':'Show Advanced Options'"
-                background-color="primary" class="map-action-button"
-                mat-raised-button>
-        </button>
-    </mat-card-actions>
-</div>
-
-<div [@visibilityAnimationContainer]="isFilterVisible ? 'open' : 'closed'" class="filter-sights-container">
+<!-- Filter container -->
+<div [@visibilityAnimationContainer]="isFilterVisible ? 'open' : 'closed'"
+     class="filter-sights-container slider-container">
     <form class="filter-form">
-        <mat-form-field appearance="fill" class="mat--fo">
+        <mat-form-field appearance="outline" class="mat--fo">
             <mat-label class="label-select-filter">Distance (km)</mat-label>
             <input #radiusInput class="label-select-filter"
                    matInput
@@ -89,12 +95,30 @@
         </mat-form-field>
     </form>
 
-    <div class="slider-container">
-        <div>
-            <mat-label [textContent]="'Minimum Rating ( '+filterRatingSliderMinimumValue+' ) '"
-                       class="label-select-filter"></mat-label>
-        </div>
+    <mat-form-field appearance="outline" class="filter-form-field">
+        <mat-label class="label-select-filter">Sorting mode</mat-label>
+        <mat-select [(value)]="filterModeValue" class="mat-select-content" matNativeControl required>
+            <mat-option value="distancedescending">Distance descending</mat-option>
+            <mat-option value="distanceascending">Distance ascending</mat-option>
+            <mat-option value="ratingsdescending">Ratings descending</mat-option>
+            <mat-option value="ratingsascending">Ratings ascending</mat-option>
+        </mat-select>
+    </mat-form-field>
 
+    <mat-form-field appearance="outline" class="filter-form-field">
+        <mat-label class="label-select-filter">Distance calculation mode</mat-label>
+        <mat-select [(value)]="sightsDistanceCalculation" class="mat-select-content" matNativeControl required>
+            <mat-option value="walking">Walking</mat-option>
+            <mat-option value="bicycle">Bicycle</mat-option>
+            <mat-option value="transit">Transit</mat-option>
+            <mat-option value="driving">Driving</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <span>
+        <mat-label [textContent]="'Minimum Rating ( '+filterRatingSliderMinimumValue+' ) '"
+                   class="label-select-filter">
+        </mat-label>
         <mat-slider
                 [(value)]="filterRatingSliderMinimumValue"
                 [displayWith]="formatLabel"
@@ -104,14 +128,11 @@
                 step="0.5"
                 thumbLabel
                 tickInterval="0.5"></mat-slider>
-    </div>
+    </span>
 
-    <div class="slider-container">
-        <div>
-            <mat-label [textContent]="'Maximum Rating ( '+filterRatingSliderMaximumValue+' ) '"
-                       class="label-select-filter"></mat-label>
-        </div>
-
+    <span>
+        <mat-label [textContent]="'Maximum Rating ( '+filterRatingSliderMaximumValue+' ) '"
+                     class="label-select-filter"></mat-label>
         <mat-slider
                 [(value)]="filterRatingSliderMaximumValue"
                 [displayWith]="formatLabel"
@@ -121,37 +142,12 @@
                 step="0.5"
                 thumbLabel
                 tickInterval="0.5"></mat-slider>
-    </div>
-
-    <div>
-        <mat-form-field appearance="fill" class="filter-form-field">
-            <mat-label class="label-select-filter">Sorting mode</mat-label>
-            <mat-select [(value)]="filterModeValue" class="mat-select-content" matNativeControl required>
-                <mat-option value="distancedescending">Distance descending</mat-option>
-                <mat-option value="distanceascending">Distance ascending</mat-option>
-                <mat-option value="ratingsdescending">Ratings descending</mat-option>
-                <mat-option value="ratingsascending">Ratings ascending</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-
-    <div>
-        <mat-form-field appearance="fill" class="filter-form-field">
-            <mat-label class="label-select-filter">Distance calculation mode</mat-label>
-            <mat-select [(value)]="sightsDistanceCalculation" class="mat-select-content" matNativeControl required>
-                <mat-option value="walking">Walking</mat-option>
-                <mat-option value="bicycle">Bicycle</mat-option>
-                <mat-option value="transit">Transit</mat-option>
-                <mat-option value="driving">Driving</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-
+    </span>
 
     <div class="filter-center">
         <button (click)="onApplyFilter(radiusInput)" background-color="primary" class="map-action-button"
-                mat-raised-button
-        >Apply
+                mat-raised-button>
+            Apply
         </button>
     </div>
 </div>
@@ -203,7 +199,7 @@
 <!--searchbar across sights and GM-->
 <div class="map-search-adressbar">
     <form class="address-form">
-        <mat-form-field appearance="fill">
+        <mat-form-field appearance="outline">
             <mat-label class="address-placeholder-label">Search by sight, label or address</mat-label>
             <input #addressSearch
                    [(ngModel)]="addressValue"
