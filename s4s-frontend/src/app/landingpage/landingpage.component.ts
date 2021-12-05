@@ -582,6 +582,7 @@ export class LandingpageComponent implements OnInit {
             unitSystem: google.maps.UnitSystem.METRIC,
             avoidHighways: false,
             avoidTolls: false,
+        }
     matrix.getDistanceMatrix(request,response => {
       for(var i = 0;i<tempSightList.length;i++){
         try {
