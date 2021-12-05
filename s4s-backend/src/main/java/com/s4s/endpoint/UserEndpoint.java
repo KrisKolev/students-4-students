@@ -131,7 +131,7 @@ public class UserEndpoint {
         //Delete user
         try {
             FirebaseAuth.getInstance().deleteUser(uid);
-            DatabaseAccess.deleteDocument(User.class, uid);
+            DatabaseAccess.deleteDocument("user", uid);
         } catch (Exception e) {
             Response response = new ResponseHelper(Info.FAILURE,
                     Info.FAILURE.defaultMessage, e.getMessage()
