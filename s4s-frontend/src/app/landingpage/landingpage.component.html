@@ -1,232 +1,181 @@
-<!--div class="image"></div-->
-<!--id="landingPage_Map"-->
-
-<div class="maps-container" [@extendMap]="isTopLocationsVisible ? 'closed' : 'open'">
+<div [@extendMap]="isTopLocationsVisible ? 'closed' : 'open'" class="maps-container">
     <google-map
         #googleMap
-        [zoom]="zoom"
-        width="100%"
-        height="100%"
+        (mapClick)="onMapClick($event)"
         [center]="center"
         [options]="options"
-        (mapClick)="onMapClick($event)">
+        [zoom]="zoom"
+        height="100%"
+        width="100%">
         <map-marker
-                markerElem="mapMarker"
                 *ngFor="let marker of mapMarkers"
-                [position]="marker.position"
                 [label]="marker.label"
-                [title]="marker.title"
-                [options]="marker.options"></map-marker>
-        <map-marker
-                markerElem="mapMarkerExisting"
-                *ngFor="let marker of mapMarkersSights"
-                [position]="marker.position"
-                [label]="marker.label"
-                [title]="marker.title"
                 [options]="marker.options"
+                [position]="marker.position"
+                [title]="marker.title"
+                markerElem="mapMarker"></map-marker>
+        <map-marker
+                (mapClick)="showDetailsOfMarker(marker)"
+                *ngFor="let marker of mapMarkersSights"
                 [icon]="marker.icon"
-                (mapClick)="showDetailsOfMarker(marker)"></map-marker>
+                [label]="marker.label"
+                [options]="marker.options"
+                [position]="marker.position"
+                [title]="marker.title"
+                markerElem="mapMarkerExisting"></map-marker>
     </google-map>
 </div>
 
-<div class="top-locations-container" *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'" [@moveSightsDetails]="isSightDetailVisible ? 'open' : 'closed'">
-    <div>
+<!-- locations list -->
+<div *ngIf="isTopLocationsVisible" [@extendLocations]="isTopLocationsVisible ? 'open' : 'closed'"
+     class="top-locations-container">
+    <div [style]="'display: flex;align-items: center;justify-content: space-between;'" fxLayout="row">
+        <h2>Top Sights near you:</h2>
+        <button (click)="onToggleTopLocations(false)" color="primary" mat-mini-fab>
+            <mat-icon>keyboard_double_arrow_left</mat-icon>
+        </button>
+    </div>
 
-        <h2>Here are locations near you</h2>
-        <h3>{{currentLocationAddress}} </h3>
-
-
-        <div *ngFor="let sight of allSightsSortedByDistance">
-            <mat-expansion-panel [expanded]="sight.headerExpanded">
-                <mat-expansion-panel-header>
-                    <mat-panel-title>
-                        <mat-label >
-                            <strong [textContent]="sight.name"></strong>
-                        </mat-label>
-
-                        <br/>
-
-                    </mat-panel-title>
-                    <mat-panel-description>
-                        <mat-label [textContent]="'     (' + sight.showDistanceString + '  /  ' + sight.timeToTarget + ')'"></mat-label>
-                    </mat-panel-description>
-                </mat-expansion-panel-header>
-
-                <div class="card-detail" >
-
-                    <mat-grid-list cols="2" rowHeight="2:1">
-                        <mat-grid-tile>
-                            <ngb-carousel>
-                                <ng-template ngbSlide *ngFor="let image of sight.allImageUrl">
-                                    <div class="picsum-img-wrapper">
-                                        <img [src]="image" alt="Random slide">
-                                    </div>
-                                </ng-template>
-                            </ngb-carousel>
-                            <mat-label *ngIf="sight.allImageUrl.length<1">No images available</mat-label>
-                        </mat-grid-tile>
-                        <mat-grid-tile>
-                            <button class="sight-show-detail-btn" mat-raised-button (click)="onGoToSight(sight)">Details</button>
-                            <button class="sight-show-detail-btn" mat-raised-button (click)="calcRoute(sight)">Show Route</button>
-                        </mat-grid-tile>
-                    </mat-grid-list>
-
-
-                    <app-star-rating width="100px" [clickable]="true" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>
-
-                    <br/>
-                    <mat-label><strong>Address: </strong></mat-label>
-                    <mat-label [textContent]="sight.address"></mat-label>
-                    <br/>
-                </div>
-            </mat-expansion-panel>
-
-        </div>
+    <div *ngFor="let sight of allSightsSortedByDistance">
+        <app-sight-list-item (calcRouteEventEmitter)="calcRoute(sight)"
+                             (goToSightEventEmitter)="onGoToSight(sight)"
+                             [sight]="sight">
+        </app-sight-list-item>
     </div>
 </div>
 
+<!-- location detail -->
 <div [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
-    <button mat-raised-button class="close-button-detail"
-    (click)="onCloseSightDetail()">X</button>
+    <app-sight-detail #sightDetail
+                      (calcRouteEventEmitter)="calcRoute(sightDetail.sight)"
+                      (closeEvent)="onCloseSightDetail()"
+                      [isDetailView]="true">
+    </app-sight-detail>
+</div>
 
-    <mat-card-title ><strong>{{detailedSight.name}}</strong></mat-card-title>
-    <mat-label><strong>Address: </strong></mat-label>
-    <mat-label [textContent]="detailedSight.address"></mat-label>
-    <br/>
-    <mat-label><strong>Comments</strong></mat-label>
-    <br/>
-
-    <div *ngFor="let rat of detailedSight.ratingList">
-        <app-rating-component [rating]="rat" class="sight-details-view-rating"></app-rating-component>
+<!-- Animated Buttons -->
+<span>
+    <div [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-gotolocation">
+        <mat-card-actions>
+            <button (click)="onGoToLocation()" background-color="primary" class="map-action-button" color="primary"
+                    mat-mini-fab>
+                <mat-icon>location_on</mat-icon>
+            </button>
+        </mat-card-actions>
     </div>
 
+    <div [@moveFilterButtonContainer]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-filter-sights-button">
+        <mat-card-actions>
+            <button (click)="onShowFilter()" class="map-action-button" color="primary" mat-mini-fab>
+                <mat-icon *ngIf="!isFilterVisible">tune</mat-icon>
+                <mat-icon *ngIf="isFilterVisible">close</mat-icon>
+            </button>
+        </mat-card-actions>
+    </div>
 
-    <br/>
-</div>
-
-<div class="maps-gotolocation" [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'">
-    <mat-card-actions>
-        <button class="map-action-button" mat-raised-button (click)="onGoToLocation()" background-color="primary">
-            Go to your location
+    <div [@moveLocationButton]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-toggleTopLocations">
+        <button (click)="onToggleTopLocations(false)" class="map-action-button" color="primary" mat-mini-fab>
+            <mat-icon>keyboard_double_arrow_right</mat-icon>
         </button>
-    </mat-card-actions>
-</div>
+    </div>
+</span>
 
-<div class="maps-toggleTopLocations" [@moveLocationButton]="isTopLocationsVisible ? 'open' : 'closed'">
-    <mat-card-actions>
-        <button class="map-action-button" mat-raised-button (click)="onToggleTopLocations(false)" background-color="primary">
-            {{toggleTopLocationsText}}
-        </button>
-    </mat-card-actions>
-</div>
-
-<div class="maps-filter-sights-button" [@moveFilterButtonContainer]="isTopLocationsVisible ? 'open' : 'closed'">
-    <mat-card-actions>
-        <button class="map-action-button" mat-raised-button (click)="onShowFilter()" background-color="primary"
-        [textContent]="isFilterVisible ? 'Hide Advanced Options':'Show Advanced Options'">
-        </button>
-    </mat-card-actions>
-</div>
-
-<div class="filter-sights-container"  [@visibilityAnimationContainer]="isFilterVisible ? 'open' : 'closed'">
+<!-- Filter container -->
+<div [@visibilityAnimationContainer]="isFilterVisible ? 'open' : 'closed'"
+     class="filter-sights-container slider-container">
     <form class="filter-form">
-        <mat-form-field appearance="fill" class="mat--fo">
+        <mat-form-field appearance="outline" class="mat--fo">
             <mat-label class="label-select-filter">Distance (km)</mat-label>
-            <input type="number" matInput
-                   placeholder="10"
+            <input #radiusInput class="label-select-filter"
+                   matInput
                    matNativeControl
-                   #radiusInput
-                   value="20"
-                   class="label-select-filter">
+                   placeholder="10"
+                   type="number"
+                   value="20">
         </mat-form-field>
     </form>
 
-    <div class="slider-container">
-        <div>
-            <mat-label class="label-select-filter" [textContent]="'Minimum Rating ( '+filterRatingSliderMinimumValue+' ) '"></mat-label>
-        </div>
+    <mat-form-field appearance="outline" class="filter-form-field">
+        <mat-label class="label-select-filter">Sorting mode</mat-label>
+        <mat-select [(value)]="filterModeValue" class="mat-select-content" matNativeControl required>
+            <mat-option value="distancedescending">Distance descending</mat-option>
+            <mat-option value="distanceascending">Distance ascending</mat-option>
+            <mat-option value="ratingsdescending">Ratings descending</mat-option>
+            <mat-option value="ratingsascending">Ratings ascending</mat-option>
+        </mat-select>
+    </mat-form-field>
 
+    <mat-form-field appearance="outline" class="filter-form-field">
+        <mat-label class="label-select-filter">Distance calculation mode</mat-label>
+        <mat-select [(value)]="sightsDistanceCalculation" class="mat-select-content" matNativeControl required>
+            <mat-option value="walking">Walking</mat-option>
+            <mat-option value="bicycle">Bicycle</mat-option>
+            <mat-option value="transit">Transit</mat-option>
+            <mat-option value="driving">Driving</mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <span>
+        <mat-label [textContent]="'Minimum Rating ( '+filterRatingSliderMinimumValue+' ) '"
+                   class="label-select-filter">
+        </mat-label>
         <mat-slider
-                thumbLabel
-                [displayWith]="formatLabel"
-                tickInterval="0.5"
-                step="0.5"
                 [(value)]="filterRatingSliderMinimumValue"
-                min="1"
-                max="5"
-                aria-label="units"></mat-slider>
-    </div>
-
-    <div class="slider-container">
-        <div>
-            <mat-label class="label-select-filter" [textContent]="'Maximum Rating ( '+filterRatingSliderMaximumValue+' ) '"></mat-label>
-        </div>
-
-        <mat-slider
-                thumbLabel
                 [displayWith]="formatLabel"
-                tickInterval="0.5"
-                step="0.5"
-                [(value)]="filterRatingSliderMaximumValue"
-                min="1"
+                aria-label="units"
                 max="5"
-                aria-label="units"></mat-slider>
-    </div>
+                min="1"
+                step="0.5"
+                thumbLabel
+                tickInterval="0.5"></mat-slider>
+    </span>
 
-    <div>
-        <mat-form-field appearance="fill" class="filter-form-field">
-            <mat-label class="label-select-filter">Sorting mode</mat-label>
-            <mat-select matNativeControl required class="mat-select-content" [(value)]="filterModeValue">
-                <mat-option value="distancedescending" >Distance descending</mat-option>
-                <mat-option value="distanceascending">Distance ascending</mat-option>
-                <mat-option value="ratingsdescending">Ratings descending</mat-option>
-                <mat-option value="ratingsascending">Ratings ascending</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-
-    <div>
-        <mat-form-field appearance="fill" class="filter-form-field">
-            <mat-label class="label-select-filter">Distance calculation mode</mat-label>
-            <mat-select matNativeControl required class="mat-select-content" [(value)]="sightsDistanceCalculation">
-                <mat-option value="walking" >Walking</mat-option>
-                <mat-option value="bicycle">Bicycle</mat-option>
-                <mat-option value="transit">Transit</mat-option>
-                <mat-option value="driving">Driving</mat-option>
-            </mat-select>
-        </mat-form-field>
-    </div>
-
+    <span>
+        <mat-label [textContent]="'Maximum Rating ( '+filterRatingSliderMaximumValue+' ) '"
+                     class="label-select-filter"></mat-label>
+        <mat-slider
+                [(value)]="filterRatingSliderMaximumValue"
+                [displayWith]="formatLabel"
+                aria-label="units"
+                max="5"
+                min="1"
+                step="0.5"
+                thumbLabel
+                tickInterval="0.5"></mat-slider>
+    </span>
 
     <div class="filter-center">
-        <button class="map-action-button" mat-raised-button (click)="onApplyFilter(radiusInput)" background-color="primary"
-        >Apply
+        <button (click)="onApplyFilter(radiusInput)" background-color="primary" class="map-action-button"
+                mat-raised-button>
+            Apply
         </button>
     </div>
 </div>
 
-<div class="route-option-container" [@routeContainerVisibility]="routeEnabled ? 'open' : 'closed'">
+<div [@routeContainerVisibility]="routeEnabled ? 'open' : 'closed'" class="route-option-container">
     <div class="route-details">
         <div>
-            <mat-label class="label-route-detail" [textContent]="'Start: '"></mat-label>
-            <mat-label class="label-route-detail-address" [textContent]="' '+routeStart"></mat-label>
-
+            <mat-label [textContent]="'Start: '" class="label-route-detail"></mat-label>
+            <mat-label [textContent]="' '+routeStart" class="label-route-detail-address"></mat-label>
         </div>
         <br/>
         <div>
-            <mat-label class="label-route-detail" [textContent]="'Target:'"></mat-label>
-            <mat-label class="label-route-detail-address" [textContent]="' '+routeTarget"></mat-label>
+            <mat-label [textContent]="'Target:'" class="label-route-detail"></mat-label>
+            <mat-label [textContent]="' '+routeTarget" class="label-route-detail-address"></mat-label>
         </div>
         <br/>
         <div class="filter-center">
-            <mat-label class="label-route-detail-distance" [textContent]="routeDistance + ' / ' + routeDuration"></mat-label>
+            <mat-label [textContent]="routeDistance + ' / ' + routeDuration"
+                       class="label-route-detail-distance"></mat-label>
         </div>
     </div>
 
     <mat-form-field appearance="fill" class="filter-form-field">
         <mat-label class="label-select-filter">Route Mode</mat-label>
-        <mat-select matNativeControl required class="mat-select-content" (selectionChange)="onApplyRouteMode()" [(value)]="routeMode">
-            <mat-option value="walking" >Walking</mat-option>
+        <mat-select (selectionChange)="onApplyRouteMode()" [(value)]="routeMode" class="mat-select-content"
+                    matNativeControl
+                    required>
+            <mat-option value="walking">Walking</mat-option>
             <mat-option value="bicycle">Bicycle</mat-option>
             <mat-option value="transit">Transit</mat-option>
             <mat-option value="driving">Driving</mat-option>
@@ -235,40 +184,42 @@
 
     <div class="filter-center">
         <mat-card-actions>
-            <button class="map-clear-route-button" mat-raised-button (click)="onClearRoutes()" background-color="primary">
+            <button (click)="onClearRoutes()" background-color="primary" class="map-clear-route-button"
+                    mat-raised-button>
                 Clear route
             </button>
         </mat-card-actions>
     </div>
-
 </div>
 
 <!--div which css moves the autocomplete to the left of the searchbar-->
-<div matAutocompleteOrigin #origin="matAutocompleteOrigin" class="sights-search-panel" [style.visibility]="'hidden'"></div>
+<div #origin="matAutocompleteOrigin" [style.visibility]="'hidden'" class="sights-search-panel"
+     matAutocompleteOrigin></div>
 
 <!--searchbar across sights and GM-->
 <div class="map-search-adressbar">
     <form class="address-form">
-        <mat-form-field appearance="fill" >
+        <mat-form-field appearance="outline">
             <mat-label class="address-placeholder-label">Search by sight, label or address</mat-label>
-            <input width="300px"
-                   type="text"
-                   matInput
-                   class="address-bar"
-                   autocorrect="off"
+            <input #addressSearch
+                   [(ngModel)]="addressValue"
+                   [formControl]="sightSearchCtrl"
+                   [matAutocompleteConnectedTo]="origin"
+                   [matAutocomplete]="auto"
                    autocapitalize="off"
+                   autocorrect="off"
+                   class="address-bar"
+                   matInput
                    spellcheck="off"
                    type="text"
-                   [matAutocomplete]="auto"
-                   [matAutocompleteConnectedTo]="origin"
-                   [formControl]="sightSearchCtrl"
-                   #addressSearch
-                   [(ngModel)]="addressValue">
+                   type="text"
+                   width="300px">
         </mat-form-field>
         <!--each individual field in the sights autocomplete-->
         <!--also, couldn't get the showDistanceString and overallRating not to show as errors, but they do work-->
         <mat-autocomplete #auto="matAutocomplete" class="address-autocomplete">
-            <mat-option *ngFor="let sight of searchedSights | async" [value]="sight.name" (onSelectionChange)="onSearchSelectItem(sight)">
+            <mat-option (onSelectionChange)="onSearchSelectItem(sight)" *ngFor="let sight of searchedSights | async"
+                        [value]="sight.name">
                 {{sight.name}}
                 <mat-label [textContent]="'(' + sight.showDistanceString + ')'"></mat-label>
                 <!--<app-star-rating class="search-stars"  [clickable]="false" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>-->

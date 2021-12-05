@@ -4,3 +4,23 @@
  * creation date: 19.10.2021
  * last change done by: Michael Fahrafellner
  */
+
+.star-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 25px;
+  width: 100px;
+
+  .star-button {
+    top: -10px;
+
+    height: 20px;
+    width: 20px;
+  }
+
+  .star-button[disabled]{
+    color: black;
+  }
+}
+
