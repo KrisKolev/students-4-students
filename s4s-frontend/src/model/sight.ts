@@ -27,6 +27,7 @@ export class Sight {
     labelList: Label[] = [];
     ratingList: Rating[] = [];
 
+    creator:string;
     createdAt:string;
     updatedAt:string;
 }
