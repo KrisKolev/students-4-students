@@ -94,8 +94,8 @@ public class SightsEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response AddRating(Rating rating, @QueryParam("id") String userId, @QueryParam("sightId") String sightId){
         rating.setCreator(userId);
-        rating.sightId = sightId;
-        return SightsAccess.addRating(rating);
+        rating.setSightId(sightId);
+        return SightsAccess.addRating(rating,true);
     }
 
     @GET

@@ -19,7 +19,7 @@ public class Rating {
     private Date createdAt;
     private Date updatedAt;
 
-    public String sightId;
+    private String sightId;
     public String sightName;
 
     public String getSightId(){return  sightId;}
@@ -86,5 +86,9 @@ public class Rating {
 
     public void setImageNames(List<String> imageNames) {
         this.imageNames = imageNames;
+    }
+
+    public void setSightId(String sightId) {
+        this.sightId = sightId;
     }
 }

@@ -1,6 +1,5 @@
 package com.s4s.database;
 
-import com.google.api.core.ApiFuture;
 import com.google.cloud.firestore.DocumentReference;
 import com.google.cloud.firestore.WriteResult;
 import com.s4s.database.model.*;
@@ -12,7 +11,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Access all sight relevant functions
@@ -101,23 +99,13 @@ public class SightsAccess {
                 }
             }
 
-            //write ratings
-            for (Rating rating : sight.getRatingList()) {
-                rating.setCreator(user);
-                addRating(rating);
-            }
-
             //assign labels
             sight.setLabelsAssigned(new ArrayList<>());
             for (Label label : sight.getLabelList()) {
                 sight.getLabelsAssigned().add(label.getUid());
             }
 
-            //assign ratings
-            sight.setRatingAssigned(new ArrayList<>());
-            for (Rating rating : sight.getRatingList()) {
-                sight.getRatingAssigned().add(rating.getUid());
-            }
+            List<Rating> tempRatings = sight.getRatingList();
 
             sight.setLabelList(new ArrayList<>());
             sight.setRatingList(new ArrayList<>());
@@ -125,7 +113,17 @@ public class SightsAccess {
             DocumentReference writeResult = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(sight.getClass()), sight);
             sight.setUid(writeResult.getId());
             DatabaseAccess.updateUidOfDocument("sight", sight.getUid(), sight.getUid());
-            sights = loadSights();
+
+            //write ratings
+            for (Rating rating : tempRatings) {
+                rating.setCreator(user);
+                rating.setSightId(sight.getUid());
+                addRating(rating,false);
+            }
+
+            sights.add(sight);
+            mapElements();
+
         } catch (Exception e) {
             return new ResponseHelper(Info.FAILURE, "Sight could not be added! " + e.getMessage(), sight).build();
         }
@@ -195,11 +193,17 @@ public class SightsAccess {
     private static List<Sight> loadSights() throws ExecutionException, InterruptedException {
         labels = loadLabels();
         ratings = DatabaseAccess.retrieveAllDocuments(Rating.class);
-        List<Sight> loadedSights = DatabaseAccess.retrieveAllDocuments(Sight.class);
+        sights = DatabaseAccess.retrieveAllDocuments(Sight.class);
 
+        mapElements();
+
+        return sights;
+    }
+
+    private static void mapElements(){
         try {
             //load sights
-            for (Sight sight : loadedSights) {
+            for (Sight sight : sights) {
 
                 //load labels for sight
                 sight.setLabelList(new ArrayList<>());
@@ -213,21 +217,12 @@ public class SightsAccess {
 
                 //load ratings for sight
                 sight.setRatingList(new ArrayList<>());
-                for (String rating : sight.getRatingAssigned()) {
-
-                    Rating found = ratings.stream()
-                            .filter(x -> x.getUid().equals(rating))
-                            .findAny()
-                            .orElse(null);
-                    if (found != null)
-                        sight.getRatingList().add(found);
-                }
+                List<Rating> assignedRatings = ratings.stream().filter(x->x.getSightId().equals(sight.getUid())).collect(Collectors.toList());
+                sight.setRatingList(assignedRatings);
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-
-        return loadedSights;
     }
 
     /**
@@ -236,21 +231,19 @@ public class SightsAccess {
      * @param rating
      * @return
      */
-    public static javax.ws.rs.core.Response addRating(Rating rating) {
+    public static javax.ws.rs.core.Response addRating(Rating rating,boolean addToSight) {
         try {
             DocumentReference ref = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(rating.getClass()), rating);
             rating.setUid(ref.getId());
             DatabaseAccess.updateUidOfDocument("rating", rating.getUid(), rating.getUid());
+            ratings.add(rating);
 
-            if(!rating.sightId.equals("")){
-                Sight sight = sights.stream().filter(x->x.getUid()== rating.sightId).findFirst().get();
+            if(addToSight){
+                Sight sight = sights.stream().filter(x->x.getUid()== rating.getSightId()).findFirst().get();
                 if(sight!=null){
-                    sight.getRatingAssigned().add(rating.getUid());
                     sight.getRatingList().add(rating);
-                    DatabaseAccess.updateStringAttribute("sight", rating.sightId, "ratingAssigned", sight.getRatingAssigned());
                 }
             }
-
         } catch (Exception e) {
             return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
         }
@@ -266,29 +259,16 @@ public class SightsAccess {
         try {
             WriteResult t = DatabaseAccess.deleteDocument("rating", ratingId).get();
 
-            List<Sight> sightSearch = sights.stream().filter(x -> x.getRatingList().stream().anyMatch(y->y.getUid().equals(ratingId)))
-                    .collect(Collectors.toList());
-
             Rating deleteRating = ratings.stream().filter(x->x.getUid().equals(ratingId)).findFirst().get();
             ratings.remove(deleteRating);
 
-            for (Sight sight: sightSearch
-                 ) {
-                List <Rating> ratings = sight.getRatingList().stream().filter(x->x.getUid() == ratingId).collect(Collectors.toList());
-                sight.getRatingList().remove(ratings);
-                List <String> ratingsAssigned = sight.getRatingAssigned().stream().filter(x->x.equals(ratingId)).collect(Collectors.toList());
-                for (String sightRat:ratingsAssigned) {
-                    sight.getRatingAssigned().remove(sightRat);
-                }
-
-                List<String> ratingsId = new ArrayList<>();
-                for (Rating rating:sight.getRatingList()) {
-                    ratingsId.add(rating.getUid());
-                }
-
-                DatabaseAccess.updateStringAttribute("sight", sight.getUid(), "ratingAssigned", ratingsId);
-                sights = loadSights();
+            List<Sight> sight = sights.stream().filter(x->x.getRatingList().stream().anyMatch(y->y.getSightId().equals(ratingId))).collect(Collectors.toList());
+            if(!sight.isEmpty()){
+                Rating rating = sight.get(0).getRatingList().stream().filter(x->x.getSightId().equals(sight.get(0).getUid())).findFirst().get();
+                sight.get(0).getRatingList().remove(rating);
             }
+
+            mapElements();
 
         } catch (Exception e) {
             return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
@@ -377,14 +357,11 @@ public class SightsAccess {
                 List<Rating> ratings = sight.getRatingList().stream().filter(x->x.getCreator().equals(userId)).collect(Collectors.toList());
 
                 for (Rating sightRating: ratings) {
-                    sightRating.sightId = sight.getUid();
+                    sightRating.setSightId(sight.getUid());
                     sightRating.sightName = sight.getName();
                 }
                 ratingList.addAll(ratings);
             }
-
-
-
             return new ResponseHelper(Info.SUCCESS, "Ratings found", ratingList).build();
         }
         catch (Exception e){
@@ -403,13 +380,10 @@ public class SightsAccess {
             if(sightSearch.equals(null)){
                 return new ResponseHelper(Info.FAILURE, "Sight not found!").build();
             }
-            for (Rating rating: sightSearch.getRatingList()
-                 ) {
+            for (Rating rating: sightSearch.getRatingList()) {
                 deleteRating(rating.getUid());
             }
-
-            sights = loadSights();
-
+            sights.remove(sightSearch);
         } catch (Exception e) {
             return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
         }
