@@ -27,6 +27,10 @@ const routes: Routes = [
         loadChildren: () => import('./profilepage/profilepage.module').then(m => m.ProfilepageModule)
     },
     {
+        path: 'faq',
+        loadChildren: () => import('./faq-page/faq-page.module').then(m => m.FaqPageModule)
+    },
+    {
         path: '**',
         loadChildren: () => import('./error/error.module').then(m => m.ErrorModule)
     }

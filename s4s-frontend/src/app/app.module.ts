@@ -27,6 +27,7 @@ import {ManageSightDialogModule} from "./manage-sight-dialog/manage-sight-dialog
 import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatTableModule} from "@angular/material/table";
+import { FaqPageComponent } from './faq-page/faq-page.component';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -43,7 +44,8 @@ const app = initializeApp(firebaseConfig);
         AppComponent,
         LoginDialogComponent,
         PopupComponent,
-        DetailPageComponent
+        DetailPageComponent,
+        FaqPageComponent
     ],
     imports: [
         BrowserModule,
