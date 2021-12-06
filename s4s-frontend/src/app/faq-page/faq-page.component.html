@@ -1,72 +1,96 @@
-
 <link rel="stylesheet" href="faq-page.component.scss">
 <div class="background">
-<div class="title">
-    <p> Frequently Asked Questions </p>
+    <div class="title">
+        <p> Frequently Asked Questions </p>
+    </div>
+
+    <div class="faqContainer">
+        <mat-card class="faq">
+            <mat-expansion-panel class="questions" [expanded]="step === 1" (opened)="setStep(1)">
+                <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
+                    <mat-panel-title class="q">
+                        Q: What is this website about?
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+
+                <p class="a">
+                    <br>
+                    A: This website was inspired by already existing services, but with added features.
+                    It is intended to be used mostly by students, hence the name. In here only students can register and
+                    submit comments or upload locations.
+                </p>
+
+            </mat-expansion-panel>
+
+            <br>
+
+            <mat-expansion-panel class="questions" [expanded]="step === 2" (opened)="setStep(2)">
+                <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
+                    <mat-panel-title class="q">
+                        Q: How can I create an account?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <p class="a">
+                    <br>
+                    A: Creating an account is a very simple step. Click on the "Sign in" button in the top right corner
+                    and then click "Create an account".
+                    Once you've done that, fill in the fields and use your STUDENT email to register.
+                </p>
+            </mat-expansion-panel>
+
+            <br>
+
+            <mat-expansion-panel class="questions" [expanded]="step === 3" (opened)="setStep(3)">
+                <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
+                    <mat-panel-title class="q">
+                        Q: Can I still use the website if I am not a student?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <p class="a">
+                    <br>
+                    A: Yes. Even if you are not a student, you can still use the website to find some of the best
+                    restaurants or places to visit.
+                    But you will not be able to create an account or rate any existing locations.
+                </p>
+            </mat-expansion-panel>
+
+            <br>
+
+            <mat-expansion-panel class="questions" [expanded]="step === 4" (opened)="setStep(4)">
+                <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
+                    <mat-panel-title class="q">
+                        Q: How can I know if my University is recognised?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <p class="a">
+                    <br>
+                    A: We have ensured that almost university in the world is recognised by our website. Use your
+                    student email address when registering and logging in.
+                </p>
+            </mat-expansion-panel>
+
+            <br>
+
+            <mat-expansion-panel class="questions" [expanded]="step === 5" (opened)="setStep(5)">
+                <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
+                    <mat-panel-title class="q">
+                        Q: I am having difficulties registering. What can I do?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <p class="a">
+                    <br>
+                    A: If there are any problems that you face during registration you can always contact us via email.
+                    We have an "About us" page in which you can easily do so. If you do, please describe how the issue occurred
+                    so we can do our best to help.
+                </p>
+            </mat-expansion-panel>
+        </mat-card>
+    </div>
 </div>
 
-<div class="faqContainer">
-    <mat-card class="faq">
-        <mat-expansion-panel class="questions">
-            <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
-                <mat-panel-title class="q">
-                    Q: What is this website about?
-                </mat-panel-title>
-            </mat-expansion-panel-header>
 
-            <p class="a">
-                <br>
-                A: This website was inspired by already existing services, but with added features.
-                It is intended to be used mostly by students, hence the name. In here only students can register and submit comments or upload locations.
-            </p>
-        </mat-expansion-panel>
-
-        <br>
-
-        <mat-expansion-panel class="questions">
-            <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
-                <mat-panel-title class="q">
-                    Q: How can I create an account?
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <p class="a">
-                <br>
-                A: Creating an account is a very simple step. Click on the "Sign in" button in the top right corner and then click "Create an account".
-                Once you've done that, fill in the fields and use your STUDENT email to register.
-            </p>
-        </mat-expansion-panel>
-
-        <br>
-
-        <mat-expansion-panel class="questions">
-            <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
-                <mat-panel-title class="q">
-                    Q: Can I still use the website if I am not a student?
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <p class="a">
-                <br>
-                A: Yes. Even if you are not a student, you can still use the website to find some of the best restaurants or places to visit.
-                But you will not be able to create an account or rate any existing locations.
-            </p>
-        </mat-expansion-panel>
-
-        <br>
-
-        <mat-expansion-panel class="questions">
-            <mat-expansion-panel-header [collapsedHeight]="'80px'" [expandedHeight]="'95px'">
-                <mat-panel-title class="q">
-                    Q: How can I know if my University is recognised?
-                </mat-panel-title>
-            </mat-expansion-panel-header>
-
-            <p class="a">
-                <br>
-                A: We have ensured that EVERY university in the world is recognised by our website. Just use your student email when registering and logging in.
-            </p>
-        </mat-expansion-panel>
-    </mat-card>
-</div>
-</div>
