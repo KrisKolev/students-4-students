@@ -11,7 +11,7 @@ const routes: Routes = [
         loadChildren: () => import('./register-form/register-form.module').then(m => m.RegisterFormModule)
     },
     {
-        path: 'manageSight',
+        path: 'manageSight/:id',
         loadChildren: () => import('./manage-sight-dialog/manage-sight-dialog.module').then(m => m.ManageSightDialogModule)
     },
     {

@@ -21,6 +21,10 @@ export class SightsService extends BackendClientService {
         return this.createPostCall('sights/sight?user='+user,JSON.stringify(sight));
     }
 
+    updateSight(sight: Sight){
+        return this.createPostCall('sights/update',JSON.stringify(sight));
+    }
+
     /**
      * Gets all sight labels from the database
      * Component written by Michael Fahrafellner

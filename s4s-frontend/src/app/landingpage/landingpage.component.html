@@ -45,6 +45,10 @@
     </div>
 </div>
 
+<div *ngIf="isTopLocationsVisible" [@extendLocations]="isAddSightVisible ? 'open' : 'closed'" class="manage-sight-container">
+
+</div>
+
 <!-- location detail -->
 <div [@moveSightsDetailsContainer]="isSightDetailVisible ? 'open' : 'closed'" class="sight-details-view">
     <app-sight-detail #sightDetail

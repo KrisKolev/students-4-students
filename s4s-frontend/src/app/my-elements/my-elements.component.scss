@@ -37,6 +37,12 @@
 
 }
 
+.picsum-img-wrapper{
+  width:150px;
+  height:90px;
+  object-fit:scale-down;
+}
+
 .filter-center{
   display: flex;
   justify-content: center;
