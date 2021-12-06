@@ -1,10 +1,11 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
 import {UserAuthService} from "../../service/userAuthService";
 import {PopupType} from "../../model/popupType";
 import {PopupComponent} from "../popup/popup.component";
+import {Emitters} from "../emitters/emitters";
 
 @Component({
     selector: 'app-login-dialog',
@@ -16,10 +17,13 @@ export class LoginDialogComponent {
     email = new FormControl('', [Validators.required, Validators.email]);
     pw = new FormControl('');
 
+
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
                 public dialog: MatDialog,
                 private userAuthService: UserAuthService,
                 private router: Router) {
+
+
     }
 
     async loginUser(){
@@ -28,6 +32,7 @@ export class LoginDialogComponent {
                 //Successfull
                 this.email.setValue('');
                 this.pw.setValue('');
+                Emitters.pfpEmitter.emit(true);
                 this.closeLoginDialog();
                 this.dialogRef.close();
             } else {

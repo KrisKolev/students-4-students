@@ -20,7 +20,12 @@
         <!--profile button-->
         <ng-template [ngIf]="isUserLoggedIn()==true" [ngIfElse]="loggedOut">
             <button mat-button [matMenuTriggerFor]="menu">
-                <mat-icon>account_circle</mat-icon>
+                <ng-template [ngIf]="this.checkProfilePictureAvailability()" [ngIfElse]="noProfilePicture">
+                    <img class="profilePicture" src="{{this.profilePictureUrl}}" alt="Avatar">
+                </ng-template>
+                <ng-template #noProfilePicture>
+                    <mat-icon>account_circle</mat-icon>
+                </ng-template>
             </button>
             <mat-menu #menu="matMenu">
                 <button mat-menu-item routerLink="./profile"><mat-icon>manage_accounts</mat-icon>Profile</button>
@@ -31,7 +36,7 @@
 
         <!--signin button-->
         <ng-template #loggedOut>
-            <button mat-flat-button color="accent" (click)="openLoginDialog()">Sign In</button>
+            <button mat-flat-button color="accent"  (click)="openLoginDialog()">Sign In</button>
         </ng-template>
     </mat-toolbar>
 
