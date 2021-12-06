@@ -19,7 +19,6 @@ public class Sight {
     private List<Rating> ratingList = new ArrayList<>();
 
     private List<String> labelsAssigned = new ArrayList<>();
-    private List<String> ratingAssigned = new ArrayList<>();
 
     private String creator;
     private Date createdAt;
@@ -108,14 +107,6 @@ public class Sight {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public List<String> getRatingAssigned() {
-        return ratingAssigned;
-    }
-
-    public void setRatingAssigned(List<String> ratingAssigned) {
-        this.ratingAssigned = ratingAssigned;
     }
 
     public List<String> getLabelsAssigned() {

@@ -1,6 +1,7 @@
 <div [@extendMap]="isTopLocationsVisible ? 'closed' : 'open'" class="maps-container">
     <google-map
         #googleMap
+        id="landingPage_Map"
         (mapClick)="onMapClick($event)"
         [center]="center"
         [options]="options"
@@ -42,6 +43,10 @@
                              [sight]="sight">
         </app-sight-list-item>
     </div>
+</div>
+
+<div *ngIf="isTopLocationsVisible" [@extendLocations]="isAddSightVisible ? 'open' : 'closed'" class="manage-sight-container">
+
 </div>
 
 <!-- location detail -->
@@ -86,12 +91,14 @@
     <form class="filter-form">
         <mat-form-field appearance="outline" class="mat--fo">
             <mat-label class="label-select-filter">Distance (km)</mat-label>
-            <input #radiusInput class="label-select-filter"
+            <input #radiusInput
                    matInput
                    matNativeControl
+                   id="routedetails"
+                   value="20"
+                   class="label-select-filter"
                    placeholder="10"
-                   type="number"
-                   value="20">
+                   type="number">
         </mat-form-field>
     </form>
 
@@ -198,8 +205,7 @@
 
 <!--searchbar across sights and GM-->
 <div class="map-search-adressbar">
-    <form class="address-form">
-        <mat-form-field appearance="outline">
+        <mat-form-field color="primary" appearance="fill">
             <mat-label class="address-placeholder-label">Search by sight, label or address</mat-label>
             <input #addressSearch
                    [(ngModel)]="addressValue"
@@ -225,5 +231,4 @@
                 <!--<app-star-rating class="search-stars"  [clickable]="false" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>-->
             </mat-option>
         </mat-autocomplete>
-    </form>
 </div>

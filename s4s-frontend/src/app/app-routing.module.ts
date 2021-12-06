@@ -8,10 +8,10 @@ const routes: Routes = [
     },
     {
         path: 'register',
-        loadChildren: () => import('./register-form/register-form.module').then(m => m.RegisterFormModule)
+        loadChildren: () => import('./register/register-form.module').then(m => m.RegisterFormModule)
     },
     {
-        path: 'manageSight',
+        path: 'manageSight/:id',
         loadChildren: () => import('./manage-sight-dialog/manage-sight-dialog.module').then(m => m.ManageSightDialogModule)
     },
     {
@@ -25,6 +25,14 @@ const routes: Routes = [
     {
         path: 'profile',
         loadChildren: () => import('./profilepage/profilepage.module').then(m => m.ProfilepageModule)
+    },
+    {
+        path: 'faq',
+        loadChildren: () => import('./faq-page/faq-page.module').then(m => m.FaqPageModule)
+    },
+    {
+        path: 'myelements',
+        loadChildren: () => import('./my-elements/my-elements.module').then(m => m.MyElementsModule)
     },
     {
         path: '**',

@@ -66,15 +66,14 @@
 
                     <mat-card-actions>
                         <mat-progress-spinner mode="indeterminate" class="mat-progress-spinner" diameter="40" color="accent" [hidden]="!addSightInProgress"></mat-progress-spinner>
-                        <button color="primary" mat-raised-button>
-                            Add Sight
+                        <button color="primary" mat-raised-button [textContent]="managedSight===undefined ? 'Add Sight' : 'Save Changes'">
                         </button>
                         <button (click)="onAbort()" color="warn" mat-stroked-button>
                             Abort
                         </button>
                     </mat-card-actions>
 
-                    <app-add-rating class="add-rating-container" [panelTitle]="'Add initial rating'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)" [color]="'primary'" (commentUpdated)="onCommentUpdated($event)" (imagesUpdated)="onImagesUpdated($event)"></app-add-rating>
+                    <app-add-rating *ngIf="managedSight===undefined" class="add-rating-container" [panelTitle]="'Add initial rating'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)" [color]="'primary'" (commentUpdated)="onCommentUpdated($event)" (imagesUpdated)="onImagesUpdated($event)"></app-add-rating>
 
                 </form>
 

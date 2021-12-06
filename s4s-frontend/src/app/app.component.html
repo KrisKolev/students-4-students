@@ -11,7 +11,7 @@
         <button mat-button routerLink="./contact">Contact Us</button>
 
         <ng-template [ngIf]="isUserLoggedIn()==true">
-            <button mat-button routerLink="manageSight">
+            <button mat-button (click)="onOpenManageSight()">
                 <mat-icon>add_location_alt</mat-icon>
             </button>
         </ng-template>
@@ -19,17 +19,23 @@
         <!--profile button-->
         <ng-template [ngIf]="isUserLoggedIn()==true" [ngIfElse]="loggedOut">
             <button mat-button [matMenuTriggerFor]="menu">
-                <mat-icon>account_circle</mat-icon>
+                <ng-template [ngIf]="this.checkProfilePictureAvailability()" [ngIfElse]="noProfilePicture">
+                    <img class="profilePicture" src="{{this.profilePictureUrl}}" alt="Avatar">
+                </ng-template>
+                <ng-template #noProfilePicture>
+                    <mat-icon>account_circle</mat-icon>
+                </ng-template>
             </button>
             <mat-menu #menu="matMenu">
                 <button mat-menu-item routerLink="./profile"><mat-icon>manage_accounts</mat-icon>Profile</button>
-                <button mat-menu-item (click)="logout()"><mat-icon>logout</mat-icon>Logout</button>
+                <button mat-menu-item routerLink="./myelements"><mat-icon>category</mat-icon>My Elements</button>
+                <button mat-menu-item routerLink="" (click)="logout()"><mat-icon>logout</mat-icon>Logout</button>
             </mat-menu>
         </ng-template>
 
         <!--signin button-->
         <ng-template #loggedOut>
-            <button mat-flat-button color="accent" (click)="openLoginDialog()">Sign In</button>
+            <button mat-flat-button color="accent"  (click)="openLoginDialog()">Sign In</button>
         </ng-template>
     </mat-toolbar>
 

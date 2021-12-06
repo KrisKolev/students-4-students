@@ -3,7 +3,6 @@
   flex-direction: column;
   height: 100%;
 }
-
 mat-toolbar {
   height: 50px;
 
@@ -15,9 +14,9 @@ mat-toolbar {
     margin-right: 5px;
   }
 }
-
 .router-container {
-
+  height: 100%;
+  width: 100%;
 }
 
 .footer-copyright {
@@ -28,7 +27,16 @@ mat-toolbar {
 .small-label-header{
   margin-left: 10px;
   color: white;
-  align-content: center;
-  align-self: center;
+  padding-top: 20px;
 }
 
+.profilePicture{
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+}
