@@ -99,6 +99,7 @@ export class AppComponent {
     }
   
     getProfilePictureUrl() {
+         if (!this.userAuthService.isUserLoggedIn()){return;}
          this.firebaseService.getProfilePictureUrl(this.userAuthService.getLoggedInUser()).then(data => {
 
              this.profilePictureUrl=data;
