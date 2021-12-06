@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {UserService} from "../service/http/backend/user.service";
 import {FirebaseService} from "../service/http/external/firebase.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-root',
@@ -22,7 +23,8 @@ export class AppComponent {
                 public userAuthService: UserAuthService,
                 public loginDialog: MatDialog,
                 private userService:UserService,
-                private firebaseService: FirebaseService) {
+                private firebaseService: FirebaseService,
+                private router: Router) {
         this.checkBackendConnection();
         this.initGeolocation();
         this.verifyCurrentUser();
@@ -75,5 +77,9 @@ export class AppComponent {
     logout()
     {
         this.userAuthService.logout();
+    }
+
+    onOpenManageSight() {
+        this.router.navigate(['./manageSight','1'])
     }
 }

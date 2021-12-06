@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit, ViewChild} from '@angular/core';
-import {Sight} from "../../model/sight";
+import {Sight, SightTopLocation} from "../../model/sight";
 import {SightsService} from "../../service/http/backend/sights";
 import {UserAuthService} from "../../service/userAuthService";
 import {Rating} from "../../model/rating";
@@ -8,6 +8,9 @@ import {MatSort, Sort} from "@angular/material/sort";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatTableDataSource} from "@angular/material/table";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {deleteObject, getStorage, ref} from "firebase/storage";
+import {FirebaseService} from "../../service/http/external/firebase.service";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-my-elements',
@@ -21,8 +24,8 @@ export class MyElementsComponent implements OnInit {
   /**
    * Columes of the my sights table
    * */
-  mySightsDisplayedColumns: string[] = ['position', 'name', 'address', 'rating', 'manage'];
-  myRatingsdDisplayedColumns: string[] = ['position', 'comment', 'sightName',  'manage'];
+  mySightsDisplayedColumns: string[] = ['position', 'name', 'address', 'rating','images', 'manage'];
+  myRatingsdDisplayedColumns: string[] = ['position', 'comment', 'sightName','rating','images', 'manage'];
 
   sightsDataSource: any;
   ratingDataSource: any;
@@ -38,10 +41,19 @@ export class MyElementsComponent implements OnInit {
               private authService:UserAuthService,
               private _liveAnnouncer: LiveAnnouncer,
               private _liveAnnouncerRating: LiveAnnouncer,
-              public dialog: MatDialog) {
+              public dialog: MatDialog,
+              private firebaseService:FirebaseService,
+              private _router: Router) {
   }
 
   ngOnInit(): void {
+    var user = this.authService.getLoggedInUser();
+    if(user == null){
+
+      this._router.navigate([''])
+      return;
+    }
+
     this.sightsDataSource = new MatTableDataSource();
     this.ratingDataSource = new MatTableDataSource();
 
@@ -50,7 +62,7 @@ export class MyElementsComponent implements OnInit {
       // @ts-ignore
       const sights = res.data as Array;
       sights.forEach(sight => {
-        const newSight = new Sight();
+        const newSight = new SightTopLocation();
         newSight.uid = sight.uid;
         newSight.name = sight.name;
         newSight.longitude = sight.longitude;
@@ -83,7 +95,7 @@ export class MyElementsComponent implements OnInit {
           }
           newSight.labelList.push(newLabel)
         })
-
+        this.firebaseService.getSightImageUrls(newSight);
         this.mySights.push(newSight);
     })
       this.sightsDataSource = new MatTableDataSource(this.mySights);
@@ -107,6 +119,8 @@ export class MyElementsComponent implements OnInit {
             images.push(rat)
           })
           newRating.imageNames = images;
+          this.firebaseService.getRatingImageUrls(newRating)
+
           this.myRatings.push(newRating)
         } catch {
         }
@@ -156,7 +170,14 @@ export class MyElementsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result === "yes"){
         this.sightService.deleteSight(element).subscribe(x=>{
-          var res = x;
+          var sight = this.mySights.find(x=>x.uid===element);
+          sight.ratingList.forEach(rat=> {
+            const storage = getStorage();
+            rat.imageNames.forEach(async name => {
+              const delRef = ref(storage, 'images/rating/' + rat.uid + '/' + name);
+              await deleteObject(delRef);
+            })
+          })
           this.ngOnInit();
         })
       }
@@ -172,8 +193,18 @@ export class MyElementsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result === "yes"){
+        var rating = this.myRatings.find(x=>x.uid === element);
+        var imageList=[];
+        rating.imageNames.forEach(url=>{
+          imageList.push(url)
+        })
+
         this.sightService.deleteRating(element).subscribe(x=>{
-          var res = x;
+          const storage = getStorage();
+          imageList.forEach(async name=>{
+            const delRef = ref(storage, 'images/rating/'+rating.uid+'/'+name);
+            await deleteObject(delRef);
+          })
           this.ngOnInit();
         })
       }
@@ -181,6 +212,9 @@ export class MyElementsComponent implements OnInit {
   }
 
 
+    onManageSight(uid: any) {
+        this._router.navigate(["manageSight",uid]);
+    }
 }
 
 @Component({
