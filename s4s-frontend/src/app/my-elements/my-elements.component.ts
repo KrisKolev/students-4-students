@@ -8,6 +8,7 @@ import {MatSort, Sort} from "@angular/material/sort";
 import {LiveAnnouncer} from "@angular/cdk/a11y";
 import {MatTableDataSource} from "@angular/material/table";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
+import {deleteObject, getStorage, ref} from "firebase/storage";
 
 @Component({
   selector: 'app-my-elements',
@@ -22,7 +23,7 @@ export class MyElementsComponent implements OnInit {
    * Columes of the my sights table
    * */
   mySightsDisplayedColumns: string[] = ['position', 'name', 'address', 'rating', 'manage'];
-  myRatingsdDisplayedColumns: string[] = ['position', 'comment', 'sightName',  'manage'];
+  myRatingsdDisplayedColumns: string[] = ['position', 'comment', 'sightName','rating', 'manage'];
 
   sightsDataSource: any;
   ratingDataSource: any;
@@ -157,6 +158,7 @@ export class MyElementsComponent implements OnInit {
       if(result === "yes"){
         this.sightService.deleteSight(element).subscribe(x=>{
           var res = x;
+
           this.ngOnInit();
         })
       }
@@ -172,8 +174,18 @@ export class MyElementsComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if(result === "yes"){
+        var rating = this.myRatings.find(x=>x.uid === element);
+        var imageList=[];
+        rating.imageNames.forEach(url=>{
+          imageList.push(url)
+        })
+
         this.sightService.deleteRating(element).subscribe(x=>{
-          var res = x;
+          const storage = getStorage();
+          imageList.forEach(async name=>{
+            const delRef = ref(storage, 'images/rating/'+rating.uid+'/'+name);
+            await deleteObject(delRef);
+          })
           this.ngOnInit();
         })
       }

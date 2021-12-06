@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
-import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
+import {getDownloadURL, getStorage, ref, uploadBytesResumable,deleteObject } from "firebase/storage";
 import {UploadItem, UploadResponse} from "../../../model/uploadItem";
 import {Rating} from "../../../model/rating";
 import {SightTopLocation} from "../../../model/sight";

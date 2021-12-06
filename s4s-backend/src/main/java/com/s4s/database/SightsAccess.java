@@ -1,6 +1,8 @@
 package com.s4s.database;
 
+import com.google.api.services.storage.Storage;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.s4s.database.model.*;
 import com.s4s.dto.ResponseHelper;
