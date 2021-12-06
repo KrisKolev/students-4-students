@@ -1,15 +1,32 @@
-.spacer {
-  flex: 1 1 auto;
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+mat-toolbar {
+  height: 50px;
+
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  * {
+    margin-right: 5px;
+  }
+}
+.router-container {
+  height: 100%;
+  width: 100%;
 }
 
-.mat-raised-button{
-  margin-left: 15px;
+.footer-copyright {
+  background-color: #3f51b5;
+  color: white;
 }
- .mat-toolbar{
-   background: rgba(125, 237, 255, 0.57);
-  color: #6f76e3;
- }
- .mat-raised-button{
-   background: #9fa4f6;
-   color: #7dedff;
- }
+
+.small-label-header{
+  margin-left: 20px;
+  color: white;
+  padding-top: 20px;
+}
+

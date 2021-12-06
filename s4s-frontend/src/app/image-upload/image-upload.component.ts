@@ -33,7 +33,6 @@ export class ImageUploadComponent implements OnInit {
    * Form for the input images
    */
   myForm = new FormGroup({
-    name: new FormControl('', [Validators.required]),
     file: new FormControl('', [Validators.required]),
     fileSource: new FormControl('', [Validators.required])
   });

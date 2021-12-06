@@ -1,0 +1,100 @@
+<mat-card class="sight-panel">
+    <mat-card-title>
+        <span class="card-title" fxLayout="row">
+            <p [textContent]="sight.name"></p>
+            <span>
+                <button (click)="onCalcRoute(sight)" mat-mini-fab>
+                    <mat-icon>explore</mat-icon>
+                </button>
+                <button (click)="onGoToSight(sight)" *ngIf="!isDetailView" mat-mini-fab>
+                    <mat-icon>open_in_new</mat-icon>
+                </button>
+                <button (click)="onEdit(sight)" *ngIf="isDetailView && sight.creator === currentUserUid" mat-mini-fab>
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button (click)="onClose()" *ngIf="isDetailView" class="close-button-detail" mat-mini-fab>
+                    <mat-icon>close</mat-icon>
+                </button>
+            </span>
+        </span>
+    </mat-card-title>
+    <mat-card-subtitle>
+    </mat-card-subtitle>
+    <mat-card-content>
+        <span fxLayout="row" style="display: flex">
+            <span style="display: inline-block; width: 230px; height: 150px;overflow: hidden">
+                <ngb-carousel *ngIf="sight.allImageUrl.length !== 0" [showNavigationArrows]="false"
+                              [showNavigationIndicators]="false">
+                        <ng-template *ngFor="let image of sight.allImageUrl" ngbSlide>
+                            <div class="picsum-img-wrapper">
+                                <img [src]="image" alt="Slide" style="width: 230px; height: 150px">
+                            </div>
+                       </ng-template>
+                </ngb-carousel>
+                <span style="display: flex; justify-content: center; align-items: center">
+                    <mat-icon *ngIf="sight.allImageUrl.length === 0"
+                              [style]="'height: 100px; width: 100px; font-size:100px'">landscape</mat-icon>
+                </span>
+            </span>
+            <span display="flex" fxLayoutAlign="center" style="padding-left: 10px">
+                <br/>
+                <div class="fxColumn">
+                    <div class="fxRow">
+                        <app-star-rating [clickable]="false" [rating]="sight.overallRating"
+                                         [starCount]="5"></app-star-rating>
+                        <span>&nbsp;({{sight.ratingList.length}} Ratings)</span>
+                    </div>
+                    <p [textContent]="'(' + sight.showDistanceString + '  /  ' + sight.timeToTarget + ')'"></p>
+                    <div>
+                        <mat-chip-list>
+                            <span *ngFor="let label of sight.labelList">
+                                <mat-chip>{{label.name}}</mat-chip>
+                            </span>
+                        </mat-chip-list>
+                    </div>
+                </div>
+            </span>
+        </span>
+    </mat-card-content>
+    <mat-card-footer>
+        <span style="margin-left: 15px">
+            <mat-label><strong>Address: </strong> {{sight.address}}</mat-label>
+        </span>
+    </mat-card-footer>
+</mat-card>
+
+<mat-card *ngIf="isDetailView">
+    <mat-card-title>
+        <p>Comments:</p>
+    </mat-card-title>
+    <mat-card-content>
+        <div *ngIf="sight.ratingList.length === 0">
+            <p>No comments found.</p>
+        </div>
+        <div *ngIf="sight.ratingList.length !== 0" >
+            <div *ngFor="let comment of sight.ratingList">
+                <mat-divider></mat-divider>
+                <div fxLayout="column" class="comment">
+                    <span class="fxRow">
+                        <p><strong>Author:</strong> John Doe</p>
+                        <p><strong>Created:</strong> 31.12.9999</p>
+                    </span>
+                    <p *ngIf="comment?.comment?.length !==0">{{comment.comment}}</p>
+                    <p *ngIf="comment?.comment === undefined">-</p>
+                    <app-star-rating [clickable]="true" [rating]="comment.rating" [starCount]="comment.rating">
+                    </app-star-rating>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+
+
+
+
+
+
+
+
+

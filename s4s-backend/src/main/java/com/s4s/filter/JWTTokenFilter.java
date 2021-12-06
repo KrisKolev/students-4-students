@@ -14,6 +14,8 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.util.Date;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Provider
 @JWTTokenRequired
@@ -21,6 +23,7 @@ import java.io.IOException;
 public class JWTTokenFilter implements ContainerRequestFilter {
 
     public static final String BEARER_STRING = "Bearer";
+    static ConcurrentHashMap<String, Date> jwtCache = new ConcurrentHashMap<>();
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -46,10 +49,21 @@ public class JWTTokenFilter implements ContainerRequestFilter {
             return;
         }
 
-        FirebaseToken decodedToken = null;
+        // Check if token is already in jwt token cache and still valid
+        if (jwtCache != null && !jwtCache.isEmpty()) {
+            Date exp = jwtCache.get(token);
+
+            if (exp != null && new Date().before(exp)) {
+                return;
+            }
+        }
+
+        // Query FirebaseAuth API
         try {
-            decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
-            String uid = decodedToken.getUid();
+            FirebaseToken decodedToken = FirebaseAuth.getInstance().verifyIdToken(token);
+
+            long exp = (Long) decodedToken.getClaims().get("exp") * 1000L;
+            jwtCache.put(token, new Date(exp));
         } catch (FirebaseAuthException e) {
             Response response = new ResponseHelper(Info.UNAUTHORIZED,
                     Info.UNAUTHORIZED.defaultMessage,

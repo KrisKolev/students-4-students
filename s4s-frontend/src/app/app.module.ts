@@ -18,11 +18,19 @@ import {MatButtonModule} from '@angular/material/button';
 import {FlexLayoutModule} from '@angular/flex-layout';
 import {CustomHttpInterceptor} from "../service/interceptor/interceptor.service";
 import {MatCardModule} from "@angular/material/card";
-import { GoogleMapsModule } from '@angular/google-maps'
+import {GoogleMapsModule} from '@angular/google-maps'
 import {MatTooltipModule} from "@angular/material/tooltip";
 import {MatMenuModule} from '@angular/material/menu';
 import {PopupComponent} from "./popup/popup.component";
-
+import {DetailPageComponent} from './detail-page/detail-page.component';
+import {ManageSightDialogModule} from "./manage-sight-dialog/manage-sight-dialog.module";
+import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
+import {MatExpansionModule} from "@angular/material/expansion";
+import {MatTableModule} from "@angular/material/table";
+import { FaqPageComponent } from './faq-page/faq-page.component';
+import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
+import {MatChipsModule} from "@angular/material/chips";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -33,11 +41,14 @@ const firebaseConfig = {
     appId: '1:148128489605:web:fe41a4249539e2b85749ec'
 };
 const app = initializeApp(firebaseConfig);
+
 @NgModule({
     declarations: [
         AppComponent,
         LoginDialogComponent,
-        PopupComponent
+        PopupComponent,
+        DetailPageComponent,
+        FaqPageComponent
     ],
     imports: [
         BrowserModule,
@@ -58,12 +69,17 @@ const app = initializeApp(firebaseConfig);
         ReactiveFormsModule,
         MatCardModule,
         MatTooltipModule,
-        MatMenuModule
+        MatMenuModule,
+        ManageSightDialogModule,
+        NgbCarouselModule,
+        MatExpansionModule,
+        MatTableModule,
+        MatProgressSpinnerModule,
+        MatChipsModule,
+        MatAutocompleteModule
     ],
     providers: [FirebaseService, {provide: HTTP_INTERCEPTORS, useClass: CustomHttpInterceptor, multi: true}],
-    entryComponents: [LoginDialogComponent,PopupComponent],
-    exports: [
-    ],
+    entryComponents: [LoginDialogComponent, PopupComponent],
     bootstrap: [AppComponent]
 })
 

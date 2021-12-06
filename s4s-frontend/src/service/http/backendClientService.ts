@@ -31,6 +31,6 @@ export class BackendClientService {
 
     createDeleteCall<T>(path: string) {
         console.log('DELETE:' + environment.baseUrl + path);
-        return this.http.delete<T>(environment.baseUrl + path, httpOptions);
+        return this.http.delete<T>(environment.baseUrl + path);
     }
 }

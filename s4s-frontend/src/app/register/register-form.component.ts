@@ -16,6 +16,9 @@ export class RegisterFormComponent implements OnInit {
     signUpForm: FormGroup;
 
     ngOnInit(): void {
+        if (this.userAuthService.isUserLoggedIn()) {
+            this.router.navigateByUrl('/')
+        }
     }
 
     constructor(private router: Router,

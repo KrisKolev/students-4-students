@@ -6,10 +6,12 @@
  */
 export class Rating {
     uid: string;
-    rating: Number;
+    rating: number;
     comment: string = "";
     imageNames: string[] = []
     createdAt:string;
     updatedAt:string;
     imageUrl: string[] = []
+    sightId: string;
+    sightName: string;
 }

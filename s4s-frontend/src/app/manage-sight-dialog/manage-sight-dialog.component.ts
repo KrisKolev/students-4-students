@@ -1,6 +1,6 @@
 import {Component, ElementRef, NgZone, OnInit, ViewChild} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
-import {Router} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {Observable} from "rxjs";
 import {LocationService} from "../../service/http/backend/locations";
 import {GoogleMap} from "@angular/google-maps";
@@ -19,6 +19,7 @@ import {PopupType} from "../../model/popupType";
 import {PopupComponent} from "../popup/popup.component";
 import {FirebaseService} from "../../service/http/external/firebase.service";
 import {UploadItem} from "../../model/uploadItem";
+import {templateJitUrl} from "@angular/compiler";
 
 export interface Tile {
   color: string;
@@ -170,13 +171,15 @@ export class ManageSightDialogComponent implements OnInit {
    */
   detailedSight : Sight = new Sight();
 
-  tiles: Tile[] = [
-    {text: 'One', cols: 3, rows: 1, color: 'lightblue'},
-    {text: 'Two', cols: 1, rows: 2, color: 'lightgreen'},
-    {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
-    {text: 'Four', cols: 2, rows: 1, color: '#DDBDF1'},
-  ];
+  isInitialized: boolean = false;
 
+  labelErrorVisible: boolean = false;
+
+  labelMapErrorVisible: boolean = false;
+
+  manageSightUidString: String;
+
+  managedSight: Sight;
 
   /**
    * Constructor for the manage sight component
@@ -196,7 +199,11 @@ export class ManageSightDialogComponent implements OnInit {
               private ngZone: NgZone,
               private sightService:SightsService,
               private dialog: MatDialog,
-              private firebaseService: FirebaseService) {
+              private firebaseService: FirebaseService,
+              private _router: Router,
+              private actRoute: ActivatedRoute) {
+
+    this.isInitialized = false;
 
     //create form group
     this.addSightForm = new FormGroup({
@@ -204,23 +211,39 @@ export class ManageSightDialogComponent implements OnInit {
       address: new FormControl('', [Validators.required, Validators.minLength(2), Validators.maxLength(200)]),
     });
 
+    this.onLoadLabels();
+    this.onLoadSights();
+
     this.addSightForm.valueChanges.subscribe( ()=>{
+      if(!this.isInitialized)return;
       this.checkFormValidity();
     })
 
     this.labelCtrl.valueChanges.subscribe(()=>{
+      if(!this.isInitialized)return;
       this.checkFormValidity();
     })
-
-    this.onLoadLabels();
-    this.onLoadSights();
   }
 
   /**
    * Initializes the model
    */
   ngOnInit(): void {
+    var user = this.authService.getLoggedInUser();
+    if(user == null){
+
+      this._router.navigate([''])
+      return;
+    }
     this.initMap();
+
+    let sightId = this.actRoute.snapshot.params.id;
+    if(sightId!="1"){
+      this.manageSightUidString = sightId
+    }
+    else {
+      this.manageSightUidString = "";
+    }
   }
 
   /**
@@ -245,6 +268,7 @@ export class ManageSightDialogComponent implements OnInit {
       });
 
       this.mapMarkers.push(marker)
+      this.isInitialized = true;
     });
   }
 
@@ -371,8 +395,25 @@ export class ManageSightDialogComponent implements OnInit {
 
       this.allSights = pulledSights;
 
+      if(this.manageSightUidString!=""){
+        var a= ""
+        this.managedSight = this.allSights.find(x=>x.uid===this.manageSightUidString);
+
+        this.nameValue = this.managedSight.name;
+        this.addressValue = this.managedSight.address;
+        this.labels = this.managedSight.labelList
+
+
+
+        this.placeCustomMarker(Number.parseFloat(this.managedSight.latitude),Number.parseFloat(this.managedSight.longitude))
+        this.initMapWithPosition(Number.parseFloat(this.managedSight.latitude),Number.parseFloat(this.managedSight.longitude),16)
+      }
+
       this.allSights.forEach((sight)=>{
 
+        if(sight.uid === this.managedSight.uid){
+          return;
+        }
         const svgMarker = {
           path: "M10.453 14.016l6.563-6.609-1.406-1.406-5.156 5.203-2.063-2.109-1.406 1.406zM12 2.016q2.906 0 4.945 2.039t2.039 4.945q0 1.453-0.727 3.328t-1.758 3.516-2.039 3.070-1.711 2.273l-0.75 0.797q-0.281-0.328-0.75-0.867t-1.688-2.156-2.133-3.141-1.664-3.445-0.75-3.375q0-2.906 2.039-4.945t4.945-2.039z",
           fillColor: "blue",
@@ -401,6 +442,8 @@ export class ManageSightDialogComponent implements OnInit {
         this.mapMarkersSights.push(existingMarker)
       })
 
+
+
     })
   }
 
@@ -424,21 +467,36 @@ export class ManageSightDialogComponent implements OnInit {
       this.mapMarkers.splice(1,this.mapMarkers.length-1)
     }
 
-    const marker = new google.maps.Marker({
-      position: {
-        lat: latitude,
-        lng: longitude,
-      },
-      title: `New sight`,
-      label: `New sight`,
-      optimized: false
-    });
-
-    this.customLatitude = latitude;
-    this.customLongitude = longitude;
-    this.getAddress(latitude, longitude);
-    this.mapMarkers.push(marker);
-    this.checkFormValidity();
+    if(this.managedSight===undefined){
+      const marker = new google.maps.Marker({
+        position: {
+          lat: latitude,
+          lng: longitude,
+        },
+        title: `New sight`,
+        label: `New sight`,
+        optimized: false
+      });
+      this.customLatitude = latitude;
+      this.customLongitude = longitude;
+      this.getAddress(latitude, longitude);
+      this.mapMarkers.push(marker);
+    }
+    else{
+      const marker = new google.maps.Marker({
+        position: {
+          lat: latitude,
+          lng: longitude,
+        },
+        title: this.nameValue,
+        label: this.nameValue,
+        optimized: false
+      });
+      this.customLatitude = latitude;
+      this.customLongitude = longitude;
+      this.getAddress(latitude, longitude);
+      this.mapMarkers.push(marker);
+    }
   }
 
   /**
@@ -467,7 +525,6 @@ export class ManageSightDialogComponent implements OnInit {
       this.detailedSight.ratingList.forEach(async rat=>{
         await this.firebaseService.getRatingImageUrls(rat);
       })
-
     }
     catch (e)
     {
@@ -586,7 +643,7 @@ export class ManageSightDialogComponent implements OnInit {
    */
   onRatingUpdated($event:any){
     this.rating = $event;
-    this.checkFormValidity();
+    //this.checkFormValidity();
   }
 
   /**
@@ -609,56 +666,108 @@ export class ManageSightDialogComponent implements OnInit {
    * Checks if the input form is valid
    */
   checkFormValidity(){
-    this.validForm = this.addSightForm.valid && this.rating!=undefined && this.mapMarkers.length>1 && this.labels.length>0 && !this.addSightInProgress
+    this.labelErrorVisible = this.labels.length <1;
+    this.labelMapErrorVisible = this.mapMarkers.length<2
+
+    if(this.managedSight===undefined){
+      this.validForm = this.addSightForm.valid && this.rating!=undefined && this.mapMarkers.length>1 && this.labels.length>0 && !this.addSightInProgress
+    }
+    else {
+      this.validForm = this.addSightForm.valid && this.mapMarkers.length>1 && this.labels.length>0 && !this.addSightInProgress
+    }
   }
 
   /**
    * Adds the current sight that is prepared by the user in the UI. Only available if the form is valid
    */
   onSightAdd() {
-    this.addSightInProgress = true;
     this.checkFormValidity();
 
-    const newSight = new Sight();
-    const newRating = new Rating();
+    if(!this.validForm)
+      return;
+    if(this.managedSight===undefined){
+      this.addSightInProgress = true;
+      const newSight = new Sight();
+      const newRating = new Rating();
 
-    newRating.rating = this.rating;
-    newRating.comment = this.ratingComment;
-    let i:number;
-    for(i = 0;i<this.ratingImages.length;i++) {
-      newRating.imageNames.push('img_'+i)
-    }
-
-    newSight.address = this.addressValue;
-    newSight.name = this.nameValue;
-    newSight.longitude = this.customLongitude.toString();
-    newSight.latitude = this.customLatitude.toString();
-    newSight.labelList = this.labels;
-    newSight.ratingList.push(newRating);
-
-    this.sightService.addSight(newSight,this.authService.getLoggedInUser().uid).subscribe(async (res)=>
-    {
+      newRating.rating = this.rating;
+      newRating.comment = this.ratingComment;
       let i:number;
-      let y:number;
-      for(i = 0;i<newRating.imageNames.length;i++) {
-        const uploadItem = new UploadItem();
-        // @ts-ignore
-        uploadItem.filePath = 'images/rating/'+res.data.ratingAssigned[0]+'/'+newRating.imageNames[i];
-        uploadItem.file = this.ratingImages[i];
-        await this.firebaseService.uploadFileToFirestore(uploadItem);
+      for(i = 0;i<this.ratingImages.length;i++) {
+        newRating.imageNames.push('img_'+i)
       }
-      this.addSightInProgress = false;
-      this.checkFormValidity();
-      const dialogConfig = new MatDialogConfig();
 
+      newSight.address = this.addressValue;
+      newSight.name = this.nameValue;
+      newSight.longitude = this.customLongitude.toString();
+      newSight.latitude = this.customLatitude.toString();
+      newSight.labelList = this.labels;
+      newSight.ratingList.push(newRating);
+
+      this.sightService.addSight(newSight,this.authService.getLoggedInUser().uid).subscribe(async (res)=>
+      {
+        let i:number;
+        let y:number;
+        for(i = 0;i<newRating.imageNames.length;i++) {
+          const uploadItem = new UploadItem();
+          // @ts-ignore
+          uploadItem.filePath = 'images/rating/'+res.data.ratingList[0].uid+'/'+newRating.imageNames[i];
+          uploadItem.file = this.ratingImages[i];
+          await this.firebaseService.uploadFileToFirestore(uploadItem);
+        }
+        this.addSightInProgress = false;
+        this.checkFormValidity();
+        const dialogConfig = new MatDialogConfig();
+
+        dialogConfig.autoFocus = true;
+        dialogConfig.maxWidth = 500;
+        dialogConfig.data = {
+          type: PopupType.INFO,
+          title: 'Success',
+          message: 'Sight was added successfully!',
+          cancelButton: 'OK'
+        }
+        this.dialog.open(PopupComponent, dialogConfig).afterClosed().subscribe(()=>{
+          this.onAbort();
+        });
+
+      },(error => {
+        this.addSightInProgress = false;
+        this.checkFormValidity();
+
+        const dialogConfig = new MatDialogConfig();
+        dialogConfig.autoFocus = true;
+        dialogConfig.maxWidth = 500;
+        dialogConfig.data = {
+          type: PopupType.ERROR,
+          title: 'Error',
+          message: error.error.status.message,
+          cancelButton: 'OK'
+        }
+        this.dialog.open(PopupComponent, dialogConfig);
+      }));
+    }
+    else {
+
+      this.addSightInProgress = true;
+      this.managedSight.address = this.addressValue;
+      this.managedSight.name = this.nameValue;
+      this.managedSight.longitude = this.customLongitude.toString();
+      this.managedSight.latitude = this.customLatitude.toString();
+      this.managedSight.labelList = this.labels;
+      this.managedSight.creator = this.authService.getLoggedInUser().uid;
+      this.sightService.updateSight(this.managedSight).subscribe(res=>{
+
+      const dialogConfig = new MatDialogConfig();
       dialogConfig.autoFocus = true;
       dialogConfig.maxWidth = 500;
       dialogConfig.data = {
         type: PopupType.INFO,
         title: 'Success',
-        message: 'Sight was added successfully!',
+        message: 'Sight was updated successfully!',
         cancelButton: 'OK'
       }
+        this.addSightInProgress = false;
       this.dialog.open(PopupComponent, dialogConfig).afterClosed().subscribe(()=>{
         this.onAbort();
       });
@@ -677,7 +786,10 @@ export class ManageSightDialogComponent implements OnInit {
         cancelButton: 'OK'
       }
       this.dialog.open(PopupComponent, dialogConfig);
-    }));
+    }))
+
+    }
+
 
   }
 
@@ -685,6 +797,11 @@ export class ManageSightDialogComponent implements OnInit {
    * Closes the manage sight form.
    */
   onAbort(){
-    this.router.navigateByUrl('/').then();
+    if(this.managedSight===undefined){
+      this.router.navigateByUrl('/');
+    }
+    else {
+      this.router.navigateByUrl('myelements');
+    }
   }
 }
