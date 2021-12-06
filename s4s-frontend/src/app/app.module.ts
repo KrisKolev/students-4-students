@@ -27,6 +27,7 @@ import {ManageSightDialogModule} from "./manage-sight-dialog/manage-sight-dialog
 import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatTableModule} from "@angular/material/table";
+import { FaqPageComponent } from './faq-page/faq-page.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
@@ -46,7 +47,8 @@ const app = initializeApp(firebaseConfig);
         AppComponent,
         LoginDialogComponent,
         PopupComponent,
-        DetailPageComponent
+        DetailPageComponent,
+        FaqPageComponent
     ],
     imports: [
         BrowserModule,
