@@ -3,7 +3,6 @@
   flex-direction: column;
   height: 100%;
 }
-
 mat-toolbar {
   height: 50px;
 
@@ -15,7 +14,6 @@ mat-toolbar {
     margin-right: 5px;
   }
 }
-
 .router-container {
   height: 100%;
   width: 100%;
@@ -27,9 +25,8 @@ mat-toolbar {
 }
 
 .small-label-header{
-  margin-left: 100px;
+  margin-left: 20px;
   color: white;
-  align-content: center;
-  align-self: center;
+  padding-top: 20px;
 }
 

@@ -201,8 +201,7 @@
 
 <!--searchbar across sights and GM-->
 <div class="map-search-adressbar">
-    <form class="address-form">
-        <mat-form-field appearance="outline">
+        <mat-form-field color="primary" appearance="fill">
             <mat-label class="address-placeholder-label">Search by sight, label or address</mat-label>
             <input #addressSearch
                    [(ngModel)]="addressValue"
@@ -228,5 +227,4 @@
                 <!--<app-star-rating class="search-stars"  [clickable]="false" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>-->
             </mat-option>
         </mat-autocomplete>
-    </form>
 </div>
