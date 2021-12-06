@@ -21,49 +21,73 @@
   background-position:50% 50%;
 }
 .picsum-img-wrapper{
-  width:300px;
-  height:300px;
+  width:230px;
+  height:150px;
   object-fit:scale-down;
 }
+
 .maps{
   width: 50vw;
   height: 50vw;
 }
-
+/* Aniamted landingpage buttons */
 .maps-gotolocation{
   position: fixed;
   top: 150px;
-  left: 20px;
+  left: 10px;
 }
 
 .maps-filter-sights-button{
   position: fixed;
   top: 200px;
-  left: -100px;
+  left: 10px;
 }
 
 .maps-toggleTopLocations{
   position: fixed;
-  top: 180px;
-  left: 20px;
+  top: 206px;
+  left: 11px;
+  z-index: 10;
 }
+/* Aniamted landingpage buttons */
 
 .top-locations-container{
   position: fixed;
-  left: 20px;
-  top: 70px;
-  width: 0px;
-  height: 90%;
-  opacity: 0;
-  padding: 20px;
+
+  left: 0px;
+  top: 60px;
+
+  height: calc(100% - 20px - 60px);
+  width: 500px;
+
+  padding-bottom:20px;
+  padding-left: 5px;
+
+  opacity: 1;
   overflow-y: auto;
+  background-color: white;
+}
+
+.manage-sight-container{
+  position: fixed;
+
+  left: 0px;
+  top: 60px;
+
+  height: calc(100% - 20px - 60px);
+  width: 500px;
+
+  padding-bottom:20px;
+  padding-left: 5px;
+
+  opacity: 1;
+  overflow-y: auto;
+  background-color: white;
 }
 
 .maps-container{
   margin-right: 10px;
   padding-bottom: 20px;
-  padding-left: 10px;
-  padding-right: 10px;
   align-content: center;
   position: fixed;
   bottom: 0;
@@ -81,14 +105,15 @@
   color:white;
   margin-left: 5px;
   align-self: center;
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
+
 }
 
 .map-clear-route-button{
   color:white;
   margin-left: 5px;
   font-size: x-large;
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
 }
 
 .map-search-adressbar{
@@ -101,18 +126,27 @@
 
 .address-placeholder-label{
   color: white;
+  background-color: #3f51b5 !important;
 }
 
 .address-form{
+  background-color: #3f51b5 !important;
 }
 
 .filter-sights-container{
   position: fixed;
-  left: 550px;
-  text-align: center;
+  left: 547px;
+  top: 208px;
   opacity: 0;
-  top: 250px;
-  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+  text-align: left;
+  background-color: #3f51b5 !important;
+  border-radius: 20px;
+  padding: 10px;
 }
 
 .filter-center{
@@ -120,6 +154,7 @@
   justify-content: center;
   margin-bottom: 5px;
   margin-top: 5px;
+  text-align: center;
 }
 
 .filter-form-field{
@@ -135,11 +170,11 @@
 }
 
 .address-bar{
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
 }
 
 .address-autocomplete{
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
 }
 mat-select{
   color: white;
@@ -159,7 +194,7 @@ mat-form-field{
   border-color: transparent;
   text-decoration-color: white;
   border-radius: 30px;
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
   outline-color: red;
 }
 
@@ -179,19 +214,6 @@ mat-form-field{
   outline-color: white;
 }
 
-.slider-container{
-  background-color: #3f51b5;
-  border-radius: 20px;
-  margin-bottom: 5px;
-  margin-top: 5px;
-  padding-left: 5px;
-  padding-right: 5px;
-  align-items: center;
-  justify-content: center;
-  align-self: center;
-  display: flex;
-}
-
 mat-slider{
   margin-left: 5px;
   margin-right: 5px;
@@ -204,15 +226,15 @@ mat-slider{
   align-self: center;
 }
 
-.sight-details-view{
-  height: 38%;
+.sight-details-view {
   position: fixed;
-  top: 60%;
-  opacity: 0;
-  margin-bottom: 20px;
-  margin-left: 20px;
+  top: 60px;
+  padding-bottom:20px;
+  padding-left: 0px;
+  height: calc(100% - 20px - 60px);
   width: 500px;
-  background-color: lightgray;
+
+  background-color: white;
 }
 
 .sight-details-view-rating{
@@ -225,7 +247,7 @@ mat-slider{
   margin-right: 10px;
   margin-bottom: 10px;
   font-size: 11px;
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
   color:white;
 }
 
@@ -254,7 +276,7 @@ mat-slider{
 }
 
 .route-details{
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
   text-align: start;
   border-radius: 40px;
   padding: 15px;

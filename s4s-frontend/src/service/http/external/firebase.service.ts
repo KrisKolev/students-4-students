@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
-import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
+import {getDownloadURL, getStorage, ref, uploadBytesResumable,deleteObject } from "firebase/storage";
 import {UploadItem, UploadResponse} from "../../../model/uploadItem";
 import {Rating} from "../../../model/rating";
 import {SightTopLocation} from "../../../model/sight";
@@ -29,6 +29,7 @@ export class FirebaseService {
         getAuth().signOut();
     }
 
+
     /**
      * Uploads a file to the firestore storage API
      * Component written by Michael Fahrafellner
@@ -44,60 +45,25 @@ export class FirebaseService {
         // Create a reference
         //const newFileRef = ref(storage, 'images/rating/mountains.jpg');
         const newFileRef = ref(storage, uploadFile.filePath);
-
-        getDownloadURL(ref(storage, uploadFile.filePath))
-            .then((url) => {
-
-            })
-            .catch((error) => {
-                // Handle any errors
-            });
-
         const uploadTask = uploadBytesResumable(newFileRef, uploadFile.file);
 
-        // Listen for state changes, errors, and completion of the upload.
-        uploadTask.on('state_changed',
-            (snapshot) => {
-                const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                console.log('Upload is ' + progress + '% done');
-                switch (snapshot.state) {
-                    case 'paused':
-                        console.log('Upload is paused');
-                        break;
-                    case 'running':
-                        console.log('Upload is running');
-                        break;
-                }
-            },
-            (error) => {
-                switch (error.code) {
-                    case 'storage/unauthorized':
-                        console.log(error.code)
-                        response.finished = true;
-                        response.hasErrors = true;
-                        break;
-                    case 'storage/canceled':
-                        console.log(error.code)
-                        response.finished = true;
-                        response.hasErrors = true;
-                        break;
-                    case 'storage/unknown':
-                        console.log(error.code)
-                        response.finished = true;
-                        response.hasErrors = true;
-                        break;
-                }
-            },
-            () => {
-                // Upload completed successfully, now we can get the download URL
-                getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        await uploadTask.then(async res => {
+            var t = res;
+            if (res.state === "success") {
+                await getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     console.log('File available at', downloadURL);
                     response.response = downloadURL;
+                    response.hasErrors = false;
                     response.finished = true;
-                    return response
                 });
             }
-        );
+            else {
+                console.log('Error');
+                response.response = undefined;
+                response.hasErrors = true;
+                response.finished = true;
+            }
+        });
 
         return response;
     }

@@ -12,4 +12,6 @@ export class Rating {
     createdAt:string;
     updatedAt:string;
     imageUrl: string[] = []
+    sightId: string;
+    sightName: string;
 }

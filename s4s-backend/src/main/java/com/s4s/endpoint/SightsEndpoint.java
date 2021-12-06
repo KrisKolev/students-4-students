@@ -3,6 +3,7 @@ package com.s4s.endpoint;
 import com.s4s.database.LocationsAccess;
 import com.s4s.database.SightsAccess;
 import com.s4s.database.model.Label;
+import com.s4s.database.model.Rating;
 import com.s4s.database.model.Sight;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
@@ -11,6 +12,7 @@ import com.s4s.filter.JWTTokenRequired;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.awt.image.RescaleOp;
 import java.security.PublicKey;
 
 /**
@@ -46,6 +48,15 @@ public class SightsEndpoint {
         return SightsAccess.addSights(sight,user);
     }
 
+    @POST
+    @Path("/update")
+    @JWTTokenRequired
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateSight(Sight sight){
+        return SightsAccess.updateSights(sight);
+    }
+
     @GET
     @Path("/allsights")
     @Produces(MediaType.APPLICATION_JSON)
@@ -65,5 +76,42 @@ public class SightsEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getSightById(@QueryParam("id") String id) {
         return SightsAccess.getSightById(id);
+    }
+
+    @GET
+    @Path("/mysights")
+    @JWTTokenRequired
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserSights(@QueryParam("id") String userId){ return SightsAccess.getSightsForUser(userId);}
+
+    @GET
+    @Path("/myratings")
+    @JWTTokenRequired
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getUserRatings(@QueryParam("id") String userId) {return SightsAccess.getRatingsForUser(userId);}
+
+    @DELETE
+    @Path("/deleteSight")
+    @JWTTokenRequired
+    @Produces(MediaType.APPLICATION_JSON)
+    public void deleteSight(@QueryParam("id") String sightId){ SightsAccess.deleteSight(sightId);}
+
+    @POST
+    @Path("/addRating")
+    @JWTTokenRequired
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response AddRating(Rating rating, @QueryParam("id") String userId, @QueryParam("sightId") String sightId){
+        rating.setCreator(userId);
+        rating.setSightId(sightId);
+        return SightsAccess.addRating(rating,true);
+    }
+
+    @DELETE
+    @Path("/deleteRating")
+    @JWTTokenRequired
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response DeleteRating(@QueryParam("id") String ratingId){
+        return SightsAccess.deleteRating(ratingId);
     }
 }

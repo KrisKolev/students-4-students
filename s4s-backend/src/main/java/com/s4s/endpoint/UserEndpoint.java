@@ -2,13 +2,16 @@ package com.s4s.endpoint;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.s4s.database.DatabaseAccess;
 import com.s4s.database.UniversityAccess;
+import com.s4s.database.model.User;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.request.UserDTO;
 import com.s4s.dto.response.Info;
+import com.s4s.filter.JWTTokenFilter;
 import com.s4s.filter.JWTTokenRequired;
 
 import javax.ws.rs.*;
@@ -56,7 +59,7 @@ public class UserEndpoint {
     }
 
     /**
-     * Verifies the user endpoint
+     * Verifies the user
      *
      * @return
      */
@@ -70,14 +73,13 @@ public class UserEndpoint {
 
 
     /**
-     * Updates the user endpoint
+     * Updates the user
      */
     @POST
     @Path("/update")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @JWTTokenRequired
-
     public Response updateUser(UserDTO userDTO) throws FirebaseAuthException, ExecutionException, InterruptedException {
         UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
                 .setPassword(userDTO.getPassword())
@@ -98,6 +100,46 @@ public class UserEndpoint {
         }
 
         return new ResponseHelper(Info.SUCCESS).build();
+    }
+
+    /**
+     * Deletes the user
+     */
+    @DELETE
+    @Path("/delete")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @JWTTokenRequired
+    public Response deleteUser(@HeaderParam("Authorization") String authorization) {
+        //Extract user jwt
+        String jwt = authorization.contains(JWTTokenFilter.BEARER_STRING)
+                ? authorization.replace(JWTTokenFilter.BEARER_STRING, "").trim()
+                : authorization;
+
+        //Extract user id
+        String uid = null;
+        try {
+            FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(jwt);
+            uid = firebaseToken.getUid();
+        } catch (FirebaseAuthException e) {
+            Response response = new ResponseHelper(Info.FAILURE,
+                    Info.FAILURE.defaultMessage,
+                    "Failed to verify the signature of Firebase ID token.").build();
+            return response;
+        }
+
+        //Delete user
+        try {
+            FirebaseAuth.getInstance().deleteUser(uid);
+            DatabaseAccess.deleteDocument("user", uid);
+        } catch (Exception e) {
+            Response response = new ResponseHelper(Info.FAILURE,
+                    Info.FAILURE.defaultMessage, e.getMessage()
+                    ).build();
+            return response;
+        }
+
+        return new ResponseHelper(Info.SUCCESS, "User deleted.").build();
     }
 }
 
