@@ -8,7 +8,7 @@ const routes: Routes = [
     },
     {
         path: 'register',
-        loadChildren: () => import('./register-form/register-form.module').then(m => m.RegisterFormModule)
+        loadChildren: () => import('./register/register-form.module').then(m => m.RegisterFormModule)
     },
     {
         path: 'manageSight',
