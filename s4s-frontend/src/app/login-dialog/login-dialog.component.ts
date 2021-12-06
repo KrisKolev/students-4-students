@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {UserAuthService} from "../../service/userAuthService";
 import {PopupType} from "../../model/popupType";
 import {PopupComponent} from "../popup/popup.component";
+import {Emitters} from "../emitters/emitters";
 
 @Component({
     selector: 'app-login-dialog',
@@ -16,16 +17,13 @@ export class LoginDialogComponent {
     email = new FormControl('', [Validators.required, Validators.email]);
     pw = new FormControl('');
 
-    @Output() updateNavbarPicture: EventEmitter<any>= new EventEmitter();
-    sendUpdateNotification(value:boolean){
-        this.updateNavbarPicture.emit(value)
-    }
-    getNavbarPictureEmitter(){return this.updateNavbarPicture}
 
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
                 public dialog: MatDialog,
                 private userAuthService: UserAuthService,
                 private router: Router) {
+
+
     }
 
     async loginUser(){
@@ -34,7 +32,7 @@ export class LoginDialogComponent {
                 //Successfull
                 this.email.setValue('');
                 this.pw.setValue('');
-                this.sendUpdateNotification(true);
+                Emitters.pfpEmitter.emit(true);
                 this.closeLoginDialog();
                 this.dialogRef.close();
             } else {

@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {UserService} from "../service/http/backend/user.service";
 import {FirebaseService} from "../service/http/external/firebase.service";
+import {Emitters} from "./emitters/emitters";
 
 @Component({
     selector: 'app-root',
@@ -17,6 +18,7 @@ export class AppComponent {
     image = 'assets/images/logo.png'
     search: String = "";
     profilePictureUrl: any;
+    loggedInUser;
 
     constructor(private healthCheckService: HealthCheckService,
                 private geolocationService: GeoLocationService,
@@ -27,7 +29,19 @@ export class AppComponent {
         this.checkBackendConnection();
         this.initGeolocation();
         this.verifyCurrentUser();
-
+        this.getProfilePictureUrl();
+        Emitters.pfpEmitter.subscribe(
+            (pfp:boolean)=>{
+                if(pfp==true)
+                {
+                    this.getProfilePictureUrl();
+                }
+                else
+                {
+                    this.profilePictureUrl=null;
+                }
+            }
+        );
     }
 
     private checkBackendConnection() {
@@ -68,8 +82,8 @@ export class AppComponent {
     }
 
     openLoginDialog(): void {
-        const dialogRef = this.loginDialog.open(LoginDialogComponent);
 
+        const dialogRef = this.loginDialog.open(LoginDialogComponent);
     }
 
     isUserLoggedIn() {
@@ -77,19 +91,27 @@ export class AppComponent {
     }
 
     logout() {
+
         this.profilePictureUrl = null;
         this.userAuthService.logout();
     }
 
     getProfilePictureUrl() {
-        return this.profilePictureUrl;
+         this.firebaseService.getProfilePictureUrl(this.userAuthService.getLoggedInUser()).then(data => {
+
+             this.profilePictureUrl=data;
+             console.log(this.profilePictureUrl)
+            this.checkProfilePictureAvailability();
+         });
     }
 
-    getUpdateNotification(evt) {
-        if (this.userAuthService.getLoggedInUser()) {
-            this.firebaseService.getProfilePictureUrl(this.userAuthService.getLoggedInUser()).then(data => this.profilePictureUrl = data);
-            console.log(this.profilePictureUrl)
+    checkProfilePictureAvailability(){
+
+        if (this.profilePictureUrl){
+            return true;
         }
+        else return false;
     }
+
 }
 

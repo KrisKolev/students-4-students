@@ -21,8 +21,8 @@
         <!--profile button-->
         <ng-template [ngIf]="isUserLoggedIn()==true" [ngIfElse]="loggedOut">
             <button mat-button [matMenuTriggerFor]="menu">
-                <ng-template [ngIf]="this.getProfilePictureUrl()" [ngIfElse]="noProfilePicture">
-                    <img class="profilePicture" src="{{this.getProfilePictureUrl()}}" alt="Avatar">
+                <ng-template [ngIf]="this.checkProfilePictureAvailability()" [ngIfElse]="noProfilePicture">
+                    <img class="profilePicture" src="{{this.profilePictureUrl}}" alt="Avatar">
                 </ng-template>
                 <ng-template #noProfilePicture>
                     <mat-icon>account_circle</mat-icon>

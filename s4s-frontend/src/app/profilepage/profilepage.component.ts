@@ -57,16 +57,15 @@ export class ProfilepageComponent implements OnInit {
     ngOnInit(): void {
         this.loggedInUser = this.userAuthService.getLoggedInUser();
         this.updatePlaceholders()
-        console.log(localStorage.getItem('loggedInUser'));
+
     }
 
-    updatePlaceholders()
-    {
+    updatePlaceholders() {
         this.loggedInUser = this.userAuthService.getLoggedInUser();
-        let splitted= this.loggedInUser.displayName.split(" ")
-        this.currentFirstName=splitted[0];
-        this.currentLastName=splitted[1];
-        this.currentNickname=splitted[2];
+        let splitted = this.loggedInUser.displayName.split(" ")
+        this.currentFirstName = splitted[0];
+        this.currentLastName = splitted[1];
+        this.currentNickname = splitted[2];
     }
 
     public hasError = (controlName: string, errorName: string, fg: string) => {
@@ -84,7 +83,10 @@ export class ProfilepageComponent implements OnInit {
     }
 
     onProfileChange() {
-        if (this.hasError('firstname'||'lastname'||'nickname','minlength'||'maxlength','profileForm')){this.popup(false); return;}
+        if (this.hasError('firstname' || 'lastname' || 'nickname', 'minlength' || 'maxlength', 'profileForm')) {
+            this.popup(false);
+            return;
+        }
         let firstName = this.profileForm.get('firstname').value;
         let lastName = this.profileForm.get('lastname').value;
         let nickname = this.profileForm.get('nickname').value;
@@ -95,23 +97,25 @@ export class ProfilepageComponent implements OnInit {
                 console.log(res);
 
                 //updates the localstorage display name
-                let currentuser:string = localStorage.getItem("loggedInUser");
-                let regex= new RegExp(/(("displayName":")[^"]*)"/);
-                let updatedUserString=currentuser.replace(regex,'"displayName":"'+firstName+" "+lastName+" "+nickname+'"');
-                regex=(/(("displayName":")[^"]*)"(?=,"email")/);
-                updatedUserString=updatedUserString.replace(regex,'"displayName":"'+firstName+" "+lastName+" "+nickname+'"');
-                localStorage.setItem("loggedInUser",updatedUserString);
+                let currentuser: string = localStorage.getItem("loggedInUser");
+                let regex = new RegExp(/(("displayName":")[^"]*)"/);
+                let updatedUserString = currentuser.replace(regex, '"displayName":"' + firstName + " " + lastName + " " + nickname + '"');
+                regex = (/(("displayName":")[^"]*)"(?=,"email")/);
+                updatedUserString = updatedUserString.replace(regex, '"displayName":"' + firstName + " " + lastName + " " + nickname + '"');
+                localStorage.setItem("loggedInUser", updatedUserString);
                 this.updatePlaceholders()
             });
 
             this.popup(true);
+
             return;
         }
         this.popup(false);
     }
 
     onPasswordChange() {
-        if (this.hasError('password','minlength','passwordForm')){}
+        if (this.hasError('password', 'minlength', 'passwordForm')) {
+        }
         let password = this.passwordForm.get('password').value;
         let passwordRepeat = this.passwordForm.get('passwordRepeat').value;
         if (password != passwordRepeat) return;
@@ -120,9 +124,6 @@ export class ProfilepageComponent implements OnInit {
         if (password && passwordRepeat) {
             this.profileService.updateUserPassword(password, updatedUser.uid).subscribe((res: Response) => {
                 console.log(res);
-                if (res.ok) {
-                    console.log(updatedUser.uid);
-                }
             });
             this.popup(true);
             return;
@@ -130,27 +131,33 @@ export class ProfilepageComponent implements OnInit {
         this.popup(false);
     }
 
+    //sets the file
     onImagesUpdated(file: File) {
         this.profilePicture = file[0];
-        console.log(this.profilePicture)
     }
 
     onPictureChange() {
+        if (!this.profilePicture){this.popup(false);return;}
+
         const uploadItem = new UploadItem();
-        uploadItem.filePath = 'images/avatars/'+this.loggedInUser.uid +"/img_0";
+        uploadItem.filePath = 'images/avatars/' + this.loggedInUser.uid + "/img_0";
         uploadItem.file = this.profilePicture;
 
-        this.firebaseService.uploadFileToFirestore(uploadItem).then(res=>{
+        this.firebaseService.uploadFileToFirestore(uploadItem).then(res => {
             console.log(res);
-            if(res.hasErrors) {console.log("There was an issue, when uploading the profile picture!"); return;}
+            if (res.hasErrors) {
+                console.log("There was an issue, when uploading the profile picture!");
+                this.popup(false);
+                return;
+            }
 
-            this.profileService.updateUserAvatar(res.response,this.loggedInUser.uid).subscribe((res:Response)=>{
+            this.profileService.updateUserAvatar(res.response, this.loggedInUser.uid).subscribe((res: Response) => {
                 console.log(res);
                 console.log("Profile picture uploaded successfully!")
-        });
+                window.location.reload();
+            });
         });
     }
-
 
 
     popup(success: boolean) {
@@ -164,7 +171,7 @@ export class ProfilepageComponent implements OnInit {
                 message: "Information updated successfully!",
                 cancelButton: 'OK'
             }
-        } else{
+        } else {
             dialogConfig.data = {
                 type: PopupType.ERROR,
                 title: 'Failure!',
