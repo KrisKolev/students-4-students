@@ -14,10 +14,15 @@ import {ManageSightDialogModule} from "../manage-sight-dialog/manage-sight-dialo
 import {MatExpansionModule} from "@angular/material/expansion";
 import {MatGridListModule} from "@angular/material/grid-list";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
-
+import {MatSelectModule} from "@angular/material/select";
+import {MatSliderModule} from "@angular/material/slider";
+import {SightListItemComponent} from "./components/sight-list-item/sight-list-item.component";
+import {MatIconModule} from "@angular/material/icon";
+import { SightDetailComponent } from './components/sight-detail/sight-detail.component';
+import {MatChipsModule} from "@angular/material/chips";
 
 @NgModule({
-  declarations: [LandingpageComponent],
+  declarations: [LandingpageComponent, SightListItemComponent, SightDetailComponent],
     imports: [
         CommonModule,
         LandingpageRoutingModule,
@@ -33,7 +38,11 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
         ManageSightDialogModule,
         MatExpansionModule,
         MatGridListModule,
-        MatAutocompleteModule
+        MatAutocompleteModule,
+        MatSelectModule,
+        MatSliderModule,
+        MatIconModule,
+        MatChipsModule
     ]
 })
 export class LandingpageModule { }

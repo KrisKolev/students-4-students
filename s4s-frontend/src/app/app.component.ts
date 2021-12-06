@@ -7,6 +7,7 @@ import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {UserService} from "../service/http/backend/user.service";
 import {FirebaseService} from "../service/http/external/firebase.service";
 import {Emitters} from "./emitters/emitters";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-root',
@@ -24,8 +25,9 @@ export class AppComponent {
                 private geolocationService: GeoLocationService,
                 public userAuthService: UserAuthService,
                 public loginDialog: MatDialog,
-                private userService: UserService,
-                private firebaseService: FirebaseService) {
+                private userService:UserService,
+                private firebaseService: FirebaseService,
+                private router: Router) {
         this.checkBackendConnection();
         this.initGeolocation();
         this.verifyCurrentUser();
@@ -95,7 +97,7 @@ export class AppComponent {
         this.profilePictureUrl = null;
         this.userAuthService.logout();
     }
-
+  
     getProfilePictureUrl() {
          this.firebaseService.getProfilePictureUrl(this.userAuthService.getLoggedInUser()).then(data => {
 
@@ -113,5 +115,8 @@ export class AppComponent {
         else return false;
     }
 
+    onOpenManageSight() {
+        this.router.navigate(['./manageSight','1'])
+    }
 }
 
