@@ -1,6 +1,8 @@
 package com.s4s.database;
 
+import com.google.api.services.storage.Storage;
 import com.google.cloud.firestore.DocumentReference;
+import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.s4s.database.model.*;
 import com.s4s.dto.ResponseHelper;
@@ -128,6 +130,64 @@ public class SightsAccess {
             return new ResponseHelper(Info.FAILURE, "Sight could not be added! " + e.getMessage(), sight).build();
         }
         return new ResponseHelper(Info.SUCCESS, "Added sight", sight).build();
+    }
+
+    public static javax.ws.rs.core.Response updateSights(Sight sight){
+        try {
+            sights = loadSights();
+            List<Sight> sightSearch = sights.stream().filter(x -> x.getName().equals(sight.getName()) && !x.getUid().equals(sight.getUid()))
+                    .collect(Collectors.toList());
+            List<Sight> sightsAddressSearch = sights.stream().filter(x -> x.getAddress().equals(sight.getAddress()) && !x.getUid().equals(sight.getUid()))
+                    .collect(Collectors.toList());
+
+            if (!sightSearch.isEmpty()) {
+                return new ResponseHelper(Info.FAILURE, "Sight '" + sight.getName() + "' already exists!").build();
+            }
+
+            if (!sightsAddressSearch.isEmpty()) {
+                return new ResponseHelper(Info.FAILURE, "Sight already added on address '" + sight.getAddress() + "'!").build();
+            }
+
+            Sight searchedSight = sights.stream().filter(x->x.getUid().equals(sight.getUid())).findFirst().get();
+
+            //check labels
+            labels = loadLabels();
+            for (Label x : sight.getLabelList()) {
+                Label found = labels.stream()
+                        .filter(y -> y.getName().equals(x.getName()))
+                        .findAny()
+                        .orElse(null);
+                if (found == null) {
+                    addLabel(x);
+                }
+            }
+
+            searchedSight.setName(sight.getName());
+            searchedSight.setAddress(sight.getAddress());
+            searchedSight.setLongitude(sight.getLongitude());
+            searchedSight.setLatitude(sight.getLatitude());
+            searchedSight.setRatingList(sight.getRatingList());
+
+            //assign labels
+            searchedSight.setLabelsAssigned(new ArrayList<>());
+            for (Label label : sight.getLabelList()) {
+                searchedSight.getLabelsAssigned().add(label.getUid());
+            }
+
+             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"name",searchedSight.getName());
+             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"address",searchedSight.getAddress());
+             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"latitude",searchedSight.getLatitude());
+             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"longitude",searchedSight.getLongitude());
+             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"labelsAssigned",searchedSight.getLabelsAssigned());
+
+            mapElements();
+
+        }
+        catch (Exception e){
+            return new ResponseHelper(Info.FAILURE, "Sight could not be updated! " + e.getMessage(), sight).build();
+        }
+
+        return new ResponseHelper(Info.SUCCESS, "Updated sight", sight).build();
     }
 
     /**

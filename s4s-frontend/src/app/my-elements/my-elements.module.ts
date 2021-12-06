@@ -7,6 +7,9 @@ import {MatTableModule} from "@angular/material/table";
 import {MatSortModule} from "@angular/material/sort";
 import {MatButtonModule} from "@angular/material/button";
 import {MatDialogModule} from "@angular/material/dialog";
+import {ManageSightDialogModule} from "../manage-sight-dialog/manage-sight-dialog.module";
+import {NgbCarouselModule} from "@ng-bootstrap/ng-bootstrap";
+import {MatIconModule} from "@angular/material/icon";
 
 @NgModule({
     declarations: [MyElementsComponent,MyElementsDeleteConfirmDialog],
@@ -20,7 +23,10 @@ import {MatDialogModule} from "@angular/material/dialog";
         MatTableModule,
         MatSortModule,
         MatButtonModule,
-        MatDialogModule
+        MatDialogModule,
+        ManageSightDialogModule,
+        NgbCarouselModule,
+        MatIconModule
     ]
 })
 /**

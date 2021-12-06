@@ -204,6 +204,7 @@ export class LandingpageComponent implements OnInit {
     allSightsSortedByDistance: SightTopLocation[] = [];
 
     isTopLocationsVisible = false;
+    isAddSightVisible = false;
     initialVisibility = true;
     showSightsLocationLongitude: number;
     showSightsLocationLatitude: number;

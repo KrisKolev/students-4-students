@@ -48,6 +48,15 @@ public class SightsEndpoint {
         return SightsAccess.addSights(sight,user);
     }
 
+    @POST
+    @Path("/update")
+    @JWTTokenRequired
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response updateSight(Sight sight){
+        return SightsAccess.updateSights(sight);
+    }
+
     @GET
     @Path("/allsights")
     @Produces(MediaType.APPLICATION_JSON)

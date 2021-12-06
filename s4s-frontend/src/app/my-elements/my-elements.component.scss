@@ -37,10 +37,23 @@
 
 }
 
+.picsum-img-wrapper{
+  width:150px;
+  height:90px;
+  object-fit:scale-down;
+}
+
 .filter-center{
   display: flex;
   justify-content: center;
   margin-bottom: 5px;
   margin-top: 5px;
   text-align: center;
+}
+
+.fxRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
