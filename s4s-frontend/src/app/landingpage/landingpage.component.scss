@@ -105,14 +105,15 @@
   color:white;
   margin-left: 5px;
   align-self: center;
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
+
 }
 
 .map-clear-route-button{
   color:white;
   margin-left: 5px;
   font-size: x-large;
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
 }
 
 .map-search-adressbar{
@@ -125,9 +126,11 @@
 
 .address-placeholder-label{
   color: white;
+  background-color: #3f51b5 !important;
 }
 
 .address-form{
+  background-color: #3f51b5 !important;
 }
 
 .filter-sights-container{
@@ -135,17 +138,14 @@
   left: 547px;
   top: 208px;
   opacity: 0;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   align-self: center;
   text-align: left;
-
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
   border-radius: 20px;
-
   padding: 10px;
 }
 
@@ -170,11 +170,11 @@
 }
 
 .address-bar{
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
 }
 
 .address-autocomplete{
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
 }
 mat-select{
   color: white;
@@ -194,7 +194,7 @@ mat-form-field{
   border-color: transparent;
   text-decoration-color: white;
   border-radius: 30px;
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
   outline-color: red;
 }
 
@@ -247,7 +247,7 @@ mat-slider{
   margin-right: 10px;
   margin-bottom: 10px;
   font-size: 11px;
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
   color:white;
 }
 
@@ -276,7 +276,7 @@ mat-slider{
 }
 
 .route-details{
-  background-color: #3f51b5;
+  background-color: #3f51b5 !important;
   text-align: start;
   border-radius: 40px;
   padding: 15px;
