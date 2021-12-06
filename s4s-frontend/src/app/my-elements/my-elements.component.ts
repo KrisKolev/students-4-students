@@ -157,8 +157,14 @@ export class MyElementsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if(result === "yes"){
         this.sightService.deleteSight(element).subscribe(x=>{
-          var res = x;
-
+          var sight = this.mySights.find(x=>x.uid===element);
+          sight.ratingList.forEach(rat=> {
+            const storage = getStorage();
+            rat.imageNames.forEach(async name => {
+              const delRef = ref(storage, 'images/rating/' + rat.uid + '/' + name);
+              await deleteObject(delRef);
+            })
+          })
           this.ngOnInit();
         })
       }
