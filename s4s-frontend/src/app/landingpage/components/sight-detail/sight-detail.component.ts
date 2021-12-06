@@ -36,6 +36,10 @@ export class SightDetailComponent implements OnInit {
     }
 
     onEdit(sight: SightTopLocation) {
-        console.log('onEdit');
+        window.alert('Has to be done');
+    }
+
+    onAddComment(sight: SightTopLocation) {
+        window.alert('Has to be done');
     }
 }

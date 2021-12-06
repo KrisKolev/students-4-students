@@ -65,7 +65,12 @@
 
 <mat-card *ngIf="isDetailView">
     <mat-card-title>
-        <p>Comments:</p>
+        <span class="fxRow">
+            <p>Comments</p>
+            <button (click)="onAddComment(sight)" style="-webkit-transform: scaleX(-1); transform: scaleX(-1);" mat-mini-fab>
+                <mat-icon>add_comment</mat-icon>
+            </button>
+        </span>
     </mat-card-title>
     <mat-card-content>
         <div *ngIf="sight.ratingList.length === 0">
