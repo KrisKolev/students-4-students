@@ -657,7 +657,7 @@ export class ManageSightDialogComponent implements OnInit {
       for(i = 0;i<newRating.imageNames.length;i++) {
         const uploadItem = new UploadItem();
         // @ts-ignore
-        uploadItem.filePath = 'images/rating/'+res.data.ratingAssigned[0]+'/'+newRating.imageNames[i];
+        uploadItem.filePath = 'images/rating/'+res.data.ratingList[0].uid+'/'+newRating.imageNames[i];
         uploadItem.file = this.ratingImages[i];
         await this.firebaseService.uploadFileToFirestore(uploadItem);
       }

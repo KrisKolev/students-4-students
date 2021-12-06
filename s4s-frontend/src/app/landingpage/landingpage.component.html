@@ -1,6 +1,7 @@
 <div [@extendMap]="isTopLocationsVisible ? 'closed' : 'open'" class="maps-container">
     <google-map
         #googleMap
+        id="landingPage_Map"
         (mapClick)="onMapClick($event)"
         [center]="center"
         [options]="options"
@@ -86,12 +87,14 @@
     <form class="filter-form">
         <mat-form-field appearance="outline" class="mat--fo">
             <mat-label class="label-select-filter">Distance (km)</mat-label>
-            <input #radiusInput class="label-select-filter"
+            <input #radiusInput
                    matInput
                    matNativeControl
+                   id="routedetails"
+                   value="20"
+                   class="label-select-filter"
                    placeholder="10"
-                   type="number"
-                   value="20">
+                   type="number">
         </mat-form-field>
     </form>
 

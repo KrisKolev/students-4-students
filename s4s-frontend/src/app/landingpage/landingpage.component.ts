@@ -16,6 +16,7 @@ import {Rating} from "../../model/rating";
 import {Observable} from "rxjs";
 import {SightDetailComponent} from "./components/sight-detail/sight-detail.component";
 import TravelMode = google.maps.TravelMode;
+import {resolve} from "path";
 
 @Component({
     selector: 'app-landingpage',
@@ -581,36 +582,36 @@ export class LandingpageComponent implements OnInit {
             unitSystem: google.maps.UnitSystem.METRIC,
             avoidHighways: false,
             avoidTolls: false,
-        };
+        }
+    matrix.getDistanceMatrix(request,response => {
+      for(var i = 0;i<tempSightList.length;i++){
+        try {
+          this.firebaseService.getSightImageUrls(tempSightList[i]);
+          tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
+          tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000,
+              this.filterDistanceValue,this.filterRatingSliderMinimumValue,this.filterRatingSliderMaximumValue)
+        }
+        catch (e) {
+          tempSightList[i].timeToTarget = "no route found";
+          var distance = getDistanceFromLatLonInKm(this.showSightsLocationLatitude,this.showSightsLocationLongitude,Number.parseFloat(tempSightList[i].latitude),Number.parseFloat(tempSightList[i].longitude))
+          tempSightList[i].onInit(distance,
+              this.filterDistanceValue,this.filterRatingSliderMinimumValue,this.filterRatingSliderMaximumValue)
+        }
 
-        matrix.getDistanceMatrix(request, response => {
-            for (var i = 0; i < tempSightList.length; i++) {
-                try {
-                    this.firebaseService.getSightImageUrls(tempSightList[i]);
-                    tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
-                    tempSightList[i].onInit(response.rows[0].elements[i].distance.value / 1000,
-                        this.filterDistanceValue, this.filterRatingSliderMinimumValue, this.filterRatingSliderMaximumValue)
-                } catch (e) {
-                    tempSightList[i].timeToTarget = "no route found";
-                    var distance = getDistanceFromLatLonInKm(this.showSightsLocationLatitude, this.showSightsLocationLongitude, Number.parseFloat(tempSightList[i].latitude), Number.parseFloat(tempSightList[i].longitude))
-                    tempSightList[i].onInit(distance,
-                        this.filterDistanceValue, this.filterRatingSliderMinimumValue, this.filterRatingSliderMaximumValue)
-                }
+      }
 
-            }
-
-            if (this.filterModeValue === "distancedescending") {
-                this.allSightsSortedByDistance = tempSightList.filter(x => x.isVisible).sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
-            }
-            if (this.filterModeValue === "distanceascending") {
-                this.allSightsSortedByDistance = tempSightList.filter(x => x.isVisible).sort((first, second) => (first.relativeDistance < second.relativeDistance ? 1 : -1))
-            }
-            if (this.filterModeValue === "ratingsdescending") {
-                this.allSightsSortedByDistance = tempSightList.filter(x => x.isVisible).sort((first, second) => (first.overallRating < second.overallRating ? 1 : -1))
-            }
-            if (this.filterModeValue === "ratingsascending") {
-                this.allSightsSortedByDistance = tempSightList.filter(x => x.isVisible).sort((first, second) => (first.overallRating > second.overallRating ? 1 : -1))
-            }
+      if(this.filterModeValue === "distancedescending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.relativeDistance > second.relativeDistance ? 1 : -1))
+      }
+      if(this.filterModeValue === "distanceascending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.relativeDistance < second.relativeDistance ? 1 : -1))
+      }
+      if(this.filterModeValue === "ratingsdescending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.overallRating < second.overallRating ? 1 : -1))
+      }
+      if(this.filterModeValue === "ratingsascending"){
+        this.allSightsSortedByDistance = tempSightList.filter(x=>x.isVisible).sort((first, second) => (first.overallRating > second.overallRating ? 1 : -1))
+      }
 
             this.mapMarkersSights = [];
             this.allSightsSortedByDistance.forEach((sight) => {
@@ -879,5 +880,10 @@ function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
 }
 
 function deg2rad(deg) {
-    return deg * (Math.PI / 180)
+  return deg * (Math.PI/180)
+}
+function sleep(ms: number) {
+  return new Promise(resolve => {
+    setTimeout(resolve, ms)
+  } );
 }

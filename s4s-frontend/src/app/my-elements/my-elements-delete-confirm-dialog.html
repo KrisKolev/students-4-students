@@ -1,0 +1,8 @@
+<div mat-dialog-content>
+    <p>{{data.message}}</p>
+</div>
+<div mat-dialog-actions class="filter-center">
+    <button mat-button [mat-dialog-close]="'yes'" cdkFocusInitial class="dialog-button">Yes</button>
+    <button mat-button (click)="onNoClick()" class="dialog-button">No</button>
+
+</div>
