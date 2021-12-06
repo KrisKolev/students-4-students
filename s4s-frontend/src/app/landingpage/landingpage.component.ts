@@ -682,10 +682,8 @@ export class LandingpageComponent implements OnInit {
     }
 
     showDetailsOfMarker(marker: any) {
-        const sight = this.allSights.find(x => x.name == marker.getLabel().text && x.address == marker.getTitle())
-        this.detailedSight = sight as Sight;
-        this.initMapWithPosition(Number.parseFloat(sight.latitude), Number.parseFloat(sight.longitude), this.zoom)
-        this.onOpenSightDetails();
+        const sight = this.allSightsSortedByDistance.find(x => x.name == marker.getLabel().text && x.address == marker.getTitle())
+        this.onGoToSight(sight);
     }
 
     onSearchSelectItem(sight: SightTopLocation) {
