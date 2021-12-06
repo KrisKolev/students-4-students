@@ -23,9 +23,9 @@ export class UserAuthService {
                 private userService:UserService) {
         this.userBehaviorSubject = new BehaviorSubject<User>(new User());
         this.userObservable = this.userBehaviorSubject.asObservable();
-
-
     }
+
+
 
     public register(email: string, password: string, firstname: string, lastname: string, nickname: string) {
         return this.registrationService.register(email, password, firstname, lastname, nickname);

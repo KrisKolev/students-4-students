@@ -1,9 +1,13 @@
 import {Injectable} from '@angular/core';
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import {getAuth, signInWithEmailAndPassword, reauthenticateWithCredential,updateProfile,getAdditionalUserInfo} from 'firebase/auth';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable} from "firebase/storage";
 import {UploadItem, UploadResponse} from "../../../model/uploadItem";
 import {Rating} from "../../../model/rating";
 import {SightTopLocation} from "../../../model/sight";
+import firebase from "firebase/compat";
+import User = firebase.User;
+import AuthCredential = firebase.auth.AuthCredential;
+
 
 @Injectable({providedIn: 'root'})
 export class FirebaseService {
@@ -23,6 +27,7 @@ export class FirebaseService {
             });
         return signResult;
     }
+
 
     public async firebaseSignOut(localStorageName: string) {
         localStorage.removeItem(localStorageName);
@@ -108,4 +113,10 @@ export class FirebaseService {
             })
         })
     }
+    public getProfilePictureUrl(user:any){
+        const storage = getStorage();
+        let profilePictureURL = getDownloadURL(ref(storage,'images/avatars/'+user.uid+'/img_0'));
+        return profilePictureURL;
+    }
+
 }

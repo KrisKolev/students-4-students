@@ -15,17 +15,19 @@ import {FirebaseService} from "../service/http/external/firebase.service";
 export class AppComponent {
     title = 'Students4Students';
     image = 'assets/images/logo.png'
-    search: String ="";
+    search: String = "";
+    profilePictureUrl: any;
 
     constructor(private healthCheckService: HealthCheckService,
                 private geolocationService: GeoLocationService,
                 public userAuthService: UserAuthService,
                 public loginDialog: MatDialog,
-                private userService:UserService,
+                private userService: UserService,
                 private firebaseService: FirebaseService) {
         this.checkBackendConnection();
         this.initGeolocation();
         this.verifyCurrentUser();
+
     }
 
     private checkBackendConnection() {
@@ -56,10 +58,10 @@ export class AppComponent {
      * Verifies the currently logged in user. If access token has expired, logged-in user will be signed out
      * @private
      */
-    private verifyCurrentUser(){
-        this.userService.verifyUser().subscribe((x=>{
+    private verifyCurrentUser() {
+        this.userService.verifyUser().subscribe((x => {
             console.log(x);
-        }),error => {
+        }), error => {
             console.log(error)
             this.firebaseService.firebaseSignOut("loggedInUser")
         })
@@ -67,13 +69,27 @@ export class AppComponent {
 
     openLoginDialog(): void {
         const dialogRef = this.loginDialog.open(LoginDialogComponent);
+
     }
-    isUserLoggedIn()
-    {
+
+    isUserLoggedIn() {
         return this.userAuthService.isUserLoggedIn();
     }
-    logout()
-    {
+
+    logout() {
+        this.profilePictureUrl = null;
         this.userAuthService.logout();
     }
+
+    getProfilePictureUrl() {
+        return this.profilePictureUrl;
+    }
+
+    getUpdateNotification(evt) {
+        if (this.userAuthService.getLoggedInUser()) {
+            this.firebaseService.getProfilePictureUrl(this.userAuthService.getLoggedInUser()).then(data => this.profilePictureUrl = data);
+            console.log(this.profilePictureUrl)
+        }
+    }
 }
+

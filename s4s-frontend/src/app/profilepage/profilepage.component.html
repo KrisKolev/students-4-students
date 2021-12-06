@@ -6,7 +6,6 @@
             <div class="row1">
                 <mat-selection-list [multiple]="false">
                     <mat-list-option (click)="selectedOption = 'Profile'">Profile</mat-list-option>
-                    <mat-list-option (click)="selectedOption = 'E-mail'">E-mail</mat-list-option>
                     <mat-list-option (click)="selectedOption = 'Password'">Password</mat-list-option>
                     <mat-list-option (click)="selectedOption = 'Picture'">Picture</mat-list-option>
                 </mat-selection-list>
@@ -21,18 +20,18 @@
                         <mat-label>Enter your firstname</mat-label>
                         <mat-error *ngIf="hasError('firstname', 'minlength','profileForm')">First name minimum length is 2</mat-error>
                         <mat-error *ngIf="hasError('firstname', 'maxlength','profileForm')">First name maximum length is 50</mat-error>
-                        <input formControlName="firstname" matInput placeholder="John" required>
+                        <input formControlName="firstname" matInput placeholder="{{currentFirstName}}" required>
                     </mat-form-field>
                     <br/>
                     <mat-form-field appearance="outline">
                         <mat-label>Enter your lastname</mat-label>
                         <mat-error *ngIf="hasError('lastname', 'minlength','profileForm')">Last name minimum length is 2</mat-error>
                         <mat-error *ngIf="hasError('lastname', 'maxlength','profileForm')">Last name maximum length is 50</mat-error>
-                        <input formControlName="lastname" matInput placeholder="Doe" required>
+                        <input formControlName="lastname" matInput placeholder="{{currentLastName}}" required>
                     </mat-form-field>
                     <br/>
                     <mat-form-field appearance="outline">
-                        <input formControlName="nickname" matInput placeholder="johndoe" required>
+                        <input formControlName="nickname" matInput placeholder="{{currentNickname}}" required>
                         <mat-label>Enter your nickname</mat-label>
                         <mat-error *ngIf="hasError('nickname', 'minlength','profileForm')">Nickname minimum length is 2</mat-error>
                         <mat-error *ngIf="hasError('nickname', 'maxlength','profileForm')">Nickname maximum length    is 50</mat-error>

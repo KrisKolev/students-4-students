@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, Output} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
 import {MatDialog, MatDialogConfig, MatDialogRef} from '@angular/material/dialog';
 import {Router} from '@angular/router';
@@ -16,6 +16,12 @@ export class LoginDialogComponent {
     email = new FormControl('', [Validators.required, Validators.email]);
     pw = new FormControl('');
 
+    @Output() updateNavbarPicture: EventEmitter<any>= new EventEmitter();
+    sendUpdateNotification(value:boolean){
+        this.updateNavbarPicture.emit(value)
+    }
+    getNavbarPictureEmitter(){return this.updateNavbarPicture}
+
     constructor(public dialogRef: MatDialogRef<LoginDialogComponent>,
                 public dialog: MatDialog,
                 private userAuthService: UserAuthService,
@@ -28,6 +34,7 @@ export class LoginDialogComponent {
                 //Successfull
                 this.email.setValue('');
                 this.pw.setValue('');
+                this.sendUpdateNotification(true);
                 this.closeLoginDialog();
                 this.dialogRef.close();
             } else {

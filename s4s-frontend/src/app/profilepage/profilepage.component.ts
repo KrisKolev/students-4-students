@@ -19,7 +19,9 @@ import {PopupComponent} from "../popup/popup.component";
 export class ProfilepageComponent implements OnInit {
     hidePassword = true;
     selectedOption = 'Profile';
-
+    currentFirstName;
+    currentLastName;
+    currentNickname;
     //form groups for each option
     profileForm: FormGroup;
     passwordForm: FormGroup;
@@ -54,6 +56,17 @@ export class ProfilepageComponent implements OnInit {
 
     ngOnInit(): void {
         this.loggedInUser = this.userAuthService.getLoggedInUser();
+        this.updatePlaceholders()
+        console.log(localStorage.getItem('loggedInUser'));
+    }
+
+    updatePlaceholders()
+    {
+        this.loggedInUser = this.userAuthService.getLoggedInUser();
+        let splitted= this.loggedInUser.displayName.split(" ")
+        this.currentFirstName=splitted[0];
+        this.currentLastName=splitted[1];
+        this.currentNickname=splitted[2];
     }
 
     public hasError = (controlName: string, errorName: string, fg: string) => {
@@ -71,7 +84,7 @@ export class ProfilepageComponent implements OnInit {
     }
 
     onProfileChange() {
-
+        if (this.hasError('firstname'||'lastname'||'nickname','minlength'||'maxlength','profileForm')){this.popup(false); return;}
         let firstName = this.profileForm.get('firstname').value;
         let lastName = this.profileForm.get('lastname').value;
         let nickname = this.profileForm.get('nickname').value;
@@ -80,10 +93,17 @@ export class ProfilepageComponent implements OnInit {
         if (firstName && lastName && nickname) {
             this.profileService.updateUserProfile(firstName, lastName, nickname, updatedUser.uid).subscribe((res: Response) => {
                 console.log(res);
-                if (res.ok) {
-                    console.log(updatedUser.uid);
-                }
+
+                //updates the localstorage display name
+                let currentuser:string = localStorage.getItem("loggedInUser");
+                let regex= new RegExp(/(("displayName":")[^"]*)"/);
+                let updatedUserString=currentuser.replace(regex,'"displayName":"'+firstName+" "+lastName+" "+nickname+'"');
+                regex=(/(("displayName":")[^"]*)"(?=,"email")/);
+                updatedUserString=updatedUserString.replace(regex,'"displayName":"'+firstName+" "+lastName+" "+nickname+'"');
+                localStorage.setItem("loggedInUser",updatedUserString);
+                this.updatePlaceholders()
             });
+
             this.popup(true);
             return;
         }
@@ -91,6 +111,7 @@ export class ProfilepageComponent implements OnInit {
     }
 
     onPasswordChange() {
+        if (this.hasError('password','minlength','passwordForm')){}
         let password = this.passwordForm.get('password').value;
         let passwordRepeat = this.passwordForm.get('passwordRepeat').value;
         if (password != passwordRepeat) return;
@@ -112,7 +133,6 @@ export class ProfilepageComponent implements OnInit {
     onImagesUpdated(file: File) {
         this.profilePicture = file[0];
         console.log(this.profilePicture)
-
     }
 
     onPictureChange() {
@@ -122,10 +142,11 @@ export class ProfilepageComponent implements OnInit {
 
         this.firebaseService.uploadFileToFirestore(uploadItem).then(res=>{
             console.log(res);
-            if(res.hasErrors) {return;}
+            if(res.hasErrors) {console.log("There was an issue, when uploading the profile picture!"); return;}
 
             this.profileService.updateUserAvatar(res.response,this.loggedInUser.uid).subscribe((res:Response)=>{
                 console.log(res);
+                console.log("Profile picture uploaded successfully!")
         });
         });
     }
