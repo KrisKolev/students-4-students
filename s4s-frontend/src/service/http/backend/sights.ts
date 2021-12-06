@@ -58,7 +58,7 @@ export class SightsService extends BackendClientService {
      * last change done by: Michael Fahrafellner
      **/
     deleteRating(ratingId: String){
-        return this.createGetCall('sights/deleteRating?id='+ratingId)
+        return this.createDeleteCall('sights/deleteRating?id='+ratingId)
     }
 
     /**
@@ -78,6 +78,6 @@ export class SightsService extends BackendClientService {
      * last change done by: Michael Fahrafellner
      **/
     deleteSight(sightId: String){
-        return this.createGetCall('sights/deleteSight?id='+sightId)
+        return this.createDeleteCall('sights/deleteSight?id='+sightId)
     }
 }

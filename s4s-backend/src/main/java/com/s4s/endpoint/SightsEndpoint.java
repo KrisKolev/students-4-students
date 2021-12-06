@@ -81,11 +81,11 @@ public class SightsEndpoint {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserRatings(@QueryParam("id") String userId) {return SightsAccess.getRatingsForUser(userId);}
 
-    @GET
+    @DELETE
     @Path("/deleteSight")
     @JWTTokenRequired
     @Produces(MediaType.APPLICATION_JSON)
-    public Response deleteSight(@QueryParam("id") String sightId){ return SightsAccess.deleteSight(sightId);}
+    public void deleteSight(@QueryParam("id") String sightId){ SightsAccess.deleteSight(sightId);}
 
     @POST
     @Path("/addRating")
@@ -98,7 +98,7 @@ public class SightsEndpoint {
         return SightsAccess.addRating(rating,true);
     }
 
-    @GET
+    @DELETE
     @Path("/deleteRating")
     @JWTTokenRequired
     @Produces(MediaType.APPLICATION_JSON)
