@@ -377,7 +377,10 @@ export class LandingpageComponent implements OnInit {
     }
 
     /**
-     * Initializes the map object.
+     * Initializes the map and sets the current position
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
      */
     initMap() {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -406,6 +409,12 @@ export class LandingpageComponent implements OnInit {
         });
     }
 
+    /**
+     * Centers at the current reference point
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     goToSelectedReferencePoint() {
         this.center = {
             lat: this.showSightsLocationLatitude,
@@ -413,6 +422,12 @@ export class LandingpageComponent implements OnInit {
         }
     }
 
+    /**
+     * Shows or hides the top location container
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onToggleTopLocations(keepVisibility: boolean) {
         if (!this.initialVisibility) {
             this.initialVisibility = false;
@@ -451,7 +466,10 @@ export class LandingpageComponent implements OnInit {
     }
 
     /**
-     * Loads all sights from the database.
+     * Loads all sights from the database
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
      */
     onLoadSights() {
         this.sightService.getSights().subscribe((val) => {
@@ -460,44 +478,11 @@ export class LandingpageComponent implements OnInit {
             const sights = val.data as Array;
             sights.forEach(sight => {
                 const newSight = new Sight();
-                newSight.uid = sight.uid;
-                newSight.name = sight.name;
-                newSight.longitude = sight.longitude;
-                newSight.latitude = sight.latitude;
-                newSight.address = sight.address;
-
-                sight.ratingList.forEach(rating => {
-                    const newRating = new Rating();
-                    try {
-                        newRating.uid = rating.uid;
-                        newRating.rating = rating.rating;
-                        newRating.comment = rating.comment;
-                        var images = [];
-                        rating.imageNames.forEach(rat => {
-                            images.push(rat)
-                        })
-                        newRating.imageNames = images;
-                    } catch {
-                    }
-                    newSight.ratingList.push(newRating);
-                })
-
-                sight.labelList.forEach(label => {
-                    const newLabel = new Label();
-                    try {
-                        newLabel.uid = label.uid;
-                        newLabel.name = label.name;
-                        newLabel.color = label.color;
-                    } catch {
-                    }
-                    newSight.labelList.push(newLabel)
-                })
-
+                newSight.InitSight(sight);
                 pulledSights.push(newSight);
             })
 
             this.allSights = pulledSights;
-
             this.allSights.forEach((sight) => {
 
                 const svgMarker = {
@@ -536,7 +521,12 @@ export class LandingpageComponent implements OnInit {
         })
     }
 
-    //filtering the sights by either name or some label
+    /**
+     * Filters sights based on the data set from filter.
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     private _filterSights(value: String): SightTopLocation[] {
         if (typeof value === 'string' || value instanceof String) {
 
@@ -549,6 +539,12 @@ export class LandingpageComponent implements OnInit {
         }
     }
 
+    /**
+     * Filters and calculates distances for sights.
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     async onFilterTopLocations() {
         this.allSightsSortedByDistance = [];
         this.myDirectionsRenderer.setDirections(new class implements google.maps.DirectionsResult {
@@ -565,8 +561,6 @@ export class LandingpageComponent implements OnInit {
 
         this.allSights.forEach((sight) => {
             tempSightList.push(CreateLocationSight(sight))
-
-
         })
 
         const matrix = new google.maps.DistanceMatrixService();
@@ -587,10 +581,13 @@ export class LandingpageComponent implements OnInit {
     matrix.getDistanceMatrix(request,response => {
       for(var i = 0;i<tempSightList.length;i++){
         try {
-          this.firebaseService.getSightImageUrls(tempSightList[i]);
           tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
           tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000,
               this.filterDistanceValue,this.filterRatingSliderMinimumValue,this.filterRatingSliderMaximumValue)
+            this.firebaseService.getSightImageUrls(tempSightList[i]).then(async ()=>{
+
+            });
+
         }
         catch (e) {
           tempSightList[i].timeToTarget = "no route found";
@@ -645,13 +642,22 @@ export class LandingpageComponent implements OnInit {
                 })
                 this.mapMarkersSights.push(existingMarker)
             })
-
+        //necessary to update bindings and show images in frontend
+        let htmlElement: HTMLElement = document.getElementById("addressElement");
+        htmlElement.click();
         })
     }
 
+    /**
+     * Centers a sight on the map and opens its details
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onGoToSight(sight: SightTopLocation) {
         this.detailedSight = sight as Sight;
         this.sightDetail.sight = sight;
+        this.sightDetail.onInitDetails();
         this.initMapWithPosition(Number.parseFloat(sight.latitude), Number.parseFloat(sight.longitude), this.zoom)
         this.onOpenSightDetails();
     }
@@ -698,6 +704,12 @@ export class LandingpageComponent implements OnInit {
         htmlElement.click();
     }
 
+    /**
+     * Calculates a route from the reference point to a selected sight.
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     calcRoute(sight: SightTopLocation) {
         this.lastRouteTopSight = sight;
         var request = {
@@ -797,6 +809,12 @@ export class LandingpageComponent implements OnInit {
 
     lastRouteTopSight: SightTopLocation;
 
+    /**
+     * Clears the current route.
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onClearRoutes() {
 
         this.myDirectionsRenderer.setDirections(new class implements google.maps.DirectionsResult {
@@ -809,10 +827,22 @@ export class LandingpageComponent implements OnInit {
         this.routeEnabled = false;
     }
 
+    /**
+     * Opens the filter options
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onShowFilter() {
         this.isFilterVisible = !this.isFilterVisible;
     }
 
+    /**
+     * Applies the filter values and sorts the sights accordingly
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onApplyFilter(radiusInput: HTMLInputElement) {
         this.filterDistanceValue = Number.parseFloat(radiusInput.value)
 
@@ -836,6 +866,12 @@ export class LandingpageComponent implements OnInit {
         return value;
     }
 
+    /**
+     * Applies the route mode selected by the user
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onApplyRouteMode() {
         if (this.routeMode === "walking") {
             this.routeTravelMode = TravelMode.WALKING;
@@ -851,6 +887,10 @@ export class LandingpageComponent implements OnInit {
         }
 
         this.calcRoute(this.lastRouteTopSight);
+    }
+
+    onCloseDialog() {
+        this.onLoadSights()
     }
 }
 

@@ -11,6 +11,7 @@ export class SightListItemComponent implements OnInit {
     @Input() sight: SightTopLocation;
     @Output() goToSightEventEmitter = new EventEmitter<any>();
     @Output() calcRouteEventEmitter = new EventEmitter<any>();
+    @Output() dialogClosedEvent = new EventEmitter();
 
     ngOnInit(): void {
     }

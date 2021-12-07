@@ -7,6 +7,7 @@ import {SightTopLocation} from "../../../model/sight";
 import firebase from "firebase/compat";
 import User = firebase.User;
 import AuthCredential = firebase.auth.AuthCredential;
+import {Console} from "inspector";
 
 
 @Injectable({providedIn: 'root'})
@@ -109,7 +110,13 @@ export class FirebaseService {
 
         sight.ratingList.forEach(rat=>{
             rat.imageNames.forEach(async img=>{
-                sight.allImageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rat.uid+'/'+img+'/')))
+                try {
+                    sight.allImageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rat.uid+'/'+img+'/')))
+                }
+                catch (e) {
+                    console.log(e);
+                }
+
             })
         })
     }

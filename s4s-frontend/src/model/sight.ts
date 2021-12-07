@@ -1,7 +1,5 @@
 import {Label} from "./label";
 import {Rating} from "./rating";
-import {coerceNumberProperty} from "@angular/cdk/coercion";
-import {relativePathBetween} from "@angular/compiler-cli/src/ngtsc/util/src/path";
 
 /**
  * Model for a sight
@@ -30,8 +28,48 @@ export class Sight {
     creator:string;
     createdAt:string;
     updatedAt:string;
+
+    /**
+     * Initializes the typescript object of a sight with the database objects
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
+    public InitSight(sight:any){
+        this.uid = sight.uid;
+        this.name = sight.name;
+        this.longitude = sight.longitude;
+        this.latitude = sight.latitude;
+        this.address = sight.address;
+
+        sight.ratingList.forEach(rating => {
+            const newRating = new Rating();
+            try {
+                newRating.InitRating(rating);
+            } catch {
+            }
+            this.ratingList.push(newRating);
+        })
+
+        sight.labelList.forEach(label => {
+            const newLabel = new Label();
+            try {
+                newLabel.uid = label.uid;
+                newLabel.name = label.name;
+                newLabel.color = label.color;
+            } catch {
+            }
+            this.labelList.push(newLabel)
+        })
+    }
 }
 
+/**
+ * Defines the top location sight for the front end
+ * Component written by Michael Fahrafellner
+ * creation date: 07.12.2021
+ * last change done by: Michael Fahrafellner
+ */
 export class SightTopLocation extends Sight{
     relativeDistance: number;
     showDistanceString: string;
@@ -41,6 +79,12 @@ export class SightTopLocation extends Sight{
     headerExpanded: boolean = false;
     isVisible: boolean = true;
 
+    /**
+     * Initializes the typescript object with the filter objects
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onInit(distance:number, filterRadius:number,minimumRating:number,maximumRating:number){
         this.relativeDistance = distance;
 
@@ -51,27 +95,38 @@ export class SightTopLocation extends Sight{
             this.showDistanceString = (Number(distance.toFixed(2))).toString() + " km away"
         }
 
-        var allRatings=0;
+        this.onInitBase();
+        this.isVisible = !(distance > filterRadius || minimumRating > this.overallRating || maximumRating < this.overallRating);
+    }
+
+    /**
+     * Initializes the basic object
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
+    onInitBase(){
+
+        let allRatings=0;
         this.ratingList.forEach((rat)=>{
-            allRatings += rat.rating;
+            allRatings = allRatings + Number.parseFloat(rat.rating.toString());
         })
 
         if(this.ratingList.length >0){
             this.overallRating = allRatings / this.ratingList.length;
         }
-
-        if(distance>filterRadius || minimumRating>this.overallRating || maximumRating<this.overallRating){
-            this.isVisible = false;
-        }
-        else {
-            this.isVisible = true;
-        }
-
     }
+
 }
 
+/**
+ * Creates a top location sight from a basic sight
+ * Component written by Michael Fahrafellner
+ * creation date: 07.12.2021
+ * last change done by: Michael Fahrafellner
+ */
 export function CreateLocationSight(oldSight:Sight){
-    var newSight = new SightTopLocation();
+    let newSight = new SightTopLocation();
 
     newSight.uid = oldSight.uid;
     newSight.name = oldSight.name;
