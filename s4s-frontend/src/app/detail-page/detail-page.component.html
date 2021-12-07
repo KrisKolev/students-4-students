@@ -1,40 +1,31 @@
 <mat-toolbar class="detail-toolbar" color="primary">
-    <span class="sight-name" [textContent]="sight.name"></span>
+    <span class="sight-name" [textContent]="data.name"></span>
 </mat-toolbar>
+
+
 <div class="big-component">
 
     <mat-card>
         <mat-card-content>
             <ngb-carousel>
-                <ng-template ngbSlide *ngFor="let image of images">
+                <ng-template ngbSlide *ngFor="let ratings of data.ratingList">
                     <div class="picsum-img-wrapper">
-                        <img [src]="image.src" alt="Random slide">
+                        <img [src]="ratings.imageUrl" alt="Random slide">
                     </div>
                 </ng-template>
             </ngb-carousel>
 
             <app-add-rating class="add-rating-container" [panelTitle]="'Add rating'" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)" [starCount]="5" [color]="'primary'"></app-add-rating>
 
-            <div class="reviews">
-                <mat-card>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi u</p>
+            <div class="reviews" *ngFor="let ratings of data.ratingList">
+                <mat-card >
+                    <h3>Comments</h3>
+                    <p>{{ratings.comment}}</p>
                 </mat-card>
-                <mat-card>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi u</p>
-                </mat-card>
-                <mat-card>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi u</p>
-                </mat-card>
-
             </div>
         </mat-card-content>
     </mat-card>
 
-</div>
-<div class="container">
-    <mat-card>
-        <h2>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</h2>
-    </mat-card>
 </div>
 
 

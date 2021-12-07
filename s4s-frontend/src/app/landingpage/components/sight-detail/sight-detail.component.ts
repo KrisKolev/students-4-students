@@ -4,6 +4,10 @@ import {UserAuthService} from "../../../../service/userAuthService";
 import {MatDialog} from "@angular/material/dialog";
 import {ManageRatingComponent} from "../../../manage-rating/manage-rating.component";
 import {Router} from "@angular/router";
+import {DetailPageComponent} from "../../../detail-page/detail-page.component";
+import {privateDecrypt} from "crypto";
+import {DetailPageService} from "../../../../service/http/backend/detail-page.service";
+import {Rating} from "../../../../model/rating";
 
 @Component({
     selector: 'app-sight-detail',
@@ -27,14 +31,16 @@ export class SightDetailComponent implements OnInit {
 
     constructor(private userAuthService: UserAuthService,
                 private addCommentDialog: MatDialog,
-                private router: Router) {
+                private detailDialog: MatDialog,
+                private router: Router,
+                private detailService: DetailPageService) {
 
     }
 
-    public onInitDetails(){
+    public onInitDetails() {
         try {
             this.currentUserUid = this.userAuthService.getLoggedInUser().uid;
-        }catch (e) {
+        } catch (e) {
         }
     }
 
@@ -44,6 +50,12 @@ export class SightDetailComponent implements OnInit {
 
     onCalcRoute(sight: SightTopLocation): void {
         this.calcRouteEventEmitter.emit(sight);
+    }
+
+
+    onExpand(uid:string, name:string, ratingList:Rating[]): void {
+       const dialogRef = this.detailDialog.open(DetailPageComponent,
+           {data:{uid:uid, name:name, ratingList:ratingList}});
     }
 
     onClose() {

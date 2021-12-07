@@ -9,6 +9,9 @@
                 <button (click)="onGoToSight(sight)" *ngIf="!isDetailView" mat-mini-fab>
                     <mat-icon>open_in_new</mat-icon>
                 </button>
+                <button (click)="onExpand(sight.uid,sight.name,sight.ratingList)" mat-mini-fab>
+                    <mat-icon>expand</mat-icon>
+                </button>
                 <button (click)="onClose()" *ngIf="isDetailView" class="close-button-detail" mat-mini-fab>
                     <mat-icon>close</mat-icon>
                 </button>

@@ -15,4 +15,8 @@ export class DetailPageService {
   getSightById() {
     return this.http.get(`${this.REST_API_SIGHT_BY_ID}`);
   }
+
+  getSight(id:string){
+    return this.http.get(`http://localhost:8080/s4s-backend/api/sights/`+{id})
+  }
 }
