@@ -23,6 +23,7 @@ public class Sight {
     private String creator;
     private Date createdAt;
     private Date updatedAt;
+    private String createdAtString;
 
     private double averageRating;
 
@@ -115,5 +116,14 @@ public class Sight {
 
     public void setLabelsAssigned(List<String> labelsAssigned) {
         this.labelsAssigned = labelsAssigned;
+    }
+
+    public String getCreatedAtString() {
+        if(createdAt!=null){
+            return createdAt.toString();
+        }
+        else {
+            return "";
+        }
     }
 }

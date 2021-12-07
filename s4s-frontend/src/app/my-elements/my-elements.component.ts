@@ -22,9 +22,12 @@ export class MyElementsComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
 
   /**
-   * Columes of the my sights table
+   * Columns of the my sights table
    * */
-  mySightsDisplayedColumns: string[] = ['position', 'name', 'address', 'rating','images', 'manage'];
+  mySightsDisplayedColumns: string[] = ['position', 'name', 'address', 'rating','ratingCalc','images', 'manage'];
+  /**
+   * Columns for the rating table
+   * */
   myRatingsdDisplayedColumns: string[] = ['position', 'comment', 'sightName','rating','images', 'manage'];
 
   sightsDataSource: any;
@@ -46,6 +49,12 @@ export class MyElementsComponent implements OnInit {
               private _router: Router) {
   }
 
+  /**
+   * Initializes all elements and loads the sights defined for the current user.
+   * Component written by Michael Fahrafellner
+   * creation date: 07.12.2021
+   * last change done by: Michael Fahrafellner
+   */
   ngOnInit(): void {
     var user = this.authService.getLoggedInUser();
     if(user == null){
@@ -63,39 +72,9 @@ export class MyElementsComponent implements OnInit {
       const sights = res.data as Array;
       sights.forEach(sight => {
         const newSight = new SightTopLocation();
-        newSight.uid = sight.uid;
-        newSight.name = sight.name;
-        newSight.longitude = sight.longitude;
-        newSight.latitude = sight.latitude;
-        newSight.address = sight.address;
-
-        sight.ratingList.forEach(rating => {
-          const newRating = new Rating();
-          try {
-            newRating.uid = rating.uid;
-            newRating.rating = rating.rating;
-            newRating.comment = rating.comment;
-            var images = [];
-            rating.imageNames.forEach(rat => {
-              images.push(rat)
-            })
-            newRating.imageNames = images;
-          } catch {
-          }
-          newSight.ratingList.push(newRating);
-        })
-
-        sight.labelList.forEach(label => {
-          const newLabel = new Label();
-          try {
-            newLabel.uid = label.uid;
-            newLabel.name = label.name;
-            newLabel.color = label.color;
-          } catch {
-          }
-          newSight.labelList.push(newLabel)
-        })
-        this.firebaseService.getSightImageUrls(newSight);
+        newSight.InitSight(sight);
+        newSight.onInitBase();
+        this.firebaseService.getSightImageUrls(newSight).then();
         this.mySights.push(newSight);
     })
       this.sightsDataSource = new MatTableDataSource(this.mySights);
@@ -109,18 +88,8 @@ export class MyElementsComponent implements OnInit {
       ratings.forEach(rating=>{
         const newRating = new Rating();
         try {
-          newRating.uid = rating.uid;
-          newRating.rating = rating.rating;
-          newRating.comment = rating.comment;
-          newRating.sightId = rating.sightId;
-          newRating.sightName = rating.sightName;
-          var images = [];
-          rating.imageNames.forEach(rat => {
-            images.push(rat)
-          })
-          newRating.imageNames = images;
+          newRating.InitRating(rating);
           this.firebaseService.getRatingImageUrls(newRating)
-
           this.myRatings.push(newRating)
         } catch {
         }
@@ -132,16 +101,8 @@ export class MyElementsComponent implements OnInit {
     })
   }
 
-  ngAfterViewInit() {
-    //this.dataSource.sort = this.sort;
-  }
-
   /** Announce the change in sort state for assistive technology. */
   announceSortChange(sortState: Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
@@ -150,10 +111,6 @@ export class MyElementsComponent implements OnInit {
   }
   /** Announce the change in sort state for assistive technology. */
   announceSortChangeRating(sortState: Sort) {
-    // This example uses English messages. If your application supports
-    // multiple language, you would internationalize these strings.
-    // Furthermore, you can customize the message to add additional
-    // details about the values being sorted.
     if (sortState.direction) {
       this._liveAnnouncerRating.announce(`Sorted ${sortState.direction}ending`);
     } else {
@@ -161,6 +118,12 @@ export class MyElementsComponent implements OnInit {
     }
   }
 
+  /**
+   * Deletes a sight
+   * Component written by Michael Fahrafellner
+   * creation date: 07.12.2021
+   * last change done by: Michael Fahrafellner
+   */
   onDeleteClick(element:any) {
     const dialogRef = this.dialog.open(MyElementsDeleteConfirmDialog, {
       width: '250px',
@@ -185,6 +148,12 @@ export class MyElementsComponent implements OnInit {
 
   }
 
+  /**
+   * Deletes a rating
+   * Component written by Michael Fahrafellner
+   * creation date: 07.12.2021
+   * last change done by: Michael Fahrafellner
+   */
   onDeleteRatingClick(element:any){
     const dialogRef = this.dialog.open(MyElementsDeleteConfirmDialog, {
       width: '250px',
@@ -211,10 +180,15 @@ export class MyElementsComponent implements OnInit {
     });
   }
 
-
-    onManageSight(uid: any) {
-        this._router.navigate(["manageSight",uid]);
-    }
+  /**
+   * Opens the manage sight component to update data.
+   * Component written by Michael Fahrafellner
+   * creation date: 07.12.2021
+   * last change done by: Michael Fahrafellner
+   */
+  onManageSight(uid: any) {
+      this._router.navigate(["manageSight",uid]);
+  }
 }
 
 @Component({

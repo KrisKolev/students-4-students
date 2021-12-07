@@ -357,54 +357,17 @@ export class ManageSightDialogComponent implements OnInit {
       const sights = val.data as Array;
       sights.forEach(sight=>{
         const newSight = new Sight();
-        newSight.uid = sight.uid;
-        newSight.name = sight.name;
-        newSight.longitude = sight.longitude;
-        newSight.latitude = sight.latitude;
-        newSight.address = sight.address;
-
-        sight.ratingList.forEach(rating=>{
-          const newRating = new Rating();
-          try {
-            newRating.uid = rating.uid;
-            newRating.rating = rating.rating;
-            newRating.comment = rating.comment;
-            var images=[];
-            rating.imageNames.forEach(rat=>{
-              images.push(rat)
-            })
-            newRating.imageNames = images;
-          }
-          catch{}
-          newSight.ratingList.push(newRating);
-        })
-
-        sight.labelList.forEach(label=>{
-          const newLabel = new Label();
-          try {
-            newLabel.uid = label.uid;
-            newLabel.name = label.name;
-            newLabel.color = label.color;
-          }
-          catch{}
-          newSight.labelList.push(newLabel)
-        })
-
+        newSight.InitSight(sight);
         pulledSights.push(newSight);
       })
 
       this.allSights = pulledSights;
 
       if(this.manageSightUidString!=""){
-        var a= ""
         this.managedSight = this.allSights.find(x=>x.uid===this.manageSightUidString);
-
         this.nameValue = this.managedSight.name;
         this.addressValue = this.managedSight.address;
         this.labels = this.managedSight.labelList
-
-
-
         this.placeCustomMarker(Number.parseFloat(this.managedSight.latitude),Number.parseFloat(this.managedSight.longitude))
         this.initMapWithPosition(Number.parseFloat(this.managedSight.latitude),Number.parseFloat(this.managedSight.longitude),16)
       }
