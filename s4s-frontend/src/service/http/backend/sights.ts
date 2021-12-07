@@ -1,6 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BackendClientService} from "../backendClientService";
 import {Sight} from "../../../model/sight";
+import {Rating} from "../../../model/rating";
 
 @Injectable({providedIn: 'root'})
 /**
@@ -83,5 +84,15 @@ export class SightsService extends BackendClientService {
      **/
     deleteSight(sightId: String){
         return this.createDeleteCall('sights/deleteSight?id='+sightId)
+    }
+
+    /**
+     * Adds a single rating to database
+     * Component written by Michael Fahrafellner
+     * creation date: 30.11.2021
+     * last change done by: Michael Fahrafellner
+     **/
+    addRating(rating:Rating,userId:string, sightId:string){
+        return this.createPostCall('sights/addRating?id='+userId+'&sightId='+sightId,rating)
     }
 }

@@ -5,15 +5,18 @@ import com.s4s.database.SightsAccess;
 import com.s4s.database.model.Label;
 import com.s4s.database.model.Rating;
 import com.s4s.database.model.Sight;
+import com.s4s.database.model.User;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
 import com.s4s.filter.JWTTokenRequired;
+import com.s4s.properties.PropertyAccessor;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.awt.image.RescaleOp;
 import java.security.PublicKey;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Endpoint for all sights relevant api calls.
@@ -114,4 +117,16 @@ public class SightsEndpoint {
     public Response DeleteRating(@QueryParam("id") String ratingId){
         return SightsAccess.deleteRating(ratingId);
     }
+
+    @POST
+    @Path("/reload")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response ReloadSights(User user) throws ExecutionException, InterruptedException {
+        if(!user.getUid().equals(RELOAD))
+            return new ResponseHelper(Info.FAILURE,"Not allowed").build();
+        SightsAccess.loadSights();
+        return new ResponseHelper(Info.SUCCESS, "Backend updated").build();
+    }
+
+    private static final String RELOAD = PropertyAccessor.getReload();
 }

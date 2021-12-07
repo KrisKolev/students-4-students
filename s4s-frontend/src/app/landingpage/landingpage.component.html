@@ -54,6 +54,7 @@
     <app-sight-detail #sightDetail
                       (calcRouteEventEmitter)="calcRoute(sightDetail.sight)"
                       (closeEvent)="onCloseSightDetail()"
+                      (closeDialogEvent)="onCloseDialog()"
                       [isDetailView]="true">
     </app-sight-detail>
 </div>

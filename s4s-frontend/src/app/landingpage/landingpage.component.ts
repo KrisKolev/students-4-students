@@ -565,8 +565,6 @@ export class LandingpageComponent implements OnInit {
 
         this.allSights.forEach((sight) => {
             tempSightList.push(CreateLocationSight(sight))
-
-
         })
 
         const matrix = new google.maps.DistanceMatrixService();
@@ -587,10 +585,11 @@ export class LandingpageComponent implements OnInit {
     matrix.getDistanceMatrix(request,response => {
       for(var i = 0;i<tempSightList.length;i++){
         try {
-          this.firebaseService.getSightImageUrls(tempSightList[i]);
           tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
           tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000,
               this.filterDistanceValue,this.filterRatingSliderMinimumValue,this.filterRatingSliderMaximumValue)
+            this.firebaseService.getSightImageUrls(tempSightList[i]);
+
         }
         catch (e) {
           tempSightList[i].timeToTarget = "no route found";
@@ -652,6 +651,7 @@ export class LandingpageComponent implements OnInit {
     onGoToSight(sight: SightTopLocation) {
         this.detailedSight = sight as Sight;
         this.sightDetail.sight = sight;
+        this.sightDetail.onInitDetails();
         this.initMapWithPosition(Number.parseFloat(sight.latitude), Number.parseFloat(sight.longitude), this.zoom)
         this.onOpenSightDetails();
     }
@@ -851,6 +851,10 @@ export class LandingpageComponent implements OnInit {
         }
 
         this.calcRoute(this.lastRouteTopSight);
+    }
+
+    onCloseDialog() {
+        this.onLoadSights()
     }
 }
 

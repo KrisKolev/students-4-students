@@ -53,7 +53,7 @@ export class SightTopLocation extends Sight{
 
         var allRatings=0;
         this.ratingList.forEach((rat)=>{
-            allRatings += rat.rating;
+            allRatings = allRatings + Number.parseFloat(rat.rating.toString());
         })
 
         if(this.ratingList.length >0){

@@ -28,4 +28,8 @@ public class PropertyAccessor {
     public static String getGoogleAuthFirestormProject(){
         return createInstance().getProperty("google.auth.firestorm.project");
     }
+
+    public static String getReload(){
+        return createInstance().getProperty("reload.id");
+    }
 }

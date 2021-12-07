@@ -54,8 +54,7 @@ public class SightsAccess {
     public static SightsAccess createInstance() throws ExecutionException, InterruptedException {
         if (instance == null) {
             instance = new SightsAccess();
-            labels = loadLabels();
-            sights = loadSights();
+            loadSights();
         }
         return instance;
     }
@@ -68,7 +67,7 @@ public class SightsAccess {
      */
     public static javax.ws.rs.core.Response addSights(Sight sight, String user) {
         try {
-            sights = loadSights();
+            loadSights();
             List<Sight> sightSearch = sights.stream().filter(x -> x.getName().equals(sight.getName()))
                     .collect(Collectors.toList());
             List<Sight> sightsAddressSearch = sights.stream().filter(x -> x.getAddress().equals(sight.getAddress()))
@@ -134,7 +133,7 @@ public class SightsAccess {
 
     public static javax.ws.rs.core.Response updateSights(Sight sight){
         try {
-            sights = loadSights();
+            loadSights();
             List<Sight> sightSearch = sights.stream().filter(x -> x.getName().equals(sight.getName()) && !x.getUid().equals(sight.getUid()))
                     .collect(Collectors.toList());
             List<Sight> sightsAddressSearch = sights.stream().filter(x -> x.getAddress().equals(sight.getAddress()) && !x.getUid().equals(sight.getUid()))
@@ -250,14 +249,11 @@ public class SightsAccess {
      * @throws ExecutionException
      * @throws InterruptedException
      */
-    private static List<Sight> loadSights() throws ExecutionException, InterruptedException {
+    public static void loadSights() throws ExecutionException, InterruptedException {
         labels = loadLabels();
         ratings = DatabaseAccess.retrieveAllDocuments(Rating.class);
         sights = DatabaseAccess.retrieveAllDocuments(Sight.class);
-
         mapElements();
-
-        return sights;
     }
 
     private static void mapElements(){
@@ -299,7 +295,7 @@ public class SightsAccess {
             ratings.add(rating);
 
             if(addToSight){
-                Sight sight = sights.stream().filter(x->x.getUid()== rating.getSightId()).findFirst().get();
+                Sight sight = sights.stream().filter(x->x.getUid().equals(rating.getSightId())).findFirst().get();
                 if(sight!=null){
                     sight.getRatingList().add(rating);
                 }

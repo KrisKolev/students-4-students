@@ -9,9 +9,6 @@
                 <button (click)="onGoToSight(sight)" *ngIf="!isDetailView" mat-mini-fab>
                     <mat-icon>open_in_new</mat-icon>
                 </button>
-                <button (click)="onEdit(sight)" *ngIf="isDetailView && sight.creator === currentUserUid" mat-mini-fab>
-                    <mat-icon>edit</mat-icon>
-                </button>
                 <button (click)="onClose()" *ngIf="isDetailView" class="close-button-detail" mat-mini-fab>
                     <mat-icon>close</mat-icon>
                 </button>
@@ -67,7 +64,7 @@
     <mat-card-title>
         <span class="fxRow">
             <p>Comments</p>
-            <button (click)="onAddComment(sight)" style="-webkit-transform: scaleX(-1); transform: scaleX(-1);" mat-mini-fab>
+            <button *ngIf="currentUserUid != undefined" (click)="onAddComment(sight)" style="-webkit-transform: scaleX(-1); transform: scaleX(-1);" mat-mini-fab>
                 <mat-icon>add_comment</mat-icon>
             </button>
         </span>
