@@ -51,14 +51,7 @@ export class SightTopLocation extends Sight{
             this.showDistanceString = (Number(distance.toFixed(2))).toString() + " km away"
         }
 
-        var allRatings=0;
-        this.ratingList.forEach((rat)=>{
-            allRatings = allRatings + Number.parseFloat(rat.rating.toString());
-        })
-
-        if(this.ratingList.length >0){
-            this.overallRating = allRatings / this.ratingList.length;
-        }
+        this.onInitBase();
 
         if(distance>filterRadius || minimumRating>this.overallRating || maximumRating<this.overallRating){
             this.isVisible = false;
@@ -68,6 +61,19 @@ export class SightTopLocation extends Sight{
         }
 
     }
+
+    onInitBase(){
+
+        var allRatings=0;
+        this.ratingList.forEach((rat)=>{
+            allRatings = allRatings + Number.parseFloat(rat.rating.toString());
+        })
+
+        if(this.ratingList.length >0){
+            this.overallRating = allRatings / this.ratingList.length;
+        }
+    }
+
 }
 
 export function CreateLocationSight(oldSight:Sight){

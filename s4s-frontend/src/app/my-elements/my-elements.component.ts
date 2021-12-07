@@ -24,7 +24,7 @@ export class MyElementsComponent implements OnInit {
   /**
    * Columes of the my sights table
    * */
-  mySightsDisplayedColumns: string[] = ['position', 'name', 'address', 'rating','images', 'manage'];
+  mySightsDisplayedColumns: string[] = ['position', 'name', 'address', 'rating','ratingCalc','images', 'manage'];
   myRatingsdDisplayedColumns: string[] = ['position', 'comment', 'sightName','rating','images', 'manage'];
 
   sightsDataSource: any;
@@ -95,6 +95,9 @@ export class MyElementsComponent implements OnInit {
           }
           newSight.labelList.push(newLabel)
         })
+
+        newSight.onInitBase();
+
         this.firebaseService.getSightImageUrls(newSight);
         this.mySights.push(newSight);
     })
