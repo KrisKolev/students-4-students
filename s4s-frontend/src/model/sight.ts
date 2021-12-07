@@ -30,6 +30,35 @@ export class Sight {
     creator:string;
     createdAt:string;
     updatedAt:string;
+
+    public InitSight(sight:any){
+        this.uid = sight.uid;
+        this.name = sight.name;
+        this.longitude = sight.longitude;
+        this.latitude = sight.latitude;
+        this.address = sight.address;
+
+        sight.ratingList.forEach(rating => {
+            const newRating = new Rating();
+            try {
+                newRating.InitRating(rating);
+            } catch {
+            }
+            this.ratingList.push(newRating);
+        })
+
+        sight.labelList.forEach(label => {
+            const newLabel = new Label();
+            try {
+                newLabel.uid = label.uid;
+                newLabel.name = label.name;
+                newLabel.color = label.color;
+            } catch {
+            }
+            this.labelList.push(newLabel)
+        })
+    }
+
 }
 
 export class SightTopLocation extends Sight{

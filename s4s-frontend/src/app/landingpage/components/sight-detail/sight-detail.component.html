@@ -78,8 +78,8 @@
                 <mat-divider></mat-divider>
                 <div fxLayout="column" class="comment">
                     <span class="fxRow">
-                        <p><strong>Author:</strong> John Doe</p>
-                        <p><strong>Created:</strong> 31.12.9999</p>
+                        <p><strong>Author:</strong> {{comment.creator}}</p>
+                        <p><strong>Created:</strong> {{comment.createdAt}}</p>
                     </span>
                     <p *ngIf="comment?.comment?.length !==0">{{comment.comment}}</p>
                     <p *ngIf="comment?.comment === undefined">-</p>

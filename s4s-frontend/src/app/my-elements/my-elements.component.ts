@@ -63,39 +63,7 @@ export class MyElementsComponent implements OnInit {
       const sights = res.data as Array;
       sights.forEach(sight => {
         const newSight = new SightTopLocation();
-        newSight.uid = sight.uid;
-        newSight.name = sight.name;
-        newSight.longitude = sight.longitude;
-        newSight.latitude = sight.latitude;
-        newSight.address = sight.address;
-
-        sight.ratingList.forEach(rating => {
-          const newRating = new Rating();
-          try {
-            newRating.uid = rating.uid;
-            newRating.rating = rating.rating;
-            newRating.comment = rating.comment;
-            var images = [];
-            rating.imageNames.forEach(rat => {
-              images.push(rat)
-            })
-            newRating.imageNames = images;
-          } catch {
-          }
-          newSight.ratingList.push(newRating);
-        })
-
-        sight.labelList.forEach(label => {
-          const newLabel = new Label();
-          try {
-            newLabel.uid = label.uid;
-            newLabel.name = label.name;
-            newLabel.color = label.color;
-          } catch {
-          }
-          newSight.labelList.push(newLabel)
-        })
-
+        newSight.InitSight(sight);
         newSight.onInitBase();
 
         this.firebaseService.getSightImageUrls(newSight);
@@ -112,18 +80,8 @@ export class MyElementsComponent implements OnInit {
       ratings.forEach(rating=>{
         const newRating = new Rating();
         try {
-          newRating.uid = rating.uid;
-          newRating.rating = rating.rating;
-          newRating.comment = rating.comment;
-          newRating.sightId = rating.sightId;
-          newRating.sightName = rating.sightName;
-          var images = [];
-          rating.imageNames.forEach(rat => {
-            images.push(rat)
-          })
-          newRating.imageNames = images;
+          newRating.InitRating(rating);
           this.firebaseService.getRatingImageUrls(newRating)
-
           this.myRatings.push(newRating)
         } catch {
         }

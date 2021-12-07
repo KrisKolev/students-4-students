@@ -8,9 +8,7 @@ import com.s4s.database.model.*;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
@@ -43,6 +41,10 @@ public class SightsAccess {
      */
     private static List<Rating> ratings = new ArrayList<>();
 
+    /**
+     * All users.
+     * */
+    private static List<User> users = new ArrayList<>();
 
     /**
      * Creates the sight instance
@@ -250,12 +252,16 @@ public class SightsAccess {
      * @throws InterruptedException
      */
     public static void loadSights() throws ExecutionException, InterruptedException {
+        users = DatabaseAccess.retrieveAllDocuments(User.class);
         labels = loadLabels();
         ratings = DatabaseAccess.retrieveAllDocuments(Rating.class);
         sights = DatabaseAccess.retrieveAllDocuments(Sight.class);
         mapElements();
     }
 
+    /**
+     * Maps all downloaded elements to their responding objects
+     * */
     private static void mapElements(){
         try {
             //load sights
@@ -275,6 +281,14 @@ public class SightsAccess {
                 sight.setRatingList(new ArrayList<>());
                 List<Rating> assignedRatings = ratings.stream().filter(x->x.getSightId().equals(sight.getUid())).collect(Collectors.toList());
                 sight.setRatingList(assignedRatings);
+
+                for (Rating rating:sight.getRatingList()) {
+                    Optional<User> user = users.stream().filter(x->x.getUid().equals(rating.getCreator())).findFirst();
+                    if(user.isPresent()){
+                        User userAct = user.get();
+                        rating.setCreatorNickName(userAct.getNickname());
+                    }
+                }
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -289,6 +303,7 @@ public class SightsAccess {
      */
     public static javax.ws.rs.core.Response addRating(Rating rating,boolean addToSight) {
         try {
+            rating.setCreatedAt(new Date());
             DocumentReference ref = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(rating.getClass()), rating);
             rating.setUid(ref.getId());
             DatabaseAccess.updateUidOfDocument("rating", rating.getUid(), rating.getUid());
@@ -298,6 +313,7 @@ public class SightsAccess {
                 Sight sight = sights.stream().filter(x->x.getUid().equals(rating.getSightId())).findFirst().get();
                 if(sight!=null){
                     sight.getRatingList().add(rating);
+                    mapElements();
                 }
             }
         } catch (Exception e) {
