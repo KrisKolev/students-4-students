@@ -584,7 +584,9 @@ export class LandingpageComponent implements OnInit {
           tempSightList[i].timeToTarget = response.rows[0].elements[i].duration.text;
           tempSightList[i].onInit(response.rows[0].elements[i].distance.value/1000,
               this.filterDistanceValue,this.filterRatingSliderMinimumValue,this.filterRatingSliderMaximumValue)
-            this.firebaseService.getSightImageUrls(tempSightList[i]);
+            this.firebaseService.getSightImageUrls(tempSightList[i]).then(async ()=>{
+
+            });
 
         }
         catch (e) {
@@ -640,7 +642,9 @@ export class LandingpageComponent implements OnInit {
                 })
                 this.mapMarkersSights.push(existingMarker)
             })
-
+        //necessary to update bindings and show images in frontend
+        let htmlElement: HTMLElement = document.getElementById("addressElement");
+        htmlElement.click();
         })
     }
 
