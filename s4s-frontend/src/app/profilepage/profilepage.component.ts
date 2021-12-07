@@ -62,7 +62,7 @@ export class ProfilepageComponent implements OnInit {
 
     updatePlaceholders() {
         this.loggedInUser = this.userAuthService.getLoggedInUser();
-        let splitted = this.loggedInUser.displayName.split(" ")
+        let splitted = this.loggedInUser.displayName.split("/")
         this.currentFirstName = splitted[0];
         this.currentLastName = splitted[1];
         this.currentNickname = splitted[2];
@@ -99,9 +99,9 @@ export class ProfilepageComponent implements OnInit {
                 //updates the localstorage display name
                 let currentuser: string = localStorage.getItem("loggedInUser");
                 let regex = new RegExp(/(("displayName":")[^"]*)"/);
-                let updatedUserString = currentuser.replace(regex, '"displayName":"' + firstName + " " + lastName + " " + nickname + '"');
+                let updatedUserString = currentuser.replace(regex, '"displayName":"' + firstName + "/" + lastName + "/" + nickname + '"');
                 regex = (/(("displayName":")[^"]*)"(?=,"email")/);
-                updatedUserString = updatedUserString.replace(regex, '"displayName":"' + firstName + " " + lastName + " " + nickname + '"');
+                updatedUserString = updatedUserString.replace(regex, '"displayName":"' + firstName + "/" + lastName + "/" + nickname + '"');
                 localStorage.setItem("loggedInUser", updatedUserString);
                 this.updatePlaceholders()
             });

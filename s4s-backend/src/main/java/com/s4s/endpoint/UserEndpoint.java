@@ -82,7 +82,7 @@ public class UserEndpoint {
     @JWTTokenRequired
     public Response updateUser(UserDTO userDTO) throws FirebaseAuthException, ExecutionException, InterruptedException {
         UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
-                .setDisplayName(userDTO.getFirstname() + " " + userDTO.getLastname() + " " + userDTO.getNickname());
+                .setDisplayName(userDTO.getFirstname() + "/" + userDTO.getLastname() + "/" + userDTO.getNickname());
 
         UserRecord userRecord;
         try {
