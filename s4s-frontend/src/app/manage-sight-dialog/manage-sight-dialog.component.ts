@@ -364,15 +364,10 @@ export class ManageSightDialogComponent implements OnInit {
       this.allSights = pulledSights;
 
       if(this.manageSightUidString!=""){
-        var a= ""
         this.managedSight = this.allSights.find(x=>x.uid===this.manageSightUidString);
-
         this.nameValue = this.managedSight.name;
         this.addressValue = this.managedSight.address;
         this.labels = this.managedSight.labelList
-
-
-
         this.placeCustomMarker(Number.parseFloat(this.managedSight.latitude),Number.parseFloat(this.managedSight.longitude))
         this.initMapWithPosition(Number.parseFloat(this.managedSight.latitude),Number.parseFloat(this.managedSight.longitude),16)
       }

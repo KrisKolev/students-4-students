@@ -54,10 +54,22 @@ export class ManageRatingComponent implements OnInit {
     this.ratingImages = files;
   }
 
+  /**
+   * Closes the dialog.
+   * Component written by Michael Fahrafellner
+   * creation date: 07.12.2021
+   * last change done by: Michael Fahrafellner
+   */
   onAbort() {
     this.dialogRef.close();
   }
 
+  /**
+   * Saves a rating
+   * Component written by Michael Fahrafellner
+   * creation date: 07.12.2021
+   * last change done by: Michael Fahrafellner
+   */
   async onSave() {
     if(this.rating === undefined)
       return;

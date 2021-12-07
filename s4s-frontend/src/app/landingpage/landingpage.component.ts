@@ -377,7 +377,10 @@ export class LandingpageComponent implements OnInit {
     }
 
     /**
-     * Initializes the map object.
+     * Initializes the map and sets the current position
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
      */
     initMap() {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -406,6 +409,12 @@ export class LandingpageComponent implements OnInit {
         });
     }
 
+    /**
+     * Centers at the current reference point
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     goToSelectedReferencePoint() {
         this.center = {
             lat: this.showSightsLocationLatitude,
@@ -413,6 +422,12 @@ export class LandingpageComponent implements OnInit {
         }
     }
 
+    /**
+     * Shows or hides the top location container
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onToggleTopLocations(keepVisibility: boolean) {
         if (!this.initialVisibility) {
             this.initialVisibility = false;
@@ -451,7 +466,10 @@ export class LandingpageComponent implements OnInit {
     }
 
     /**
-     * Loads all sights from the database.
+     * Loads all sights from the database
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
      */
     onLoadSights() {
         this.sightService.getSights().subscribe((val) => {
@@ -503,7 +521,12 @@ export class LandingpageComponent implements OnInit {
         })
     }
 
-    //filtering the sights by either name or some label
+    /**
+     * Filters sights based on the data set from filter.
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     private _filterSights(value: String): SightTopLocation[] {
         if (typeof value === 'string' || value instanceof String) {
 
@@ -516,6 +539,12 @@ export class LandingpageComponent implements OnInit {
         }
     }
 
+    /**
+     * Filters and calculates distances for sights.
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     async onFilterTopLocations() {
         this.allSightsSortedByDistance = [];
         this.myDirectionsRenderer.setDirections(new class implements google.maps.DirectionsResult {
@@ -615,6 +644,12 @@ export class LandingpageComponent implements OnInit {
         })
     }
 
+    /**
+     * Centers a sight on the map and opens its details
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onGoToSight(sight: SightTopLocation) {
         this.detailedSight = sight as Sight;
         this.sightDetail.sight = sight;
@@ -665,6 +700,12 @@ export class LandingpageComponent implements OnInit {
         htmlElement.click();
     }
 
+    /**
+     * Calculates a route from the reference point to a selected sight.
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     calcRoute(sight: SightTopLocation) {
         this.lastRouteTopSight = sight;
         var request = {
@@ -764,6 +805,12 @@ export class LandingpageComponent implements OnInit {
 
     lastRouteTopSight: SightTopLocation;
 
+    /**
+     * Clears the current route.
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onClearRoutes() {
 
         this.myDirectionsRenderer.setDirections(new class implements google.maps.DirectionsResult {
@@ -776,10 +823,22 @@ export class LandingpageComponent implements OnInit {
         this.routeEnabled = false;
     }
 
+    /**
+     * Opens the filter options
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onShowFilter() {
         this.isFilterVisible = !this.isFilterVisible;
     }
 
+    /**
+     * Applies the filter values and sorts the sights accordingly
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onApplyFilter(radiusInput: HTMLInputElement) {
         this.filterDistanceValue = Number.parseFloat(radiusInput.value)
 
@@ -803,6 +862,12 @@ export class LandingpageComponent implements OnInit {
         return value;
     }
 
+    /**
+     * Applies the route mode selected by the user
+     * Component written by Michael Fahrafellner
+     * creation date: 07.12.2021
+     * last change done by: Michael Fahrafellner
+     */
     onApplyRouteMode() {
         if (this.routeMode === "walking") {
             this.routeTravelMode = TravelMode.WALKING;
