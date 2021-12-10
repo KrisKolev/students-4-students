@@ -9,9 +9,6 @@
                 <button (click)="onGoToSight(sight)" *ngIf="!isDetailView" mat-mini-fab>
                     <mat-icon>open_in_new</mat-icon>
                 </button>
-                <button (click)="onEdit(sight)" *ngIf="isDetailView && sight.creator === currentUserUid" mat-mini-fab>
-                    <mat-icon>edit</mat-icon>
-                </button>
                 <button (click)="onClose()" *ngIf="isDetailView" class="close-button-detail" mat-mini-fab>
                     <mat-icon>close</mat-icon>
                 </button>
@@ -65,7 +62,12 @@
 
 <mat-card *ngIf="isDetailView">
     <mat-card-title>
-        <p>Comments:</p>
+        <span class="fxRow">
+            <p>Comments</p>
+            <button *ngIf="currentUserUid != undefined" (click)="onAddComment(sight)" style="-webkit-transform: scaleX(-1); transform: scaleX(-1);" mat-mini-fab>
+                <mat-icon>add_comment</mat-icon>
+            </button>
+        </span>
     </mat-card-title>
     <mat-card-content>
         <div *ngIf="sight.ratingList.length === 0">
@@ -76,8 +78,8 @@
                 <mat-divider></mat-divider>
                 <div fxLayout="column" class="comment">
                     <span class="fxRow">
-                        <p><strong>Author:</strong> John Doe</p>
-                        <p><strong>Created:</strong> 31.12.9999</p>
+                        <p><strong>Author:</strong> {{comment.creator}}</p>
+                        <p><strong>Created:</strong> {{comment.createdAt}}</p>
                     </span>
                     <p *ngIf="comment?.comment?.length !==0">{{comment.comment}}</p>
                     <p *ngIf="comment?.comment === undefined">-</p>

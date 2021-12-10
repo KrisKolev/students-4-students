@@ -54,6 +54,7 @@
     <app-sight-detail #sightDetail
                       (calcRouteEventEmitter)="calcRoute(sightDetail.sight)"
                       (closeEvent)="onCloseSightDetail()"
+                      (closeDialogEvent)="onCloseDialog()"
                       [isDetailView]="true">
     </app-sight-detail>
 </div>
@@ -208,6 +209,7 @@
         <mat-form-field color="primary" appearance="fill">
             <mat-label class="address-placeholder-label">Search by sight, label or address</mat-label>
             <input #addressSearch
+                   id="addressElement"
                    [(ngModel)]="addressValue"
                    [formControl]="sightSearchCtrl"
                    [matAutocompleteConnectedTo]="origin"

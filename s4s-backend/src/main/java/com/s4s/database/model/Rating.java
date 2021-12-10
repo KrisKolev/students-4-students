@@ -14,8 +14,10 @@ public class Rating {
     private List<String> imageNames = new ArrayList<>();
 
     private String creator;
+    private String creatorNickName;
     private Date createdAt;
     private Date updatedAt;
+    private String createdAtString;
 
     private String sightId;
     public String sightName;
@@ -88,5 +90,22 @@ public class Rating {
 
     public void setSightId(String sightId) {
         this.sightId = sightId;
+    }
+
+    public String getCreatorNickName() {
+        return creatorNickName;
+    }
+
+    public void setCreatorNickName(String creatorNickName) {
+        this.creatorNickName = creatorNickName;
+    }
+
+    public String getCreatedAtString() {
+        if(createdAt!=null){
+            return createdAt.toString();
+        }
+        else {
+            return "";
+        }
     }
 }

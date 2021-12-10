@@ -1,10 +1,9 @@
 <span class="app-container">
     <mat-toolbar class="mat-elevation-z6" color="primary">
-        <span routerLink="">
-            <img src="{{image}}" alt="{{image}}" width="300px" height="45px" style="padding-bottom: 2px" routerLink=""/>
+        <span routerLink="" style="display: flex" fxLayout="row">
+            <img src="{{image}}" alt="{{image}}" width="30px" height="35px" style="padding-bottom: 2px" routerLink=""/>
+            <h1 class="small-label-header">Students 4 Students - The Helper every newcomer needs!</h1>
         </span>
-
-        <mat-card-subtitle class="small-label-header"> The Helper every newcomer needs!</mat-card-subtitle>
 
         <div class="spacer"></div>
         <button mat-button routerLink="">Home</button>
@@ -20,7 +19,12 @@
         <!--profile button-->
         <ng-template [ngIf]="isUserLoggedIn()==true" [ngIfElse]="loggedOut">
             <button mat-button [matMenuTriggerFor]="menu">
-                <mat-icon>account_circle</mat-icon>
+                <ng-template [ngIf]="this.checkProfilePictureAvailability()" [ngIfElse]="noProfilePicture">
+                    <img class="profilePicture" src="{{this.profilePictureUrl}}" alt="Avatar">
+                </ng-template>
+                <ng-template #noProfilePicture>
+                    <mat-icon>account_circle</mat-icon>
+                </ng-template>
             </button>
             <mat-menu #menu="matMenu">
                 <button mat-menu-item routerLink="./profile"><mat-icon>manage_accounts</mat-icon>Profile</button>
@@ -31,7 +35,7 @@
 
         <!--signin button-->
         <ng-template #loggedOut>
-            <button mat-flat-button color="accent" (click)="openLoginDialog()">Sign In</button>
+            <button mat-flat-button color="accent"  (click)="openLoginDialog()">Sign In</button>
         </ng-template>
     </mat-toolbar>
 

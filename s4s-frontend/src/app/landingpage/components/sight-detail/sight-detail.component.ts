@@ -1,6 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {SightTopLocation} from "../../../../model/sight";
 import {UserAuthService} from "../../../../service/userAuthService";
+import {MatDialog} from "@angular/material/dialog";
+import {ManageRatingComponent} from "../../../manage-rating/manage-rating.component";
+import {Router} from "@angular/router";
 
 @Component({
     selector: 'app-sight-detail',
@@ -16,11 +19,23 @@ export class SightDetailComponent implements OnInit {
     @Output() goToSightEventEmitter = new EventEmitter<any>();
     @Output() closeEvent = new EventEmitter();
 
+    @Output() closeDialogEvent = new EventEmitter();
+
     ngOnInit(): void {
-        //TODO init currentUserId
+
     }
 
-    constructor(private userAuthService: UserAuthService) {
+    constructor(private userAuthService: UserAuthService,
+                private addCommentDialog: MatDialog,
+                private router: Router) {
+
+    }
+
+    public onInitDetails(){
+        try {
+            this.currentUserUid = this.userAuthService.getLoggedInUser().uid;
+        }catch (e) {
+        }
     }
 
     onGoToSight(sight: SightTopLocation): void {
@@ -36,6 +51,21 @@ export class SightDetailComponent implements OnInit {
     }
 
     onEdit(sight: SightTopLocation) {
-        console.log('onEdit');
+        this.router.navigate(['./myelements']).then(res=>{
+            if(res){
+                this.router.navigate(["manageSight",sight.uid]);
+            }
+        })
+    }
+
+    onAddComment(sight: SightTopLocation) {
+        this.addCommentDialog.open(ManageRatingComponent,{
+            data: {
+                sightId: sight.uid,
+            }
+        }).afterClosed().subscribe(()=>{
+            this.closeDialogEvent.emit();
+            this.onClose();
+        });
     }
 }

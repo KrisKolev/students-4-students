@@ -31,6 +31,7 @@ import { FaqPageComponent } from './faq-page/faq-page.component';
 import {MatProgressSpinnerModule} from "@angular/material/progress-spinner";
 import {MatChipsModule} from "@angular/material/chips";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import { ManageRatingComponent } from './manage-rating/manage-rating.component';
 
 const firebaseConfig = {
     apiKey: 'AIzaSyDaF7WsFkyX5rr37M_kCHz3oovCDJ4Il-U',
@@ -48,7 +49,8 @@ const app = initializeApp(firebaseConfig);
         LoginDialogComponent,
         PopupComponent,
         DetailPageComponent,
-        FaqPageComponent
+        FaqPageComponent,
+        ManageRatingComponent
     ],
     imports: [
         BrowserModule,

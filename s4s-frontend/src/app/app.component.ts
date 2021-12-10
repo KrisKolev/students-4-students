@@ -6,6 +6,7 @@ import {MatDialog} from '@angular/material/dialog';
 import {LoginDialogComponent} from './login-dialog/login-dialog.component';
 import {UserService} from "../service/http/backend/user.service";
 import {FirebaseService} from "../service/http/external/firebase.service";
+import {Emitters} from "./emitters/emitters";
 import {Router} from "@angular/router";
 
 @Component({
@@ -16,7 +17,9 @@ import {Router} from "@angular/router";
 export class AppComponent {
     title = 'Students4Students';
     image = 'assets/images/logo.png'
-    search: String ="";
+    search: String = "";
+    profilePictureUrl: any;
+    loggedInUser;
 
     constructor(private healthCheckService: HealthCheckService,
                 private geolocationService: GeoLocationService,
@@ -28,6 +31,19 @@ export class AppComponent {
         this.checkBackendConnection();
         this.initGeolocation();
         this.verifyCurrentUser();
+        this.getProfilePictureUrl();
+        Emitters.pfpEmitter.subscribe(
+            (pfp:boolean)=>{
+                if(pfp==true)
+                {
+                    this.getProfilePictureUrl();
+                }
+                else
+                {
+                    this.profilePictureUrl=null;
+                }
+            }
+        );
     }
 
     private checkBackendConnection() {
@@ -58,28 +74,50 @@ export class AppComponent {
      * Verifies the currently logged in user. If access token has expired, logged-in user will be signed out
      * @private
      */
-    private verifyCurrentUser(){
-        this.userService.verifyUser().subscribe((x=>{
+    private verifyCurrentUser() {
+        this.userService.verifyUser().subscribe((x => {
             console.log(x);
-        }),error => {
+        }), error => {
             console.log(error)
             this.firebaseService.firebaseSignOut("loggedInUser")
         })
     }
 
     openLoginDialog(): void {
+
         const dialogRef = this.loginDialog.open(LoginDialogComponent);
     }
-    isUserLoggedIn()
-    {
+
+    isUserLoggedIn() {
         return this.userAuthService.isUserLoggedIn();
     }
-    logout()
-    {
+
+    logout() {
+
+        this.profilePictureUrl = null;
         this.userAuthService.logout();
+    }
+  
+    getProfilePictureUrl() {
+         if (!this.userAuthService.isUserLoggedIn()){return;}
+         this.firebaseService.getProfilePictureUrl(this.userAuthService.getLoggedInUser()).then(data => {
+
+             this.profilePictureUrl=data;
+             console.log(this.profilePictureUrl)
+            this.checkProfilePictureAvailability();
+         });
+    }
+
+    checkProfilePictureAvailability(){
+
+        if (this.profilePictureUrl){
+            return true;
+        }
+        else return false;
     }
 
     onOpenManageSight() {
         this.router.navigate(['./manageSight','1'])
     }
 }
+

@@ -6,7 +6,7 @@ public class UserDTO {
     private String firstname;
     private String lastname;
     private String nickname;
-    private String photoURL;
+    private String photoUrl;
     private String email;
     private String password;
     private String uid;
@@ -34,7 +34,11 @@ public class UserDTO {
         return nickname;
     }
 
-    public String getPhotoURL(){return photoURL;}
+    public String getPhotoUrl(){return photoUrl;}
+
+    public void setPhotoUrl(String photoURL) {
+        this.photoUrl = photoURL;
+    }
 
     public void setNickname(String nickname) {
         this.nickname = nickname;

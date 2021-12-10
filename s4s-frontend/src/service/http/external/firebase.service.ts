@@ -1,9 +1,14 @@
 import {Injectable} from '@angular/core';
-import {getAuth, signInWithEmailAndPassword} from 'firebase/auth';
+import {getAuth, signInWithEmailAndPassword, reauthenticateWithCredential,updateProfile,getAdditionalUserInfo} from 'firebase/auth';
 import {getDownloadURL, getStorage, ref, uploadBytesResumable,deleteObject } from "firebase/storage";
 import {UploadItem, UploadResponse} from "../../../model/uploadItem";
 import {Rating} from "../../../model/rating";
 import {SightTopLocation} from "../../../model/sight";
+import firebase from "firebase/compat";
+import User = firebase.User;
+import AuthCredential = firebase.auth.AuthCredential;
+import {Console} from "inspector";
+
 
 @Injectable({providedIn: 'root'})
 export class FirebaseService {
@@ -24,6 +29,7 @@ export class FirebaseService {
         return signResult;
     }
 
+
     public async firebaseSignOut(localStorageName: string) {
         localStorage.removeItem(localStorageName);
         getAuth().signOut();
@@ -36,6 +42,7 @@ export class FirebaseService {
      * creation date: 16.10.2021
      * last change done by: Michael Fahrafellner
      */
+    // @ts-ignore
     public async uploadFileToFirestore(uploadFile:UploadItem) : Promise<UploadResponse>{
         var response = new UploadResponse();
 
@@ -103,8 +110,20 @@ export class FirebaseService {
 
         sight.ratingList.forEach(rat=>{
             rat.imageNames.forEach(async img=>{
-                sight.allImageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rat.uid+'/'+img+'/')))
+                try {
+                    sight.allImageUrl.push(await getDownloadURL(ref(storage, 'images/rating/'+rat.uid+'/'+img+'/')))
+                }
+                catch (e) {
+                    console.log(e);
+                }
+
             })
         })
     }
+    public getProfilePictureUrl(user:any){
+        const storage = getStorage();
+        let profilePictureURL = getDownloadURL(ref(storage,'images/avatars/'+user.uid+'/img_0'));
+        return profilePictureURL;
+    }
+
 }
