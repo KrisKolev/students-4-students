@@ -50,7 +50,8 @@ const app = initializeApp(firebaseConfig);
         PopupComponent,
         DetailPageComponent,
         FaqPageComponent,
-        ManageRatingComponent
+        ManageRatingComponent,
+
     ],
     imports: [
         BrowserModule,

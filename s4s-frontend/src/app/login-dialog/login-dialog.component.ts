@@ -13,6 +13,7 @@ import {Emitters} from "../emitters/emitters";
     styleUrls: ['./login-dialog.component.scss']
 })
 export class LoginDialogComponent {
+    login = 'assets/images/login.jpg'
     hidePassword = true;
     email = new FormControl('', [Validators.required, Validators.email]);
     pw = new FormControl('');

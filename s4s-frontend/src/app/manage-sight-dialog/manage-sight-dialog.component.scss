@@ -5,7 +5,6 @@
   align-self: center;
   height: 100%;
   width: 90%;
-  margin-top: 100px;
 }
 
 #map-canvas {
@@ -34,7 +33,10 @@
 .outerContainer{
   display: flex;
   width: 100%;
+  height: 100%;
   justify-content: center;
+  padding: 100px;
+  margin: 0;
 }
 
 .autocomplete-container{
@@ -68,6 +70,7 @@ mat-card-actions {
   display: flex;
   justify-content: center;
   width: 100%;
+  padding:0;
 }
 
 ::ng-deep {
@@ -77,8 +80,11 @@ mat-card-actions {
 
   .mat-card {
     max-width: 80%;
-  }
+    text-align: center;
+    width: 50%;
 
+
+  }
   .mat-button-toggle {
     background-color: white;
   }
