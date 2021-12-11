@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.s4s.database.model.City;
 import com.s4s.database.model.Country;
+import com.s4s.database.model.Sight;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
 import com.s4s.dto.response.Response;
@@ -13,6 +14,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Access to all country and city relevant data.
@@ -110,6 +113,17 @@ public class LocationsAccess {
      */
     public static List<Country> getCountriesWithCities(){
         return countriesWithCities;
+    }
+
+    public static boolean deleteCountry(Country country){
+        try {
+            DatabaseAccess.deleteDocument(Country.class, country.getUid());
+            return true;
+        }catch (InterruptedException | ExecutionException iex){
+            System.out.println("Error while deleting document rollback is made");
+            System.err.println(iex);
+            return false;
+        }
     }
 
     /**
