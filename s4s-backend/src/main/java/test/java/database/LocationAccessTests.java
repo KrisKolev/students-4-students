@@ -1,12 +1,8 @@
 package test.java.database;
-
 import com.s4s.database.LocationsAccess;
-import com.s4s.database.model.City;
 import com.s4s.database.model.Country;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -32,7 +28,7 @@ public class LocationAccessTests {
         }
 
         assert(hasAustria);
-        assert(hasAustria);
+        assert(hasBulgaria);
         assert(countries.size() > 200);
     }
 }

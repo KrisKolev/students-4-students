@@ -7,12 +7,13 @@ import com.s4s.database.model.Rating;
 import com.s4s.database.model.Sight;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import javax.ws.rs.core.Response;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class SightsAccessTests {
+
+    private String USER_ID = "TestUserDoNotDeletexCP3QCAGe1IqO";
 
     @BeforeEach
     void SetUp() throws ExecutionException, InterruptedException {
@@ -31,7 +32,7 @@ public class SightsAccessTests {
         List<Sight> before = SightsAccess.getSights();
         int sightNumberBefore = before.size();
 
-        Response response = SightsAccess.addSights(sightToAdd, "5MMOO2DKV3R9jXaRts3IKnRnfpm2");
+        Response response = SightsAccess.addSights(sightToAdd, USER_ID);
 
         List<Sight> after = SightsAccess.getSights();
         int sightNumberAfter = after.size();
@@ -56,7 +57,7 @@ public class SightsAccessTests {
         List<Sight> before = SightsAccess.getSights();
         int sightNumberBefore = before.size();
 
-        Response response = SightsAccess.addSights(sightToAddAndDelete, "5MMOO2DKV3R9jXaRts3IKnRnfpm2");
+        Response response = SightsAccess.addSights(sightToAddAndDelete, USER_ID);
 
         List<Sight> after = SightsAccess.getSights();
         int sightNumberAfter = after.size();
@@ -64,7 +65,7 @@ public class SightsAccessTests {
         assert(response.getStatus() == HttpStatusCodes.STATUS_CODE_OK);
         assert(sightNumberAfter == sightNumberBefore+1);
 
-        SightsAccess.deleteSight(sightToAddAndDelete);
+        SightsAccess.deleteSight(sightToAddAndDelete.getUid());
         return sightNumberBefore;
     }
 
@@ -94,7 +95,7 @@ public class SightsAccessTests {
         sight.setLabelList(labelList);
         List<Rating> ratingList = new ArrayList<Rating>();
         sight.setRatingList(ratingList);
-        sight.setCreator("5MMOO2DKV3R9jXaRts3IKnRnfpm2");
+        sight.setCreator(USER_ID);
         sight.setCreatedAt(new Date());
         sight.setUpdatedAt(new Date());
         sight.setAddress("MockupAddress MockupStreet, MockupCountry");
@@ -103,7 +104,7 @@ public class SightsAccessTests {
 
     private Label getValidLabel(){
         Label label = new Label();
-        label.setUid("5MMOO2DKV3R9jXaRts3IKnRnfpm2");
+        label.setUid(USER_ID);
         label.setName("TestLabelName");
         label.setColor("Blue");
         label.setCreatedAt(new Date());
@@ -112,8 +113,7 @@ public class SightsAccessTests {
     }
 
     private void deleteSight(Sight sight){
-        SightsAccess.deleteSight(sight);
+        SightsAccess.deleteSight(sight.getUid());
     }
-
 
 }
