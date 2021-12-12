@@ -4,6 +4,7 @@ import com.google.api.client.http.HttpStatusCodes;
 import com.s4s.database.model.Label;
 import com.s4s.endpoint.SightsEndpoint;
 import org.junit.jupiter.api.Test;
+
 import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.Date;
