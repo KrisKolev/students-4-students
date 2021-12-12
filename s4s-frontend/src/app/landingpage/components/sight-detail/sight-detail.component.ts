@@ -53,9 +53,9 @@ export class SightDetailComponent implements OnInit {
     }
 
 
-    onExpand(uid:string, name:string, ratingList:Rating[]): void {
+    onExpand(uid:string, name:string, overallRating:number, allImageUrl:string[], ratingList:Rating[]): void {
        const dialogRef = this.detailDialog.open(DetailPageComponent,
-           {data:{uid:uid, name:name, ratingList:ratingList}});
+           {data:{uid:uid, name:name, overallRating:overallRating, allImageUrl:allImageUrl, ratingList:ratingList}});
     }
 
     onClose() {

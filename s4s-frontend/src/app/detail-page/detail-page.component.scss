@@ -10,15 +10,13 @@
   padding-block: 50px;
 }
 
-/*.picture {
-  float: left;
-  position: relative;
-  width: 200px;
-  height: 200px;
-  background-color: #6f76e3;
-  margin-left: 100px;
-  margin-top: 50px;
-}*/
+img {
+  display: block;
+  background-size: cover;
+  max-width:640px;
+  max-height:410px;
+  border-radius: 15px;
+}
 
 .container {
   display: grid;
@@ -53,8 +51,11 @@
   justify-content: center;
   max-width: 30%;
   word-wrap: break-word;
+  margin-top: 25px;
 }
 
-img {
-  border-radius: 15px;
+.commentCenter{
+  justify-content: center;
+  grid-template-columns: auto;
+  text-align: -webkit-center;
 }
