@@ -20,9 +20,7 @@
                 </mat-icon>
             </span>
 
-            <app-add-rating class="add-rating-container" [panelTitle]="'Add rating'" [rating]="data.overallRating"
-                            (ratingUpdated)="onRatingUpdated($event)" [starCount]="5"
-                            [color]="'primary'"></app-add-rating>
+            <app-manage-rating [sightId]="data.uid" class="add-rating-container"></app-manage-rating>
 
         </mat-card-content>
     </mat-card>

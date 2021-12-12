@@ -1,17 +1,25 @@
-
 <div class="mainContainer">
-    <app-add-rating class="add-rating-container" [panelTitle]="'Add rating'" [starCount]="5" [rating]="rating" (ratingUpdated)="onRatingUpdated($event)" [color]="'primary'" (commentUpdated)="onCommentUpdated($event)" (imagesUpdated)="onImagesUpdated($event)"></app-add-rating>
+    <app-add-rating class="add-rating-container" [panelTitle]="'Add rating'" [starCount]="5" [rating]="rating"
+                    (ratingUpdated)="onRatingUpdated($event)" [color]="'primary'"
+                    (commentUpdated)="onCommentUpdated($event)"
+                    (imagesUpdated)="onImagesUpdated($event)">
+    </app-add-rating>
 
     <div style="text-align: center;align-content: center;align-items: center">
+
         <mat-card-actions>
-            <mat-progress-spinner mode="indeterminate" class="mat-progress-spinner" diameter="40" color="accent" [hidden]="!addRatingInProgress"></mat-progress-spinner>
-            <button color="primary" mat-raised-button [textContent]="isNewRating?'Add rating':'Update rating'" (click)="onSave()">
+
+            <mat-progress-spinner mode="indeterminate" class="mat-progress-spinner" diameter="40" color="accent"
+                                  [hidden]="!addRatingInProgress"></mat-progress-spinner>
+
+            <button color="primary" mat-raised-button [textContent]="isNewRating?'Add rating':'Update rating'"
+                    (click)="onSave()">
             </button>
+
             <button (click)="onAbort()" color="warn" mat-stroked-button>
                 Abort
             </button>
         </mat-card-actions>
     </div>
-
 </div>
 

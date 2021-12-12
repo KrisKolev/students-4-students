@@ -17,7 +17,10 @@ export class DetailPageComponent implements OnInit {
 
   //@Input("sight") sight: Sight;
 
+  //new comment information
+  ratingImages: File[]=[];
   rating: any;
+  ratingComment: any;
 
   sight: any;
 
@@ -49,4 +52,12 @@ export class DetailPageComponent implements OnInit {
   sightById(id:string):void{
     this.sight = this.service.getSight(id).subscribe((s)=>{this.sight = s});
   }
+
+  onCommentUpdated($event:any) {
+    this.ratingComment = $event;
+  }
+  onImagesUpdated(files: File[]) {
+    this.ratingImages = files;
+  }
+
 }
