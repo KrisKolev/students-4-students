@@ -117,7 +117,7 @@ public class LocationsAccess {
 
     public static boolean deleteCountry(Country country){
         try {
-            DatabaseAccess.deleteDocument(Country.class, country.getUid());
+            DatabaseAccess.deleteDocument("country", country.getUid());
             return true;
         }catch (InterruptedException | ExecutionException iex){
             System.out.println("Error while deleting document rollback is made");

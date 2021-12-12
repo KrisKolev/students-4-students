@@ -18,6 +18,8 @@ public class UniversityAccess {
     private static List<University> universities;
     private static List<String> uniqueDomains;
     private static UniversityAccess instance;
+    private static String VALID_EMAIL_REGEX = "(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21\\x23-\\x5b\\x5d-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9]))\\.){3}(?:(2(5[0-5]|[0-4][0-9])|1[0-9][0-9]|[1-9]?[0-9])|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])";
+
 
     static {
         try {
@@ -65,7 +67,7 @@ public class UniversityAccess {
 
     public static boolean deleteUniversity(University university){
         try {
-            DatabaseAccess.deleteDocument(University.class, university.getUid());
+            DatabaseAccess.deleteDocument("university", university.getUid());
             return true;
         }catch (InterruptedException | ExecutionException iex){
             System.out.println("Error while deleting document rollback is made");
@@ -75,7 +77,8 @@ public class UniversityAccess {
     }
 
     public static boolean isValidEmailDomain(String email) {
-        if (email == null || "".equals(email) || !email.contains("@"))
+
+        if (!email.matches(VALID_EMAIL_REGEX))
             return false;
 
         String emailDomain = email.substring(email.indexOf('@')).replace("@", "");
