@@ -3,7 +3,8 @@
         <mat-card-title>Send us a message</mat-card-title>
         <mat-card-content>
             <form action="https://formspree.io/f/mayaraka"
-                  method="POST">
+                  method="POST"
+            [formGroup]="contactUsForm">
                 <div fxLayout="column">
                     <mat-form-field appearance="outline">
                         <mat-label>Your Name:</mat-label>
@@ -26,7 +27,7 @@
                         <mat-error *ngIf="hasError('message', 'required')">A Message is required</mat-error>
                     </mat-form-field>
 
-                    <button [disabled]="!contactUsForm"
+                    <button [disabled]="checkFormValidity()"
                             color="primary" mat-raised-button type="submit">
                         Send
                     </button>

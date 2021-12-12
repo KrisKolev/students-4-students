@@ -27,5 +27,16 @@ export class ContactusPageComponent implements OnInit {
   onAbort() {
     this.router.navigateByUrl('/');
   }
-
+    checkFormValidity() {
+        if (this.hasError('name', 'required') || this.hasError('name', 'minlength') || this.hasError('name', 'maxlength')) {
+            return true;
+        }
+        if (this.hasError('email', 'required') || this.hasError('email', 'email')) {
+            return true;
+        }
+        if (this.hasError('message', 'required') || this.hasError('message', 'minlength') || this.hasError('message', 'maxlength')) {
+            return true;
+        }
+        return false;
+    }
 }
