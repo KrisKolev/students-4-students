@@ -1,7 +1,5 @@
 package com.s4s.dto.request;
 
-import com.s4s.database.UniversityAccess;
-
 public class UserDTO {
     private String firstname;
     private String lastname;
@@ -10,9 +8,6 @@ public class UserDTO {
     private String email;
     private String password;
     private String uid;
-
-    public UserDTO() {
-    }
 
     public String getFirstname() {
         return firstname;
