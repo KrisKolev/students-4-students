@@ -4,17 +4,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.s4s.database.model.City;
 import com.s4s.database.model.Country;
-import com.s4s.database.model.Sight;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
-import com.s4s.dto.response.Response;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -27,6 +24,10 @@ public class LocationsAccess {
     private static List<Country> countries;
     private static List<Country> countriesWithCities;
     private static LocationsAccess instance;
+
+    private LocationsAccess(){
+        throw new IllegalStateException("Utility class");
+    }
 
     static {
         try {
@@ -119,9 +120,14 @@ public class LocationsAccess {
         try {
             DatabaseAccess.deleteDocument("country", country.getUid());
             return true;
-        }catch (InterruptedException | ExecutionException iex){
+        }catch (ExecutionException iex){
             System.out.println("Error while deleting document rollback is made");
             System.err.println(iex);
+            return false;
+        }catch (InterruptedException iex){
+            System.out.println("Error while deleting document rollback is made");
+            System.err.println(iex);
+            Thread.currentThread().interrupt();
             return false;
         }
     }

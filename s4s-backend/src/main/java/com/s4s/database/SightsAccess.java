@@ -1,8 +1,6 @@
 package com.s4s.database;
 
-import com.google.api.services.storage.Storage;
 import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.s4s.database.model.*;
 import com.s4s.dto.ResponseHelper;
@@ -20,10 +18,8 @@ import java.util.stream.Collectors;
  */
 public class SightsAccess {
 
-    /**
-     * Top sights
-     */
-    private static final List<Sight> topSight = new ArrayList<>();
+    public static final String SIGHT = "sight";
+    public static final String AN_ERROR_OCCURRED = "An error occurred! ";
     /**
      * Sight instance for access
      */
@@ -115,7 +111,7 @@ public class SightsAccess {
 
             DocumentReference writeResult = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(sight.getClass()), sight);
             sight.setUid(writeResult.getId());
-            DatabaseAccess.updateUidOfDocument("sight", sight.getUid(), sight.getUid());
+            DatabaseAccess.updateUidOfDocument(SIGHT, sight.getUid(), sight.getUid());
 
             //write ratings
             for (Rating rating : tempRatings) {
@@ -175,11 +171,11 @@ public class SightsAccess {
                 searchedSight.getLabelsAssigned().add(label.getUid());
             }
 
-             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"name",searchedSight.getName());
-             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"address",searchedSight.getAddress());
-             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"latitude",searchedSight.getLatitude());
-             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"longitude",searchedSight.getLongitude());
-             DatabaseAccess.updateStringAttribute("sight",searchedSight.getUid(),"labelsAssigned",searchedSight.getLabelsAssigned());
+             DatabaseAccess.updateStringAttribute(SIGHT,searchedSight.getUid(),"name",searchedSight.getName());
+             DatabaseAccess.updateStringAttribute(SIGHT,searchedSight.getUid(),"address",searchedSight.getAddress());
+             DatabaseAccess.updateStringAttribute(SIGHT,searchedSight.getUid(),"latitude",searchedSight.getLatitude());
+             DatabaseAccess.updateStringAttribute(SIGHT,searchedSight.getUid(),"longitude",searchedSight.getLongitude());
+             DatabaseAccess.updateStringAttribute(SIGHT,searchedSight.getUid(),"labelsAssigned",searchedSight.getLabelsAssigned());
 
             mapElements();
 
@@ -219,7 +215,7 @@ public class SightsAccess {
             DatabaseAccess.updateUidOfDocument("label", label.getUid(), label.getUid());
             labels = loadLabels();
         } catch (Exception e) {
-            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+            return new ResponseHelper(Info.FAILURE, AN_ERROR_OCCURRED + e.getMessage()).build();
         }
         return new ResponseHelper(Info.SUCCESS, label).build();
     }
@@ -317,7 +313,7 @@ public class SightsAccess {
                 }
             }
         } catch (Exception e) {
-            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+            return new ResponseHelper(Info.FAILURE, AN_ERROR_OCCURRED + e.getMessage()).build();
         }
         return new ResponseHelper(Info.SUCCESS, "Rating added", rating).build();
     }
@@ -329,7 +325,7 @@ public class SightsAccess {
      */
     public static javax.ws.rs.core.Response deleteRating(String ratingId){
         try {
-            WriteResult t = DatabaseAccess.deleteDocument("rating", ratingId).get();
+            DatabaseAccess.deleteDocument("rating", ratingId).get();
 
             Rating deleteRating = ratings.stream().filter(x->x.getUid().equals(ratingId)).findFirst().get();
             ratings.remove(deleteRating);
@@ -343,7 +339,7 @@ public class SightsAccess {
             mapElements();
 
         } catch (Exception e) {
-            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+            return new ResponseHelper(Info.FAILURE, AN_ERROR_OCCURRED + e.getMessage()).build();
         }
         return new ResponseHelper(Info.SUCCESS, "Rating deleted", ratingId).build();
     }
@@ -381,7 +377,7 @@ public class SightsAccess {
             return new ResponseHelper(Info.SUCCESS, "TopSights sorted", sortedSights).build();
         }
         catch (Exception e){
-            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+            return new ResponseHelper(Info.FAILURE, AN_ERROR_OCCURRED + e.getMessage()).build();
         }
     }
 
@@ -398,7 +394,7 @@ public class SightsAccess {
             return new ResponseHelper(Info.SUCCESS, "Sight found", sightList.get(0)).build();
         }
         catch (Exception e){
-            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage(),null).build();
+            return new ResponseHelper(Info.FAILURE, AN_ERROR_OCCURRED + e.getMessage(),null).build();
         }
     }
 
@@ -415,7 +411,7 @@ public class SightsAccess {
             return new ResponseHelper(Info.SUCCESS, "Sights found", sightList).build();
         }
         catch (Exception e){
-            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage(),null).build();
+            return new ResponseHelper(Info.FAILURE, AN_ERROR_OCCURRED + e.getMessage(),null).build();
         }
     }
 
@@ -437,7 +433,7 @@ public class SightsAccess {
             return new ResponseHelper(Info.SUCCESS, "Ratings found", ratingList).build();
         }
         catch (Exception e){
-            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage(),null).build();
+            return new ResponseHelper(Info.FAILURE, AN_ERROR_OCCURRED + e.getMessage(),null).build();
         }
     }
 
@@ -446,7 +442,7 @@ public class SightsAccess {
      * */
     public static javax.ws.rs.core.Response deleteSight(String sightId){
         try {
-            WriteResult t = DatabaseAccess.deleteDocument("sight", sightId).get();
+            DatabaseAccess.deleteDocument(SIGHT, sightId).get();
             Sight sightSearch = sights.stream().filter(x->x.getUid().equals(sightId)).collect(Collectors.toList()).stream().findFirst().get();
 
             if(sightSearch.equals(null)){
@@ -457,7 +453,7 @@ public class SightsAccess {
             }
             sights.remove(sightSearch);
         } catch (Exception e) {
-            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+            return new ResponseHelper(Info.FAILURE, AN_ERROR_OCCURRED + e.getMessage()).build();
         }
         return new ResponseHelper(Info.SUCCESS, "Sight deleted", sightId).build();
     }
