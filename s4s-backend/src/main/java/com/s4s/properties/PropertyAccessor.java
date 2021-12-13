@@ -8,6 +8,10 @@ public class PropertyAccessor {
 
     private static Properties properties;
 
+    private PropertyAccessor() {
+        throw new IllegalStateException("Utility class");
+    }
+
     public static Properties createInstance() {
         if(properties == null){
             properties = new Properties();
