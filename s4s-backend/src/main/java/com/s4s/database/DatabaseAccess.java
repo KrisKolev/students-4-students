@@ -29,7 +29,7 @@ public class DatabaseAccess {
     public static final String GOOGLE_FIRESTORM_PROJECT_ID = PropertyAccessor.getGoogleAuthFirestormProject();
 
     private static Firestore dbInstance;
-    private static final Map<Class, String> documentMap;
+    public static final Map<Class, String> documentMap;
     static {
         documentMap = new HashMap<>();
         documentMap.put(Bookmark.class, "bookmark");

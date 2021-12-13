@@ -7,7 +7,6 @@ import com.google.firebase.auth.UserRecord;
 import com.google.firebase.auth.UserRecord.CreateRequest;
 import com.s4s.database.DatabaseAccess;
 import com.s4s.database.UniversityAccess;
-import com.s4s.database.model.User;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.request.UserDTO;
 import com.s4s.dto.response.Info;
@@ -50,9 +49,13 @@ public class UserEndpoint {
             dbUser.setEmail(userDTO.getEmail());
             dbUser.setUid(userRecord.getUid());
             DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(dbUser.getClass()), dbUser, dbUser.getUid());
-        } catch (FirebaseAuthException | ExecutionException | InterruptedException e) {
+        } catch (FirebaseAuthException | ExecutionException e) {
             e.printStackTrace();
             return new ResponseHelper(Info.FAILURE, e.getMessage()).build();
+        } catch (InterruptedException iex){
+            iex.printStackTrace();
+            Thread.currentThread().interrupt();
+            return new ResponseHelper(Info.FAILURE, iex.getMessage()).build();
         }
 
         return new ResponseHelper(Info.SUCCESS, userRecord).build();
@@ -84,10 +87,9 @@ public class UserEndpoint {
         UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
                 .setDisplayName(userDTO.getFirstname() + "/" + userDTO.getLastname() + "/" + userDTO.getNickname());
 
-        UserRecord userRecord;
         try {
             com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
-            userRecord = FirebaseAuth.getInstance().updateUser(updateRequest);
+            FirebaseAuth.getInstance().updateUser(updateRequest);
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "firstname", userDTO.getFirstname());
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "lastname", userDTO.getLastname());
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "nickname", userDTO.getNickname());
@@ -109,10 +111,9 @@ public class UserEndpoint {
         UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
                 .setPhotoUrl(userDTO.getPhotoUrl());
 
-        UserRecord userRecord;
         try {
             com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
-            userRecord = FirebaseAuth.getInstance().updateUser(updateRequest);
+            FirebaseAuth.getInstance().updateUser(updateRequest);
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "photoUrl", userDTO.getPhotoUrl());
 
         } catch (FirebaseAuthException exception) {
@@ -131,10 +132,8 @@ public class UserEndpoint {
         UserRecord.UpdateRequest updateRequest = new UserRecord.UpdateRequest(userDTO.getUid())
                 .setPassword(userDTO.getPassword());
 
-        UserRecord userRecord;
         try {
-            com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
-            userRecord = FirebaseAuth.getInstance().updateUser(updateRequest);
+            FirebaseAuth.getInstance().updateUser(updateRequest);
         } catch (FirebaseAuthException exception) {
             return new ResponseHelper(Info.FAILURE).build();
         }
@@ -157,15 +156,14 @@ public class UserEndpoint {
                 : authorization;
 
         //Extract user id
-        String uid = null;
+        String uid;
         try {
             FirebaseToken firebaseToken = FirebaseAuth.getInstance().verifyIdToken(jwt);
             uid = firebaseToken.getUid();
         } catch (FirebaseAuthException e) {
-            Response response = new ResponseHelper(Info.FAILURE,
+            return new ResponseHelper(Info.FAILURE,
                     Info.FAILURE.defaultMessage,
                     "Failed to verify the signature of Firebase ID token.").build();
-            return response;
         }
 
         //Delete user
@@ -173,10 +171,9 @@ public class UserEndpoint {
             FirebaseAuth.getInstance().deleteUser(uid);
             DatabaseAccess.deleteDocument("user", uid);
         } catch (Exception e) {
-            Response response = new ResponseHelper(Info.FAILURE,
+            return new ResponseHelper(Info.FAILURE,
                     Info.FAILURE.defaultMessage, e.getMessage()
                     ).build();
-            return response;
         }
 
         return new ResponseHelper(Info.SUCCESS, "User deleted.").build();

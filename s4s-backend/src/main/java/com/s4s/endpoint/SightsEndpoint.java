@@ -1,6 +1,5 @@
 package com.s4s.endpoint;
 
-import com.s4s.database.LocationsAccess;
 import com.s4s.database.SightsAccess;
 import com.s4s.database.model.Label;
 import com.s4s.database.model.Rating;
@@ -14,8 +13,6 @@ import com.s4s.properties.PropertyAccessor;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.image.RescaleOp;
-import java.security.PublicKey;
 import java.util.concurrent.ExecutionException;
 
 /**
@@ -104,7 +101,7 @@ public class SightsEndpoint {
     @JWTTokenRequired
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response AddRating(Rating rating, @QueryParam("id") String userId, @QueryParam("sightId") String sightId){
+    public Response addRating(Rating rating, @QueryParam("id") String userId, @QueryParam("sightId") String sightId){
         rating.setCreator(userId);
         rating.setSightId(sightId);
         return SightsAccess.addRating(rating,true);
@@ -114,14 +111,14 @@ public class SightsEndpoint {
     @Path("/deleteRating")
     @JWTTokenRequired
     @Produces(MediaType.APPLICATION_JSON)
-    public Response DeleteRating(@QueryParam("id") String ratingId){
+    public Response deleteRating(@QueryParam("id") String ratingId){
         return SightsAccess.deleteRating(ratingId);
     }
 
     @POST
     @Path("/reload")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response ReloadSights(User user) throws ExecutionException, InterruptedException {
+    public Response reloadSights(User user) throws ExecutionException, InterruptedException {
         if(!user.getUid().equals(RELOAD))
             return new ResponseHelper(Info.FAILURE,"Not allowed").build();
         SightsAccess.loadSights();
