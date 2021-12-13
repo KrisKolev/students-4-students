@@ -69,7 +69,9 @@ public class JWTTokenFilter implements ContainerRequestFilter {
                     Info.UNAUTHORIZED.defaultMessage,
                     "Failed to verify the signature of Firebase ID token.").build();
             requestContext.abortWith(response);
-            return;
+        } catch (NullPointerException npex){
+            System.err.println("Null Pointer thrown ");
+            npex.printStackTrace();
         }
     }
 }

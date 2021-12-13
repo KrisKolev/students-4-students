@@ -11,12 +11,10 @@ public class CleanupBean {
     public void cleanupJwtCache() {
         int sizeBeforeCleanup = JWTTokenFilter.jwtCache.size();
 
-        JWTTokenFilter.jwtCache.values().removeIf(value -> {
-            return new Date().after(value);
-        });
+        JWTTokenFilter.jwtCache.values().removeIf(new Date()::after);
 
         int sizeAfterCleanup = JWTTokenFilter.jwtCache.size();
 
-        System.out.printf("Removed %d expired items from jwt cache.\n", (sizeBeforeCleanup - sizeAfterCleanup));
+        System.out.printf("Removed %d expired items from jwt cache.%n", (sizeBeforeCleanup - sizeAfterCleanup));
     }
 }
