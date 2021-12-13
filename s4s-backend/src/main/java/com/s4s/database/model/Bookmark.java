@@ -14,9 +14,6 @@ public class Bookmark {
     private Date createdAt;
     private Date updatedAt;
 
-    public Bookmark() {
-    }
-
     public String getUid() {
         return uid;
     }

@@ -2,9 +2,9 @@ package com.s4s.database.model;
 
 public class City {
     private String uid;
-    private String Name;
-    private String CenterLongitude;
-    private String CenterLatitude;
+    private String name;
+    private String centerLongitude;
+    private String centerLatitude;
 
     public String getUid() {
         return uid;
@@ -14,26 +14,26 @@ public class City {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getCenterLongitude() {
-        return CenterLongitude;
+        return centerLongitude;
     }
 
     public void setCenterLongitude(String centerLongitude) {
-        CenterLongitude = centerLongitude;
+        this.centerLongitude = centerLongitude;
     }
 
     public String getCenterLatitude() {
-        return CenterLatitude;
+        return centerLatitude;
     }
 
     public void setCenterLatitude(String centerLatitude) {
-        CenterLatitude = centerLatitude;
+        this.centerLatitude = centerLatitude;
     }
 }

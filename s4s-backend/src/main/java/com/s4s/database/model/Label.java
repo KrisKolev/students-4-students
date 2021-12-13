@@ -11,9 +11,6 @@ public class Label {
     private Date createdAt;
     private Date updatedAt;
 
-    public Label() {
-    }
-
     public String getUid() {
         return uid;
     }

@@ -1,7 +1,5 @@
 package com.s4s.database.model;
 
-import com.google.cloud.firestore.DocumentReference;
-
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +24,6 @@ public class Sight {
     private String createdAtString;
 
     private double averageRating;
-
-    public Sight() {
-    }
 
     public String getUid() {
         return uid;

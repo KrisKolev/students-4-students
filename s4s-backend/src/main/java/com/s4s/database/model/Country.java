@@ -4,58 +4,58 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Country {
-    private List<City> Cities = new ArrayList<>();
-    private String Uid;
-    private City Capital;
-    private String Name;
-    private String Longitude;
-    private String Latitude;
+    private List<City> cities = new ArrayList<>();
+    private String uid;
+    private City capital;
+    private String name;
+    private String longitude;
+    private String latitude;
 
     public List<City> getCities() {
-        return Cities;
+        return cities;
     }
 
     public void setCities(List<City> cities) {
-        Cities = cities;
+        this.cities = cities;
     }
 
     public String getUid() {
-        return Uid;
+        return uid;
     }
 
     public void setUid(String uid) {
-        Uid = uid;
+        this.uid = uid;
     }
 
     public City getCapital() {
-        return Capital;
+        return capital;
     }
 
     public void setCapital(City capital) {
-        Capital = capital;
+        this.capital = capital;
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
     public String getLongitude() {
-        return Longitude;
+        return longitude;
     }
 
     public void setLongitude(String longitude) {
-        Longitude = longitude;
+        this.longitude = longitude;
     }
 
     public String getLatitude() {
-        return Latitude;
+        return latitude;
     }
 
     public void setLatitude(String latitude) {
-        Latitude = latitude;
+        this.latitude = latitude;
     }
 }

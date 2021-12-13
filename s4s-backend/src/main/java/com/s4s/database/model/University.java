@@ -11,9 +11,6 @@ public class University {
     private List<String> websites= new ArrayList<>();
     private String country;
 
-    public University(){
-    }
-
     public String getUid() {
         return uid;
     }

@@ -17,9 +17,6 @@ public class User {
     private Date createdAt;
     private Date updatedAt;
 
-    public User() {
-    }
-
     public String getUid() {
         return uid;
     }

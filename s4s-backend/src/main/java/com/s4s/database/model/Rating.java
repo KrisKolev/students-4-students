@@ -20,7 +20,7 @@ public class Rating {
     private String createdAtString;
 
     private String sightId;
-    public String sightName;
+    private String sightName;
 
     public String getSightId(){return  sightId;}
 
