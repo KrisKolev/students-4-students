@@ -1,0 +1,51 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- master
+
+pool:
+  name: Azure Pipelines
+  demands: maven
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '16.9'
+    checkLatest: true
+
+- script: |
+    npm install -g @angular/cli
+    npm install
+    ng build --prod
+  displayName: 'npm install and build'
+
+- task: Maven@3
+  inputs:
+    mavenPomFile: 'pom.xml'
+    goals: 'clean install'
+    publishJUnitResults: true
+    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+    javaHomeOption: 'JDKVersion'
+    jdkVersionOption: '1.9'
+    mavenVersionOption: 'Default'
+    mavenAuthenticateFeed: false
+    effectivePomSkip: false
+    sonarQubeRunAnalysis: false
+    isJacocoCoverageReportXML: false
+    sqMavenPluginVersionChoice: 'latest'
+    checkStyleRunAnalysis: false
+    pmdRunAnalysis: false
+    findBugsRunAnalysis: false
+
+
+- task: AzureRmWebAppDeployment@4
+  displayName: 'Azure App Service Deploy: students4students'
+  inputs:
+    azureSubscription: 'Azure for Students (c584532d-7c96-44a2-bb51-b160cf4df72d)'
+    appType: webAppLinux
+    WebAppName: students4students
+    packageForLinux: '$(System.DefaultWorkingDirectory)/s4s-backend/target/*.war'
+    RuntimeStack: 'TOMCAT|9.0-jre8'
