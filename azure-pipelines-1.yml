@@ -7,8 +7,7 @@ trigger:
 - master
 
 pool:
-  name: Azure Pipelines
-  demands: maven
+  vmImage: windows-2019
 
 steps:
 - task: NodeTool@0
