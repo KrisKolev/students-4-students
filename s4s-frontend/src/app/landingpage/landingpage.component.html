@@ -226,11 +226,10 @@
         <!--each individual field in the sights autocomplete-->
         <!--also, couldn't get the showDistanceString and overallRating not to show as errors, but they do work-->
         <mat-autocomplete #auto="matAutocomplete" class="address-autocomplete">
-            <mat-option (onSelectionChange)="onSearchSelectItem(sight)" *ngFor="let sight of searchedSights | async"
-                        [value]="sight.name">
+            <mat-option style="height: auto" (onSelectionChange)="onSearchSelectItem(sight)" *ngFor="let sight of searchedSights | async" [value]="sight.name">
                 {{sight.name}}
-                <mat-label [textContent]="'(' + sight.showDistanceString + ')'"></mat-label>
-                <!--<app-star-rating class="search-stars"  [clickable]="false" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>-->
+                <mat-label [textContent]="'(' + sight.showDistanceString + ')'" ></mat-label>
+                <app-star-rating  class="search-stars"  [clickable]="false" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>
             </mat-option>
         </mat-autocomplete>
 </div>
