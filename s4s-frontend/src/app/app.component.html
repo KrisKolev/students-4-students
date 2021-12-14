@@ -9,6 +9,7 @@
         <button mat-button routerLink="">Home</button>
         <button mat-button>About Us</button>
         <button mat-button routerLink="./contact">Contact Us</button>
+        <button mat-button routerLink="./faq">FAQ</button>
 
         <ng-template [ngIf]="isUserLoggedIn()==true">
             <button mat-button (click)="onOpenManageSight()">
