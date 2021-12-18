@@ -17,6 +17,8 @@ public class User {
     private Date createdAt;
     private Date updatedAt;
 
+    private String photoUrl;
+
     public User() {
     }
 
@@ -90,5 +92,13 @@ public class User {
 
     public void setUpdatedAt(Date updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public String getPhotoUrl() {
+        return photoUrl;
+    }
+
+    public void setPhotoUrl(String photoUrl) {
+        this.photoUrl = photoUrl;
     }
 }
