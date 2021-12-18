@@ -1,6 +1,5 @@
 package com.s4s.endpoint;
 
-import com.s4s.database.LocationsAccess;
 import com.s4s.database.SightsAccess;
 import com.s4s.database.model.Label;
 import com.s4s.database.model.Rating;
@@ -14,8 +13,6 @@ import com.s4s.properties.PropertyAccessor;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.awt.image.RescaleOp;
-import java.security.PublicKey;
 import java.util.concurrent.ExecutionException;
 
 /**

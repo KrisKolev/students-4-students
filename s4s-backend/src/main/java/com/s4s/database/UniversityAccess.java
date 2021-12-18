@@ -3,8 +3,6 @@ package com.s4s.database;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.s4s.database.model.Country;
-import com.s4s.database.model.Sight;
 import com.s4s.database.model.University;
 
 import java.io.InputStream;

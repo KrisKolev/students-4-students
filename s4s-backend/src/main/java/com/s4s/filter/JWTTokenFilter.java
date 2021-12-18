@@ -23,7 +23,7 @@ import java.util.concurrent.ConcurrentHashMap;
 public class JWTTokenFilter implements ContainerRequestFilter {
 
     public static final String BEARER_STRING = "Bearer";
-    static ConcurrentHashMap<String, Date> jwtCache = new ConcurrentHashMap<>();
+    public static ConcurrentHashMap<String, Date> jwtCache = new ConcurrentHashMap<>();
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {

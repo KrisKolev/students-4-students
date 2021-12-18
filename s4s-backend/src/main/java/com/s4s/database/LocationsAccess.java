@@ -4,17 +4,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.s4s.database.model.City;
 import com.s4s.database.model.Country;
-import com.s4s.database.model.Sight;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
-import com.s4s.dto.response.Response;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
 /**

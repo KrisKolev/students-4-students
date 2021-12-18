@@ -30,7 +30,7 @@ export class Rating {
 
         this.creator = rating.creatorNickName;
 
-        if(rating.createdAt!=undefined){
+        if(rating.createdAtString!=undefined){
             this.createdAt = rating.createdAtString;
         }
     }

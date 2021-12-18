@@ -31,7 +31,7 @@ public class UserEndpoint {
             return new ResponseHelper(Info.FAILURE, "Email domain cannot be verified!").build();
         }
 
-        UserRecord.CreateRequest request = new CreateRequest()
+        CreateRequest request = new CreateRequest()
                 .setEmail(userDTO.getEmail())
                 .setEmailVerified(true)
                 .setPassword(userDTO.getPassword())
@@ -43,7 +43,7 @@ public class UserEndpoint {
             DatabaseAccess.createInstance();
             userRecord = FirebaseAuth.getInstance().createUser(request);
 
-            com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
+            User dbUser = new User();
             dbUser.setFirstname(userDTO.getFirstname());
             dbUser.setLastname(userDTO.getLastname());
             dbUser.setNickname(userDTO.getNickname());
@@ -86,7 +86,7 @@ public class UserEndpoint {
 
         UserRecord userRecord;
         try {
-            com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
+            User dbUser = new User();
             userRecord = FirebaseAuth.getInstance().updateUser(updateRequest);
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "firstname", userDTO.getFirstname());
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "lastname", userDTO.getLastname());
@@ -111,7 +111,7 @@ public class UserEndpoint {
 
         UserRecord userRecord;
         try {
-            com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
+            User dbUser = new User();
             userRecord = FirebaseAuth.getInstance().updateUser(updateRequest);
             DatabaseAccess.updateStringAttribute(DatabaseAccess.documentMap.get(dbUser.getClass()), userDTO.getUid(), "photoUrl", userDTO.getPhotoUrl());
 
@@ -133,7 +133,7 @@ public class UserEndpoint {
 
         UserRecord userRecord;
         try {
-            com.s4s.database.model.User dbUser = new com.s4s.database.model.User();
+            User dbUser = new User();
             userRecord = FirebaseAuth.getInstance().updateUser(updateRequest);
         } catch (FirebaseAuthException exception) {
             return new ResponseHelper(Info.FAILURE).build();

@@ -1,8 +1,6 @@
 package com.s4s.database;
 
-import com.google.api.services.storage.Storage;
 import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.WriteResult;
 import com.s4s.database.model.*;
 import com.s4s.dto.ResponseHelper;
@@ -303,7 +301,7 @@ public class SightsAccess {
      */
     public static javax.ws.rs.core.Response addRating(Rating rating,boolean addToSight) {
         try {
-            rating.setCreatedAt(new Date());
+            rating.setCreatedAtString(new Date().toString());
             DocumentReference ref = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(rating.getClass()), rating);
             rating.setUid(ref.getId());
             DatabaseAccess.updateUidOfDocument("rating", rating.getUid(), rating.getUid());

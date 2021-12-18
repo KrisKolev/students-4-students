@@ -1,10 +1,13 @@
 package com.s4s.endpoint;
 
 import com.s4s.database.LocationsAccess;
-import com.s4s.database.model.Country;
 import com.s4s.dto.ResponseHelper;
 import com.s4s.dto.response.Info;
-import javax.ws.rs.*;
+
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 

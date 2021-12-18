@@ -12,10 +12,10 @@ public class Rating {
     private String comment;
 
     private List<String> imageNames = new ArrayList<>();
+    private List<String> imageUrl = new ArrayList<>();
 
     private String creator;
     private String creatorNickName;
-    private Date createdAt;
     private Date updatedAt;
     private String createdAtString;
 
@@ -64,14 +64,6 @@ public class Rating {
         this.creator = creator;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
     public Date getUpdatedAt() {
         return updatedAt;
     }
@@ -100,12 +92,19 @@ public class Rating {
         this.creatorNickName = creatorNickName;
     }
 
+    public List<String> getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(List<String> imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
     public String getCreatedAtString() {
-        if(createdAt!=null){
-            return createdAt.toString();
-        }
-        else {
-            return "";
-        }
+        return createdAtString;
+    }
+
+    public void setCreatedAtString(String createdAtString) {
+        this.createdAtString = createdAtString;
     }
 }
