@@ -1,15 +1,13 @@
-package test.java.controller;
+package com.s4s.controller;
 
 import com.google.api.client.http.HttpStatusCodes;
-import com.google.api.gax.rpc.StatusCode;
-import com.s4s.database.model.Country;
 import com.s4s.endpoint.LocationsEndpoint;
-import com.s4s.endpoint.SightsEndpoint;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.ws.rs.core.Response;
-import java.util.ArrayList;
 
+@SpringBootTest
 public class LocationsEndpointTests {
 
 

@@ -1,33 +1,49 @@
-package test.java.database;
+package com.s4s.database;
 
 import com.google.api.client.http.HttpStatusCodes;
-import com.s4s.database.SightsAccess;
 import com.s4s.database.model.Label;
 import com.s4s.database.model.Rating;
 import com.s4s.database.model.Sight;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import javax.ws.rs.core.Response;
-import java.util.*;
+import java.io.Console;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+@SpringBootTest
 public class SightsAccessTests {
 
     private String USER_ID = "TestUserDoNotDeletexCP3QCAGe1IqO";
 
     @BeforeEach
     void SetUp() throws ExecutionException, InterruptedException {
+        DatabaseAccess.createInstance();
         SightsAccess.createInstance();
     }
 
+
     @Test
-    public void getSights_ReturnsSights(){
+    public void getSights_ReturnsSights() throws ExecutionException, InterruptedException {
         List<Sight> allSights = SightsAccess.getSights();
         assert(allSights.size() > 0);
     }
 
     @Test
     public void addSight_WithValidSight_AddsSight(){
+
+        Optional<Sight> sight = SightsAccess.getSights().stream().filter(x->x.getName().equals("NewSight")).findFirst();
+
+        if(sight.isPresent()){
+            Sight deleteSight = sight.get();
+            deleteSight(deleteSight);
+        }
+
         Sight sightToAdd = getValidSight();
         List<Sight> before = SightsAccess.getSights();
         int sightNumberBefore = before.size();
@@ -72,16 +88,22 @@ public class SightsAccessTests {
     @Test
     public void addLabel_WithValidLabel_AddsLabel(){
         Label label = getValidLabel();
-        List<Label> before = SightsAccess.getLabels();
-        int labelNumberBefore = before.size();
+        Optional<Label> deleteLabel = SightsAccess.getLabels().stream().filter(x->x.getName().equals(getValidLabel().getName())).findFirst();
+        if (deleteLabel.isPresent()){
+            SightsAccess.deleteLabel(deleteLabel.get());
+        }
 
         Response response = SightsAccess.addLabel(label);
-
-        List<Label> after = SightsAccess.getLabels();
-        int labelNumberAfter = after.size();
+        Optional writtenValueAfter = SightsAccess.getLabels().stream().filter(x->x.getName().equals(label.getName())).findFirst();
 
         assert(response.getStatus() == HttpStatusCodes.STATUS_CODE_OK);
-        assert(labelNumberAfter == labelNumberBefore+1);
+        assert(writtenValueAfter.isPresent());
+
+        Optional<Label> cleanupLabel = SightsAccess.getLabels().stream().filter(x->x.getName().equals(getValidLabel().getName())).findFirst();
+        if (deleteLabel.isPresent()){
+            SightsAccess.deleteLabel(cleanupLabel.get());
+        }
+
     }
 
     private Sight getValidSight(){

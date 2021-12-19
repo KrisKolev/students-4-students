@@ -222,6 +222,20 @@ public class SightsAccess {
         return new ResponseHelper(Info.SUCCESS, label).build();
     }
 
+    public static javax.ws.rs.core.Response deleteLabel(Label label){
+        try {
+            labels = loadLabels();
+            Optional<Label> deleteLabel = SightsAccess.getLabels().stream().filter(x->x.getUid().equals(label.getUid())).findFirst();
+            if(deleteLabel.isPresent()){
+                DatabaseAccess.deleteDocument("label",label.getUid());
+            }
+            labels = loadLabels();
+        } catch (Exception e) {
+            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+        }
+        return new ResponseHelper(Info.SUCCESS, label).build();
+    }
+
     /**
      * Gets all sights from database.
      *

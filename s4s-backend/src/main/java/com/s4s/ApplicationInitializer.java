@@ -1,16 +1,9 @@
 package com.s4s;
 import com.s4s.database.*;
-import javax.annotation.PostConstruct;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
 import java.util.concurrent.ExecutionException;
 
-@Singleton
-@Startup
 public class ApplicationInitializer {
-
-    @PostConstruct
-    public void initialize() throws ExecutionException, InterruptedException {
+    public static void Initialize() throws ExecutionException, InterruptedException {
         //Database
         System.out.println("S4S Backend - creating database instance.");
         DatabaseAccess.createInstance();
