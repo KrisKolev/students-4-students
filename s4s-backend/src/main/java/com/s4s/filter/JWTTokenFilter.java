@@ -41,7 +41,7 @@ public class JWTTokenFilter implements ContainerRequestFilter {
         String token = authorizationHeader.contains(BEARER_STRING)
                 ? authorizationHeader.replace(BEARER_STRING, "").trim()
                 : authorizationHeader;
-        if (token == null || token.isEmpty()) {
+        if (token.isEmpty()) {
             Response response = new ResponseHelper(Info.UNAUTHORIZED,
                     Info.UNAUTHORIZED.defaultMessage,
                     "Firebase ID token is missing.").build();
@@ -69,7 +69,6 @@ public class JWTTokenFilter implements ContainerRequestFilter {
                     Info.UNAUTHORIZED.defaultMessage,
                     "Failed to verify the signature of Firebase ID token.").build();
             requestContext.abortWith(response);
-            return;
         }
     }
 }
