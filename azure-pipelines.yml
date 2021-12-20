@@ -16,9 +16,9 @@ steps:
     checkLatest: true
 
 - script: |
-    cd D:/a/1/s/
-    ls
-  displayName: 'test'
+    cd D:/a/1/s/s4s-frontend
+    npm clean install
+  displayName: 'Build Frontend'
 
 #- script: |
 #    npm install -g @angular/cli
