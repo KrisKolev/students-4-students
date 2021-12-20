@@ -17,7 +17,9 @@ steps:
 
 - script: |
     cd D:/a/1/s/s4s-frontend
-    npm clean-install
+    npm install -g @angular/cli
+    npm install
+    ng build --prod
   displayName: 'Build Frontend'
 
 - script: |
