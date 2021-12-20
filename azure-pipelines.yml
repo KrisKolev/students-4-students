@@ -17,8 +17,13 @@ steps:
 
 - script: |
     cd D:/a/1/s/s4s-frontend
-    npm clean install
+    npm clean-install
   displayName: 'Build Frontend'
+
+- script: |
+    cd D:/a/1/s/s4s-backend
+    mvn clean install
+  displayName: 'Build Backend'
 
 #- script: |
 #    npm install -g @angular/cli
