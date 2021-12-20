@@ -16,32 +16,37 @@ steps:
     checkLatest: true
 
 - script: |
-    npm install -g @angular/cli
-    npm install
-    ng build --prod
-  displayName: 'npm install and build'
+    cd D:/a/1/s/
+    ls
+  displayName: 'test'
 
-- task: CmdLine@2
-  inputs:
-    script: |
-      echo Write your commands here
-      mkdir D:\a\1\s\s4s-backend\src\main\webapp\web
-      echo Hello world
+#- script: |
+#    npm install -g @angular/cli
+#    npm install
+#    ng build --prod
+##  displayName: 'npm install and build'
+
+#- task: CmdLine@2
+#  inputs:
+#    script: |
+#      echo Write your commands here
+#      mkdir D:\a\1\s\s4s-backend\src\main\webapp\web
+#      echo Hello world
       
-- task: Maven@3
-  inputs:
-    mavenPomFile: 'pom.xml'
-    goals: 'clean install'
-    publishJUnitResults: true
-    testResultsFiles: '**/surefire-reports/TEST-*.xml'
-    javaHomeOption: 'JDKVersion'
-    jdkVersionOption: '1.9'
-    mavenVersionOption: 'Default'
-    mavenAuthenticateFeed: false
-    effectivePomSkip: false
-    sonarQubeRunAnalysis: false
-    isJacocoCoverageReportXML: false
-    sqMavenPluginVersionChoice: 'latest'
-    checkStyleRunAnalysis: false
-    pmdRunAnalysis: false
-    findBugsRunAnalysis: false
+#- task: Maven@3
+#  inputs:
+#    mavenPomFile: 'pom.xml'
+#    goals: 'clean install'
+#    publishJUnitResults: true
+#    testResultsFiles: '**/surefire-reports/TEST-*.xml'
+#    javaHomeOption: 'JDKVersion'
+#    jdkVersionOption: '1.9'
+#    mavenVersionOption: 'Default'
+#    mavenAuthenticateFeed: false
+#    effectivePomSkip: false
+#    sonarQubeRunAnalysis: false
+#    isJacocoCoverageReportXML: false
+#    sqMavenPluginVersionChoice: 'latest'
+#    checkStyleRunAnalysis: false
+#    pmdRunAnalysis: false
+#    findBugsRunAnalysis: false
