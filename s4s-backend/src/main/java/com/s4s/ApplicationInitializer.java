@@ -3,7 +3,7 @@ import com.s4s.database.*;
 import java.util.concurrent.ExecutionException;
 
 public class ApplicationInitializer {
-    public static void Initialize() throws ExecutionException, InterruptedException {
+    public static void initialize() throws ExecutionException, InterruptedException {
         //Database
         System.out.println("S4S Backend - creating database instance.");
         DatabaseAccess.createInstance();

@@ -1,16 +1,15 @@
 package com.s4s;
 
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import java.util.concurrent.ExecutionException;
 
-@SpringBootApplication
+@org.springframework.boot.autoconfigure.SpringBootApplication
 @EnableScheduling
-public class SpringBootJaxrsApplication {
+public class SpringBootApplication {
 
 	public static void main(String[] args) throws ExecutionException, InterruptedException {
-		SpringApplication.run(SpringBootJaxrsApplication.class, args);
-		ApplicationInitializer.Initialize();
+		SpringApplication.run(SpringBootApplication.class, args);
+		ApplicationInitializer.initialize();
 	}
 }
