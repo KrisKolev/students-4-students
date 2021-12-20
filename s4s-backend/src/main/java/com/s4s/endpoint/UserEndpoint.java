@@ -1,5 +1,6 @@
 package com.s4s.endpoint;
 
+import com.google.cloud.firestore.WriteResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
@@ -49,7 +50,8 @@ public class UserEndpoint {
             dbUser.setNickname(userDTO.getNickname());
             dbUser.setEmail(userDTO.getEmail());
             dbUser.setUid(userRecord.getUid());
-            DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(dbUser.getClass()), dbUser, dbUser.getUid());
+            WriteResult result = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(dbUser.getClass()), dbUser, dbUser.getUid());
+            System.out.println(result);
         } catch (FirebaseAuthException | ExecutionException | InterruptedException e) {
             e.printStackTrace();
             return new ResponseHelper(Info.FAILURE, e.getMessage()).build();

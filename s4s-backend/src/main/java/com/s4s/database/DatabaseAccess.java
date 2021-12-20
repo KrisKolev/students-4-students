@@ -12,10 +12,7 @@ import com.s4s.properties.PropertyAccessor;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class DatabaseAccess {
@@ -38,6 +35,9 @@ public class DatabaseAccess {
         createInstance();
     }
 
+    /**
+     * Must be executed before accessing the database access classes to initialize the connection
+     * */
     public static Firestore createInstance() {
         if (dbInstance == null) {
             ArrayList<String> scopes = Lists.newArrayList(GOOGLE_AUTH_SCOPE);
@@ -48,13 +48,13 @@ public class DatabaseAccess {
             //Init credentials
             GoogleCredentials credentials = null;
             try {
-                credentials = GoogleCredentials.fromStream(inputStream).createScoped(scopes);
+                credentials = GoogleCredentials.fromStream(Objects.requireNonNull(inputStream)).createScoped(scopes);
             } catch (IOException e) {
                 e.printStackTrace();
             }
 
             FirebaseOptions options = new FirebaseOptions.Builder()
-                    .setCredentials(credentials)
+                    .setCredentials(Objects.requireNonNull(credentials))
                     .setProjectId(GOOGLE_FIRESTORM_PROJECT_ID)
                     .build();
 
@@ -65,60 +65,65 @@ public class DatabaseAccess {
         return dbInstance;
     }
 
-    //use if you want to add a document and let firebase generate the uid for it
-    public static <T> DocumentReference saveOrInsertDocument(String collectionName,Object document) throws ExecutionException, InterruptedException {
-        DocumentReference reference =  dbInstance.collection(collectionName).add(document).get();
-        return reference;
+    /**
+    * use to store an object as document on firestore if document name can be generic
+    * */
+    public static DocumentReference saveOrInsertDocument(String collectionName,Object document) throws ExecutionException, InterruptedException {
+        return dbInstance.collection(collectionName).add(document).get();
     }
 
-    //use if you know how the document shall be named
-    public static <T> WriteResult saveOrInsertDocument(String collectionName,Object document,String documentName) throws ExecutionException, InterruptedException {
-        WriteResult reference = dbInstance.collection(collectionName).document(documentName).set(document).get();
-        return reference;
+    /**
+     * use to store an object as document on firestore if document name can must be specific
+     * **/
+    public static WriteResult saveOrInsertDocument(String collectionName,Object document,String documentName) throws ExecutionException, InterruptedException {
+        return dbInstance.collection(collectionName).document(documentName).set(document).get();
     }
 
-    public static <T> WriteResult updateUidOfDocument(String collectionName,String documentName,String uid) throws ExecutionException, InterruptedException {
+    /**
+     * use only if the given document is existing, otherwise exception will be thrown.
+     * */
+    public static WriteResult updateUidOfDocument(String collectionName,String documentName,String uid) throws ExecutionException, InterruptedException {
         DocumentReference docRef = dbInstance.collection(collectionName).document(documentName);
-        WriteResult reference = docRef.update("uid",uid).get();
-        return reference;
+        return docRef.update("uid",uid).get();
     }
-    public static <T> WriteResult updateStringAttribute(String collectionName,String documentName,String attributeName,String newValue) throws ExecutionException, InterruptedException {
+
+    /**
+     * use only if the given document is existing and the attribute field exists, otherwise exception will be thrown.
+     * */
+    public static WriteResult updateStringAttribute(String collectionName,String documentName,String attributeName,String newValue) throws ExecutionException, InterruptedException {
         DocumentReference docRef = dbInstance.collection(collectionName).document(documentName);
-        WriteResult reference = docRef.update(attributeName,newValue).get();
-        return reference;
+        return docRef.update(attributeName,newValue).get();
     }
-    public static <T> WriteResult updateStringAttribute(String collectionName,String documentName,String attributeName,List<String> newValue) throws ExecutionException, InterruptedException {
+
+    /**
+     * use only if the given document is existing and the attribute field exists, otherwise exception will be thrown.
+     * */
+    public static WriteResult updateStringAttribute(String collectionName,String documentName,String attributeName,List<String> newValue) throws ExecutionException, InterruptedException {
         DocumentReference docRef = dbInstance.collection(collectionName).document(documentName);
-        WriteResult reference = docRef.update(attributeName,newValue).get();
-        return reference;
+        return docRef.update(attributeName,newValue).get();
     }
 
-    public static <T> T retrieveDocument(Class<T> documentType, String documentId)
-            throws ExecutionException, InterruptedException {
-        DocumentReference docRef = dbInstance.collection(documentMap.get(documentType)).document(documentId);
-
-        ApiFuture<DocumentSnapshot> future = docRef.get();
-        DocumentSnapshot document = future.get();
-
-        T obj = document.toObject(documentType);
-        return obj;
-    }
-
-    public static <T> List<T> retrieveAllDocuments(Class<T> documentType)
+    /**
+     * gets all documents of a specific collection
+     * */
+    public static <T> List<T> retrieveAllDocuments(Class<T> collectionName)
             throws InterruptedException, ExecutionException {
-        ApiFuture<QuerySnapshot> query = dbInstance.collection(documentMap.get(documentType)).get();
+        ApiFuture<QuerySnapshot> query = dbInstance.collection(documentMap.get(collectionName)).get();
 
         QuerySnapshot querySnapshot = query.get();
         List<QueryDocumentSnapshot> documents = querySnapshot.getDocuments();
 
         List<T> result = new ArrayList<>();
         for (QueryDocumentSnapshot document : documents) {
-            result.add(document.toObject(documentType));
+            result.add(document.toObject(collectionName));
         }
 
         return result;
     }
 
+    /**
+     * use only if the given document is existing, otherwise exception will be thrown.
+     * */
     public static ApiFuture<WriteResult> deleteDocument(String documentPath, String documentId)
             throws InterruptedException, ExecutionException {
         DocumentReference document = dbInstance.collection(documentPath).document(documentId);
