@@ -12,7 +12,7 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
+import java.util.Objects;
 
 /**
  * Access to all country and city relevant data.
@@ -30,7 +30,7 @@ public class LocationsAccess {
             InputStream countriesJsonStream = LocationsAccess.class.getResourceAsStream("../../../countries+cities.json");
 
             JsonArray jsonObjects = (JsonArray) JsonParser.parseReader(
-                    new InputStreamReader(countriesJsonStream, StandardCharsets.UTF_8));
+                    new InputStreamReader(Objects.requireNonNull(countriesJsonStream), StandardCharsets.UTF_8));
 
             if (jsonObjects != null) {
                 countries = new ArrayList<>();
@@ -40,7 +40,7 @@ public class LocationsAccess {
                     Country newCountry = new Country();
                     Country newCountryCity = new Country();
 
-                    String capital="";
+                    String capital;
 
                     //load data from JSON
                     newCountry.setName(newCountryObject.get("name").getAsString());
@@ -69,7 +69,7 @@ public class LocationsAccess {
 
                         //add city to country
                         newCountryCity.getCities().add(newCity);
-                        if(newCity.getName() == finalCapital){
+                        if(newCity.getName().equals(finalCapital)){
                             newCountryCity.setCapital(newCity);
                             newCountry.setCapital(newCity);
                         }
@@ -86,8 +86,7 @@ public class LocationsAccess {
     }
 
     /**
-     * Creates the instance of the locations access.
-     * @return
+     * Must be executed before accessing the locations functions to initialize them.
      */
     public static LocationsAccess createInstance() {
         if (instance == null) {
@@ -97,36 +96,21 @@ public class LocationsAccess {
     }
 
     /**
-     * Returns all countries without cities
-     * @return
+     * Returns all countries without cities.
      */
     public static List<Country> getCountries() {
         return countries;
     }
 
     /**
-     * Returns all data available.
-     * @return
+     * Returns all countries with its corresponding cities. Warning: large data size!
      */
     public static List<Country> getCountriesWithCities(){
         return countriesWithCities;
     }
 
-    public static boolean deleteCountry(Country country){
-        try {
-            DatabaseAccess.deleteDocument("country", country.getUid());
-            return true;
-        }catch (InterruptedException | ExecutionException iex){
-            System.out.println("Error while deleting document rollback is made");
-            System.err.println(iex);
-            return false;
-        }
-    }
-
     /**
-     * Returns all cities for a specific country
-     * @param id
-     * @return
+     * Returns all cities for a specific country by its id. Returns error if the country id is not found!
      */
     public static javax.ws.rs.core.Response getCountryWithCity(String id){
 

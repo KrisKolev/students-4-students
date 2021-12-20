@@ -19,11 +19,7 @@ import java.util.stream.Collectors;
 public class SightsAccess {
 
     /**
-     * Top sights
-     */
-    private static final List<Sight> topSight = new ArrayList<>();
-    /**
-     * Sight instance for access
+     * instance for access the functions
      */
     private static SightsAccess instance;
     /**
@@ -45,11 +41,7 @@ public class SightsAccess {
     private static List<User> users = new ArrayList<>();
 
     /**
-     * Creates the sight instance
-     *
-     * @return
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * Must be executed before accessing the sights access classes to initialize the connection
      */
     public static SightsAccess createInstance() throws ExecutionException, InterruptedException {
         if (instance == null) {
@@ -60,10 +52,7 @@ public class SightsAccess {
     }
 
     /**
-     * Adds a sight to database
-     *
-     * @param sight
-     * @return
+     * Adds a sight to database only if name is unique and address is unique. Otherwise, it will be refused.
      */
     public static javax.ws.rs.core.Response addSights(Sight sight, String user) {
         try {
@@ -113,7 +102,8 @@ public class SightsAccess {
 
             DocumentReference writeResult = DatabaseAccess.saveOrInsertDocument(DatabaseAccess.documentMap.get(sight.getClass()), sight);
             sight.setUid(writeResult.getId());
-            DatabaseAccess.updateUidOfDocument("sight", sight.getUid(), sight.getUid());
+            WriteResult result = DatabaseAccess.updateUidOfDocument("sight", sight.getUid(), sight.getUid());
+            System.out.println(result);
 
             //write ratings
             for (Rating rating : tempRatings) {
@@ -131,6 +121,9 @@ public class SightsAccess {
         return new ResponseHelper(Info.SUCCESS, "Added sight", sight).build();
     }
 
+    /***
+     *Updates a sight only if it exists. Otherwise, it will be refused.
+     */
     public static javax.ws.rs.core.Response updateSights(Sight sight){
         try {
             loadSights();
@@ -147,7 +140,12 @@ public class SightsAccess {
                 return new ResponseHelper(Info.FAILURE, "Sight already added on address '" + sight.getAddress() + "'!").build();
             }
 
-            Sight searchedSight = sights.stream().filter(x->x.getUid().equals(sight.getUid())).findFirst().get();
+            Optional<Sight> searchedSightOptional = sights.stream().filter(x->x.getUid().equals(sight.getUid())).findFirst();
+            if(!searchedSightOptional.isPresent()){
+                return new ResponseHelper(Info.FAILURE, "Sight '" + sight.getName() + "' can´t be found!").build();
+            }
+            Sight searchedSight;
+            searchedSight = sights.stream().filter(x->x.getUid().equals(sight.getUid())).findFirst().get();
 
             //check labels
             labels = loadLabels();
@@ -190,23 +188,23 @@ public class SightsAccess {
     }
 
     /**
-     * Get all labels
-     *
-     * @return
+     * Returns all currently existing labels from cache. A new database pull will not be done!
      */
     public static List<Label> getLabels() {
         return labels;
     }
 
     /**
-     * Adds a label to database.
-     *
-     * @param label
-     * @return
+     * Adds a label to database only if its name is unique and not an empty string or whitespaces.
      */
     public static javax.ws.rs.core.Response addLabel(Label label) {
         try {
             labels = loadLabels();
+
+            if(label.getName().equals("") || label.getName().equals(" ")){
+                return new ResponseHelper(Info.FAILURE, "Label name must not be empty or whitespace!").build();
+            }
+
             List<Label> labelSearch = labels.stream().filter(x -> x.getName().equals(label.getName()))
                     .collect(Collectors.toList());
             if (!labelSearch.isEmpty())
@@ -222,32 +220,39 @@ public class SightsAccess {
         return new ResponseHelper(Info.SUCCESS, label).build();
     }
 
+    /***
+     * Deletes a label only if its present in the database. Otherwise, returns an error.
+     */
+    public static javax.ws.rs.core.Response deleteLabel(Label label){
+        try {
+            labels = loadLabels();
+            Optional<Label> deleteLabel = SightsAccess.getLabels().stream().filter(x->x.getUid().equals(label.getUid())).findFirst();
+            if(deleteLabel.isPresent()){
+                DatabaseAccess.deleteDocument("label",label.getUid());
+            }
+            labels = loadLabels();
+        } catch (Exception e) {
+            return new ResponseHelper(Info.FAILURE, "An error occurred! " + e.getMessage()).build();
+        }
+        return new ResponseHelper(Info.SUCCESS, label).build();
+    }
+
     /**
-     * Gets all sights from database.
-     *
-     * @return
+     * Gets all sights from cache. A new database pull will not be done!.
      */
     public static List<Sight> getSights() {
         return sights;
     }
 
     /**
-     * Loads all labels from database
-     *
-     * @return
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * Loads all labels from database with a new fetch and overwrites the cache.
      */
     private static List<Label> loadLabels() throws ExecutionException, InterruptedException {
         return DatabaseAccess.retrieveAllDocuments(Label.class);
     }
 
     /**
-     * Loads all sights from database
-     *
-     * @return
-     * @throws ExecutionException
-     * @throws InterruptedException
+     * Loads all sights from database with a new fetch and overwrites the cache.
      */
     public static void loadSights() throws ExecutionException, InterruptedException {
         users = DatabaseAccess.retrieveAllDocuments(User.class);
@@ -258,7 +263,7 @@ public class SightsAccess {
     }
 
     /**
-     * Maps all downloaded elements to their responding objects
+     * Maps ratings and labels to their corresponding sights.
      * */
     private static void mapElements(){
         try {
@@ -268,11 +273,8 @@ public class SightsAccess {
                 //load labels for sight
                 sight.setLabelList(new ArrayList<>());
                 for (String label : sight.getLabelsAssigned()) {
-                    Label found = labels.stream().filter(x -> x.getUid().equals(label))
-                            .findAny()
-                            .orElse(null);
-                    if (found != null)
-                        sight.getLabelList().add(found);
+                    labels.stream().filter(x -> x.getUid().equals(label))
+                            .findAny().ifPresent(found -> sight.getLabelList().add(found));
                 }
 
                 //load ratings for sight
@@ -294,10 +296,7 @@ public class SightsAccess {
     }
 
     /**
-     * Adds a rating for a sight
-     *
-     * @param rating
-     * @return
+     * Adds a new rating for a sight. If the sight does not exist it will be refused.
      */
     public static javax.ws.rs.core.Response addRating(Rating rating,boolean addToSight) {
         try {
@@ -308,7 +307,13 @@ public class SightsAccess {
             ratings.add(rating);
 
             if(addToSight){
-                Sight sight = sights.stream().filter(x->x.getUid().equals(rating.getSightId())).findFirst().get();
+                Sight sight = null;
+
+                Optional<Sight> sightOptional =  sights.stream().filter(x->x.getUid().equals(rating.getSightId())).findFirst();
+                if(sightOptional.isPresent()){
+                    sight = sights.stream().filter(x->x.getUid().equals(rating.getSightId())).findFirst().get();
+                }
+
                 if(sight!=null){
                     sight.getRatingList().add(rating);
                     mapElements();
@@ -321,15 +326,14 @@ public class SightsAccess {
     }
 
     /**
-     * Deletes a rating
-     *
-     * @return
+     * Deletes a rating only if it exists. Otherwise, it will be refused.
      */
     public static javax.ws.rs.core.Response deleteRating(String ratingId){
         try {
             WriteResult t = DatabaseAccess.deleteDocument("rating", ratingId).get();
-
-            Rating deleteRating = ratings.stream().filter(x->x.getUid().equals(ratingId)).findFirst().get();
+            System.out.println(t);
+            Rating deleteRating = ratings.stream().filter(x->x.getUid().equals(ratingId)).findFirst().isPresent()
+                    ? ratings.stream().filter(x->x.getUid().equals(ratingId)).findFirst().get() : null;
             ratings.remove(deleteRating);
 
             List<Sight> sight = sights.stream().filter(x->x.getRatingList().stream().anyMatch(y->y.getSightId().equals(ratingId))).collect(Collectors.toList());
@@ -346,6 +350,9 @@ public class SightsAccess {
         return new ResponseHelper(Info.SUCCESS, "Rating deleted", ratingId).build();
     }
 
+    /**
+     * Gets all topsights sorted by rating from database cache.
+     */
     public static javax.ws.rs.core.Response getTopSights(double lon, double lat, double radius){
 
         try{
@@ -384,7 +391,7 @@ public class SightsAccess {
     }
 
     /**
-     * Gets a sight by its id
+     * Gets a sight by its id. If id is not present in database, it will return an error.
      * */
     public static javax.ws.rs.core.Response getSightById(String id) {
         try{
@@ -401,7 +408,7 @@ public class SightsAccess {
     }
 
     /**
-     * Gets all sights that a user has created
+     * Gets all sights that a user has created by his id. If the user id is not found or the user has no sights, it returns null.
      * */
     public static javax.ws.rs.core.Response getSightsForUser(String userId){
         try{
@@ -418,7 +425,7 @@ public class SightsAccess {
     }
 
     /**
-     * Get all ratings for users
+     * Get all ratings for users. If the user id is not found or the user has no ratings, it returns null.
      * */
     public static javax.ws.rs.core.Response getRatingsForUser(String userId){
         try{
@@ -440,8 +447,8 @@ public class SightsAccess {
     }
 
     /**
-     * Deletes a sight
-     * */
+     * Deletes a sight only if it exists. Otherwise, it will be refused.
+     */
     public static javax.ws.rs.core.Response deleteSight(String sightId){
         try {
             WriteResult t = DatabaseAccess.deleteDocument("sight", sightId).get();
@@ -460,6 +467,9 @@ public class SightsAccess {
         return new ResponseHelper(Info.SUCCESS, "Sight deleted", sightId).build();
     }
 
+    /***
+     * Calculates the direct distance of two points via longitude and latitude.
+     */
     public static double getDistanceFromLatLonInKm(double lat1, double lon1, double lat2, double lon2) {
         final double earthRadius = 6371;
         double dLat = deg2rad(lat2 - lat1);

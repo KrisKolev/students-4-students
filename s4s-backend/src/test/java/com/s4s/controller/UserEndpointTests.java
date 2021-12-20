@@ -1,17 +1,19 @@
-package test.java.controller;
+package com.s4s.controller;
 
 import com.s4s.dto.request.UserDTO;
 import com.s4s.dto.response.Info;
 import com.s4s.endpoint.UserEndpoint;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import javax.ws.rs.core.Response;
 
+@SpringBootTest
 public class UserEndpointTests {
 
     private UserEndpoint _sut = new UserEndpoint();
 
-    @Test
+    //ToDo needs major rework as user needs always a unique mail address and can´t be the same twice!
     public void registerUser_WithValidUser_CreatesUser(){
         UserDTO user = getValidUser();
 

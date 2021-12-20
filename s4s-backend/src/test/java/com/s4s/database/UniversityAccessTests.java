@@ -1,8 +1,9 @@
-package test.java.database;
+package com.s4s.database;
 
-import com.s4s.database.UniversityAccess;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 public class UniversityAccessTests {
 
     @Test

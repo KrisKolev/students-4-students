@@ -1,11 +1,17 @@
-package test.java.database;
-import com.s4s.database.LocationsAccess;
+package com.s4s.database;
+
 import com.s4s.database.model.Country;
-import org.junit.jupiter.api.BeforeEach;
+
+
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+@SpringBootTest
 public class LocationAccessTests {
 
     @BeforeEach

@@ -1,13 +1,12 @@
 package com.s4s.filter;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
-import javax.ejb.Schedule;
-import javax.ejb.Singleton;
 import java.util.Date;
 
-@Singleton
+@Component
 public class CleanupBean {
-
-    @Schedule(minute = "*/5", hour = "*", persistent = false)
+    @Scheduled(fixedRate = 30000)
     public void cleanupJwtCache() {
         int sizeBeforeCleanup = JWTTokenFilter.jwtCache.size();
 
@@ -16,7 +15,8 @@ public class CleanupBean {
         });
 
         int sizeAfterCleanup = JWTTokenFilter.jwtCache.size();
-
+        System.out.println(
+                "Fixed rate task async - " + System.currentTimeMillis() / 1000);
         System.out.printf("Removed %d expired items from jwt cache.\n", (sizeBeforeCleanup - sizeAfterCleanup));
     }
 }
