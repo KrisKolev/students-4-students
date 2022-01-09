@@ -9,7 +9,8 @@
                 <button (click)="onGoToSight(sight)" *ngIf="!isDetailView" mat-mini-fab>
                     <mat-icon>open_in_new</mat-icon>
                 </button>
-                <button (click)="onExpand(sight.uid, sight.name, sight.overallRating, sight.allImageUrl, sight.ratingList)" mat-mini-fab>
+                <button (click)="onExpand(sight.uid, sight.name, sight.overallRating, sight.allImageUrl, sight.ratingList)"
+                        mat-mini-fab>
                     <mat-icon>expand</mat-icon>
                 </button>
                 <button (click)="onClose()" *ngIf="isDetailView" class="close-button-detail" mat-mini-fab>
@@ -18,8 +19,6 @@
             </span>
         </span>
     </mat-card-title>
-    <mat-card-subtitle>
-    </mat-card-subtitle>
     <mat-card-content>
         <span fxLayout="row" style="display: flex">
             <span style="display: inline-block; width: 230px; height: 150px;overflow: hidden">
@@ -62,44 +61,40 @@
         </span>
     </mat-card-footer>
 </mat-card>
-
 <mat-card *ngIf="isDetailView">
     <mat-card-title>
         <span class="fxRow">
             <p>Comments</p>
-            <button *ngIf="currentUserUid != undefined" (click)="onAddComment(sight)" style="-webkit-transform: scaleX(-1); transform: scaleX(-1);" mat-mini-fab>
+            <button *ngIf="currentUserUid != undefined" (click)="onAddComment(sight)"
+                    style="-webkit-transform: scaleX(-1); transform: scaleX(-1);" mat-mini-fab>
                 <mat-icon>add_comment</mat-icon>
             </button>
         </span>
     </mat-card-title>
     <mat-card-content>
-        <div *ngIf="sight.ratingList.length === 0">
-            <p>No comments found.</p>
-        </div>
-        <div *ngIf="sight.ratingList.length !== 0" >
-            <div *ngFor="let comment of sight.ratingList">
-                <mat-divider></mat-divider>
-                <div fxLayout="column" class="comment">
+        <cdk-virtual-scroll-viewport itemSize="100" class="example-viewport">
+            <div *ngIf="sight.ratingList.length === 0">
+                <p>No comments found.</p>
+            </div>
+
+            <div *ngIf="sight.ratingList.length !== 0">
+
+                <div *cdkVirtualFor="let comment of sight.ratingList" class="example-item">
+                    <mat-card-content>
+                        <mat-divider></mat-divider>
+                        <div fxLayout="column" class="comment">
                     <span class="fxRow">
                         <p><strong>Author:</strong> {{comment.creator}}</p>
                         <p><strong>Created:</strong> {{comment.createdAt}}</p>
                     </span>
-                    <p *ngIf="comment?.comment?.length !==0">{{comment.comment}}</p>
-                    <p *ngIf="comment?.comment === undefined">-</p>
-                    <app-star-rating [clickable]="true" [rating]="comment.rating" [starCount]="comment.rating">
-                    </app-star-rating>
+                            <p *ngIf="comment?.comment?.length !==0">{{comment.comment}}</p>
+                            <p *ngIf="comment?.comment === undefined">-</p>
+                            <app-star-rating [clickable]="true" [rating]="comment.rating" [starCount]="comment.rating">
+                            </app-star-rating>
+                        </div>
+                    </mat-card-content>
                 </div>
             </div>
-        </div>
+        </cdk-virtual-scroll-viewport>
     </mat-card-content>
 </mat-card>
-
-
-
-
-
-
-
-
-
-
