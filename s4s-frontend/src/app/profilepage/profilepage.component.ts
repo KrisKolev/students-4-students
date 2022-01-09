@@ -29,7 +29,7 @@ export class ProfilepageComponent implements OnInit {
     pictureForm: FormGroup;
     loggedInUser: any;
     profilePicture: File;
-
+    accountDeletionAgreement: boolean=false;
     constructor(private router: Router,
                 private userAuthService: UserAuthService,
                 private dialog: MatDialog,
@@ -183,4 +183,11 @@ export class ProfilepageComponent implements OnInit {
 
     }
 
+    onDelete() {
+        this.profileService.deleteUser().subscribe((res: Response) => {
+            console.log(res);
+        })
+        this.firebaseService.firebaseSignOut("loggedInUser");
+        this.onAbort();
+    }
 }
