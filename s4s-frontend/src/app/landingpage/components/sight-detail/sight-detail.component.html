@@ -40,7 +40,7 @@
                 <br/>
                 <div class="fxColumn">
                     <div class="fxRow">
-                        <app-star-rating [clickable]="false" [rating]="sight.overallRating"
+                        <app-star-rating [clickable]="false" [rating]=" roundStars(sight.overallRating)"
                                          [starCount]="5"></app-star-rating>
                         <span>&nbsp;({{sight.ratingList.length}} Ratings)</span>
                     </div>
