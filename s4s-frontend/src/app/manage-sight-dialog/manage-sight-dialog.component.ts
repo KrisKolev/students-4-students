@@ -55,6 +55,11 @@ export class ManageSightDialogComponent implements OnInit {
   @ViewChild('addressSearch') public searchElementRef: ElementRef;
 
   /**
+   * Chiplist that's being used for the labels.
+   */
+  @ViewChild('chipList') chipList;
+
+  /**
    * Zoom value for the map object
    */
   zoom = 15
@@ -630,6 +635,7 @@ export class ManageSightDialogComponent implements OnInit {
    */
   checkFormValidity(){
     this.labelErrorVisible = this.labels.length <1;
+    this.chipList.errorState=this.labelErrorVisible;
     this.labelMapErrorVisible = this.mapMarkers.length<2
 
     if(this.managedSight===undefined){
@@ -767,4 +773,5 @@ export class ManageSightDialogComponent implements OnInit {
       this.router.navigateByUrl('myelements');
     }
   }
+
 }
