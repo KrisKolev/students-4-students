@@ -1,4 +1,3 @@
-
 <div class="card">
     <mat-card>
         <div class="container row">
@@ -8,6 +7,7 @@
                     <mat-list-option (click)="selectedOption = 'Profile'">Profile</mat-list-option>
                     <mat-list-option (click)="selectedOption = 'Password'">Password</mat-list-option>
                     <mat-list-option (click)="selectedOption = 'Picture'">Picture</mat-list-option>
+                    <mat-list-option (click)="selectedOption = 'Deletion'">Delete</mat-list-option>
                 </mat-selection-list>
             </div>
             <!--Profile selected in menu-->
@@ -18,23 +18,35 @@
                     <br/>
                     <mat-form-field appearance="outline">
                         <mat-label>Enter your firstname</mat-label>
-                        <mat-error *ngIf="hasError('firstname', 'minlength','profileForm')">First name minimum length is 2</mat-error>
-                        <mat-error *ngIf="hasError('firstname', 'maxlength','profileForm')">First name maximum length is 50</mat-error>
+                        <mat-error *ngIf="hasError('firstname', 'minlength','profileForm')">First name minimum length is
+                            2
+                        </mat-error>
+                        <mat-error *ngIf="hasError('firstname', 'maxlength','profileForm')">First name maximum length is
+                            50
+                        </mat-error>
                         <input formControlName="firstname" matInput placeholder="{{currentFirstName}}" required>
                     </mat-form-field>
                     <br/>
                     <mat-form-field appearance="outline">
                         <mat-label>Enter your lastname</mat-label>
-                        <mat-error *ngIf="hasError('lastname', 'minlength','profileForm')">Last name minimum length is 2</mat-error>
-                        <mat-error *ngIf="hasError('lastname', 'maxlength','profileForm')">Last name maximum length is 50</mat-error>
+                        <mat-error *ngIf="hasError('lastname', 'minlength','profileForm')">Last name minimum length is
+                            2
+                        </mat-error>
+                        <mat-error *ngIf="hasError('lastname', 'maxlength','profileForm')">Last name maximum length is
+                            50
+                        </mat-error>
                         <input formControlName="lastname" matInput placeholder="{{currentLastName}}" required>
                     </mat-form-field>
                     <br/>
                     <mat-form-field appearance="outline">
                         <input formControlName="nickname" matInput placeholder="{{currentNickname}}" required>
                         <mat-label>Enter your nickname</mat-label>
-                        <mat-error *ngIf="hasError('nickname', 'minlength','profileForm')">Nickname minimum length is 2</mat-error>
-                        <mat-error *ngIf="hasError('nickname', 'maxlength','profileForm')">Nickname maximum length    is 50</mat-error>
+                        <mat-error *ngIf="hasError('nickname', 'minlength','profileForm')">Nickname minimum length is
+                            2
+                        </mat-error>
+                        <mat-error *ngIf="hasError('nickname', 'maxlength','profileForm')">Nickname maximum length is
+                            50
+                        </mat-error>
                     </mat-form-field>
                     <br/>
 
@@ -80,24 +92,30 @@
                     <br/>
                     <mat-form-field appearance="outline">
                         <mat-label>Enter your password</mat-label>
-                        <input placeholder="Password" [type]="hidePassword ? 'password' : 'text'" formControlName="password" matInput required>
+                        <input placeholder="Password" [type]="hidePassword ? 'password' : 'text'"
+                               formControlName="password" matInput required>
                         <mat-button (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
                                     [attr.aria-pressed]="hidePassword"
                                     mat-icon-button matSuffix>
                             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </mat-button>
-                        <mat-error *ngIf="hasError('password', 'minlength','passwordForm')">Password minimum length is 6</mat-error>
+                        <mat-error *ngIf="hasError('password', 'minlength','passwordForm')">Password minimum length is
+                            6
+                        </mat-error>
                     </mat-form-field>
                     <br/>
                     <mat-form-field appearance="outline">
                         <mat-label>Repeat your password</mat-label>
-                        <input placeholder="Password" [type]="hidePassword ? 'password' : 'text'" formControlName="passwordRepeat" matInput
+                        <input placeholder="Password" [type]="hidePassword ? 'password' : 'text'"
+                               formControlName="passwordRepeat" matInput
                                required>
                         <mat-button (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'"
                                     [attr.aria-pressed]="hidePassword"
                                     mat-icon-button matSuffix>
                             <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
-                            <mat-error *ngIf="hasError('password', 'minlength','passwordForm')">Password minimum length is 6</mat-error>
+                            <mat-error *ngIf="hasError('password', 'minlength','passwordForm')">Password minimum length
+                                is 6
+                            </mat-error>
                         </mat-button>
                     </mat-form-field>
                     <mat-error *ngIf="passwordForm.controls['password'].value !== ''
@@ -127,6 +145,49 @@
                     <mat-card-actions>
                         <button (click)="this.onPictureChange();" color="primary" mat-raised-button>
                             Change
+                        </button>
+                        <button (click)="onAbort()" color="warn" mat-stroked-button>
+                            Abort
+                        </button>
+                    </mat-card-actions>
+                </form>
+            </ng-template>
+
+            <ng-template [ngIf]="selectedOption=='Deletion'">
+                <form class="col-lg" [formGroup]="passwordForm">
+                    <br/>
+                    <mat-card-title>Delete Your Account</mat-card-title>
+                    <br/>
+                    <!--I'm not sure how factual this information is, it should be adjusted accordingly!!!-->
+
+                    <mat-card-subtitle class="deletion-text">
+                        By deleting your account, all the sights and comments that you have left will remain.
+                        It's only your account that's being deleted, along with the data that you've registered on
+                        creation.
+                        Are you sure you wanna do that?
+                    </mat-card-subtitle>
+
+                    <div class="numbertoggleholder">
+
+                        <div *ngIf="accountDeletionAgreement==true">I have read the information above and agree to
+                            delete my account:
+                            <button mat-icon-button (click)="accountDeletionAgreement=false;">
+                                <mat-icon class="">check_box</mat-icon>
+                            </button>
+                        </div>
+                        <div *ngIf="accountDeletionAgreement==false">I have read the information above and agree to
+                            delete my account:
+                            <button mat-icon-button (click)="accountDeletionAgreement=true;">
+                                <mat-icon class="">check_box_outline_blank</mat-icon>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!--Buttons-->
+                    <mat-card-actions>
+                        <button disabled="{{!accountDeletionAgreement}}" (click)="onDelete()" color="primary"
+                                mat-raised-button>
+                            Delete
                         </button>
                         <button (click)="onAbort()" color="warn" mat-stroked-button>
                             Abort

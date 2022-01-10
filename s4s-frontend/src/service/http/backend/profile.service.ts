@@ -1,7 +1,6 @@
 import {Injectable} from "@angular/core";
-import {User} from "../../../model/user";
 import {BackendClientService} from "../backendClientService";
-
+import {getAuth} from 'firebase/auth';
 @Injectable({providedIn: 'root'})
 export class ProfileService extends BackendClientService {
 
@@ -26,5 +25,9 @@ export class ProfileService extends BackendClientService {
             'photoUrl': photoUrl,
             'uid': uid
         });
+    }
+
+    deleteUser() {
+        return this.createDeleteCall('user/delete',)
     }
 }

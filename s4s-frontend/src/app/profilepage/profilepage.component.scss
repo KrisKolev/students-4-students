@@ -1,6 +1,6 @@
 .row1
 {
-  width: 30%;
+  width: 20%;
 }
 .mat-form-field
 {
@@ -26,4 +26,14 @@ mat-card{
   vertical-align: center;
   margin: 20px;
 }
-
+.mat-list-base {
+  text-align: left;
+}
+.deletion-text
+{
+  margin-left: 40px;
+  display: flex;
+  justify-content: center;
+  width:500px;
+  text-align: left;
+}

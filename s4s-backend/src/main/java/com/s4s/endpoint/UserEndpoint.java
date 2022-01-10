@@ -36,7 +36,7 @@ public class UserEndpoint {
                 .setEmail(userDTO.getEmail())
                 .setEmailVerified(true)
                 .setPassword(userDTO.getPassword())
-                .setDisplayName(userDTO.getFirstname() + " " + userDTO.getLastname()+ " " + userDTO.getNickname())
+                .setDisplayName(userDTO.getFirstname() + "/" + userDTO.getLastname()+ "/" + userDTO.getNickname())
                 .setDisabled(false);
 
         UserRecord userRecord;
