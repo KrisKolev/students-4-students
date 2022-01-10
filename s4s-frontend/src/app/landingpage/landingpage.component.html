@@ -36,7 +36,6 @@
             <mat-icon>keyboard_double_arrow_left</mat-icon>
         </button>
     </div>
-
     <div *ngFor="let sight of allSightsSortedByDistance">
         <app-sight-list-item (calcRouteEventEmitter)="calcRoute(sight)"
                              (goToSightEventEmitter)="onGoToSight(sight)"
@@ -45,7 +44,8 @@
     </div>
 </div>
 
-<div *ngIf="isTopLocationsVisible" [@extendLocations]="isAddSightVisible ? 'open' : 'closed'" class="manage-sight-container">
+<div *ngIf="isTopLocationsVisible" [@extendLocations]="isAddSightVisible ? 'open' : 'closed'"
+     class="manage-sight-container">
 
 </div>
 
@@ -140,7 +140,7 @@
 
     <span>
         <mat-label [textContent]="'Maximum Rating ( '+filterRatingSliderMaximumValue+' ) '"
-                     class="label-select-filter"></mat-label>
+                   class="label-select-filter"></mat-label>
         <mat-slider
                 [(value)]="filterRatingSliderMaximumValue"
                 [displayWith]="formatLabel"
@@ -206,30 +206,30 @@
 
 <!--searchbar across sights and GM-->
 <div class="map-search-adressbar">
-        <mat-form-field color="primary" appearance="fill">
-            <mat-label class="address-placeholder-label">Search by sight, label or address</mat-label>
-            <input #addressSearch
-                   id="addressElement"
-                   [(ngModel)]="addressValue"
-                   [formControl]="sightSearchCtrl"
-                   [matAutocompleteConnectedTo]="origin"
-                   [matAutocomplete]="auto"
-                   autocapitalize="off"
-                   autocorrect="off"
-                   class="address-bar"
-                   matInput
-                   spellcheck="off"
-                   type="text"
-                   type="text"
-                   width="300px">
-        </mat-form-field>
-        <!--each individual field in the sights autocomplete-->
-        <!--also, couldn't get the showDistanceString and overallRating not to show as errors, but they do work-->
-        <mat-autocomplete #auto="matAutocomplete" class="address-autocomplete">
-            <mat-option style="height: auto" (onSelectionChange)="onSearchSelectItem(sight)" *ngFor="let sight of searchedSights | async" [value]="sight.name">
-                {{sight.name}}
-                <mat-label [textContent]="'(' + sight.showDistanceString + ')'" ></mat-label>
-                <app-star-rating  class="search-stars"  [clickable]="false" [starCount]="5" [rating]="sight.overallRating"></app-star-rating>
-            </mat-option>
-        </mat-autocomplete>
+    <mat-form-field color="primary" appearance="fill">
+        <mat-label class="address-placeholder-label">Search by sight, label or address</mat-label>
+        <input #addressSearch
+               id="addressElement"
+               [(ngModel)]="addressValue"
+               [formControl]="sightSearchCtrl"
+               [matAutocompleteConnectedTo]="origin"
+               [matAutocomplete]="auto"
+               autocapitalize="off"
+               autocorrect="off"
+               class="address-bar"
+               matInput
+               spellcheck="off"
+               type="text"
+               type="text"
+               width="300px">
+    </mat-form-field>
+    <mat-autocomplete #auto="matAutocomplete" class="address-autocomplete">
+        <mat-option style="height: auto" (onSelectionChange)="onSearchSelectItem(sight)"
+                    *ngFor="let sight of searchedSights | async" [value]="sight.name">
+            {{sight.name}}
+            <mat-label [textContent]="'(' + sight.showDistanceString + ')'"></mat-label>
+            <app-star-rating class="search-stars" [clickable]="false" [starCount]="5"
+                             [rating]="sight.overallRating"></app-star-rating>
+        </mat-option>
+    </mat-autocomplete>
 </div>
