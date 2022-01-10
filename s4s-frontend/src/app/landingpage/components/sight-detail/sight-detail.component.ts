@@ -80,4 +80,7 @@ export class SightDetailComponent implements OnInit {
             this.onClose();
         });
     }
+    roundStars(stars:number){
+        return Math.round(stars)
+    }
 }
