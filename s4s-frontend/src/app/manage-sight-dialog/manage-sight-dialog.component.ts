@@ -379,7 +379,7 @@ export class ManageSightDialogComponent implements OnInit {
 
       this.allSights.forEach((sight)=>{
 
-        if(sight.uid === this.managedSight.uid){
+        if(this.managedSight != undefined && sight.uid === this.managedSight.uid){
           return;
         }
         const svgMarker = {
