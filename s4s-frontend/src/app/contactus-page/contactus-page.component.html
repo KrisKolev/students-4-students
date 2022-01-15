@@ -1,39 +1,70 @@
-<div class="container">
-    <mat-card>
-        <mat-card-title>Send us a message</mat-card-title>
-        <mat-card-content>
-            <form action="https://formspree.io/f/mayaraka"
-                  method="POST"
-            [formGroup]="contactUsForm">
-                <div fxLayout="column">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Your Name:</mat-label>
-                        <input formControlName="name" matInput required type="name">
-                        <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
-                        <mat-error *ngIf="hasError('name', 'minlength')">Names minimum length is 2</mat-error>
-                        <mat-error *ngIf="hasError('name', 'maxlength')">Names maximum length is 50</mat-error>
-                    </mat-form-field>
+<div class="background">
+    <div class="title">
+        <p> About Us </p>
+    </div>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Your Email:</mat-label>
-                        <input formControlName="email" matInput name="_replyto" required type="email">
-                        <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
-                        <mat-error *ngIf="hasError('email', 'email')">Email Syntax is incorrect</mat-error>
-                    </mat-form-field>
+    <br>
 
-                    <mat-form-field appearance="outline">
-                        <mat-label>Your Message:</mat-label>
-                        <textarea formControlName="message" matInput name="message" required type="message"></textarea>
-                        <mat-error *ngIf="hasError('message', 'required')">A Message is required</mat-error>
-                    </mat-form-field>
-
-                    <button [disabled]="checkFormValidity()"
-                            color="primary" mat-raised-button type="submit">
-                        Send
-                    </button>
+    <div class="aboutuscontainer">
+        <mat-card>
+            <mat-card-title>
+                <div class="somequestion">
+                    Who are we?
                 </div>
-            </form>
+            </mat-card-title>
+            <br>
+            <br>
+            <mat-card-content>
+                <div class="sometext">
+                    Our team consists of 7 university students. <br>
+                    We 4 of us are from Bulgaria and 3 - Austria. <br>
+                    Our mission was to create an application for easy finding of restaurants, cafes and sights, but with a major twist. <br>
+                    This one is specifically targeting students. We truly believe that our website <br> will serve well to every student that quickly needs to find a place to eat at or just have fun with friends. <br>
+                    If you have any questions you can visit the "FAQ" page and if your question is still not answered <br>
+                    feel free to send us a message and we will respond as soon as possible.
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
 
-        </mat-card-content>
-    </mat-card>
+    <div class="container">
+        <mat-card>
+            <mat-card-title>Send us a message</mat-card-title>
+            <mat-card-content>
+                <form action="https://formspree.io/f/mayaraka"
+                      method="POST"
+                      [formGroup]="contactUsForm">
+                    <div fxLayout="column">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Your Name:</mat-label>
+                            <input formControlName="name" matInput required type="name">
+                            <mat-error *ngIf="hasError('name', 'required')">Name is required</mat-error>
+                            <mat-error *ngIf="hasError('name', 'minlength')">Names minimum length is 2</mat-error>
+                            <mat-error *ngIf="hasError('name', 'maxlength')">Names maximum length is 50</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Your Email:</mat-label>
+                            <input formControlName="email" matInput name="_replyto" required type="email">
+                            <mat-error *ngIf="hasError('email', 'required')">Email is required</mat-error>
+                            <mat-error *ngIf="hasError('email', 'email')">Email Syntax is incorrect</mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline">
+                            <mat-label>Your Message:</mat-label>
+                            <textarea formControlName="message" matInput name="message" required type="message"></textarea>
+                            <mat-error *ngIf="hasError('message', 'required')">A Message is required</mat-error>
+                        </mat-form-field>
+
+                        <button [disabled]="checkFormValidity()"
+                                color="primary" mat-raised-button type="submit">
+                            Send
+                        </button>
+                    </div>
+                </form>
+
+            </mat-card-content>
+        </mat-card>
+    </div>
 </div>
+
