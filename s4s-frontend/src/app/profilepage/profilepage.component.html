@@ -17,30 +17,30 @@
                     <mat-card-title>Profile</mat-card-title>
                     <br/>
                     <mat-form-field appearance="outline">
-                        <mat-label>Enter your firstname</mat-label>
+                        <mat-label>{{currentFirstName}}</mat-label>
                         <mat-error *ngIf="hasError('firstname', 'minlength','profileForm')">First name minimum length is
                             2
                         </mat-error>
                         <mat-error *ngIf="hasError('firstname', 'maxlength','profileForm')">First name maximum length is
                             50
                         </mat-error>
-                        <input formControlName="firstname" matInput placeholder="{{currentFirstName}}" required>
+                        <input formControlName="firstname" matInput required>
                     </mat-form-field>
                     <br/>
                     <mat-form-field appearance="outline">
-                        <mat-label>Enter your lastname</mat-label>
+                        <mat-label>{{currentLastName}}</mat-label>
                         <mat-error *ngIf="hasError('lastname', 'minlength','profileForm')">Last name minimum length is
                             2
                         </mat-error>
                         <mat-error *ngIf="hasError('lastname', 'maxlength','profileForm')">Last name maximum length is
                             50
                         </mat-error>
-                        <input formControlName="lastname" matInput placeholder="{{currentLastName}}" required>
+                        <input formControlName="lastname" matInput required>
                     </mat-form-field>
                     <br/>
                     <mat-form-field appearance="outline">
-                        <input formControlName="nickname" matInput placeholder="{{currentNickname}}" required>
-                        <mat-label>Enter your nickname</mat-label>
+                        <input formControlName="nickname" matInput required>
+                        <mat-label>{{currentNickname}}</mat-label>
                         <mat-error *ngIf="hasError('nickname', 'minlength','profileForm')">Nickname minimum length is
                             2
                         </mat-error>

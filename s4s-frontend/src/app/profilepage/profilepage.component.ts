@@ -10,6 +10,7 @@ import {UploadItem, UploadResponse} from "../../model/uploadItem";
 import {FirebaseService} from "../../service/http/external/firebase.service";
 import {PopupType} from "../../model/popupType";
 import {PopupComponent} from "../popup/popup.component";
+import {Emitters} from "../emitters/emitters";
 
 @Component({
     selector: 'app-profilepage',

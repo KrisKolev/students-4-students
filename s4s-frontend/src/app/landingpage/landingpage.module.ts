@@ -21,6 +21,7 @@ import {MatIconModule} from "@angular/material/icon";
 import { SightDetailComponent } from './components/sight-detail/sight-detail.component';
 import {MatChipsModule} from "@angular/material/chips";
 import {ScrollingModule} from "@angular/cdk/scrolling";
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [LandingpageComponent, SightListItemComponent, SightDetailComponent],
@@ -44,7 +45,8 @@ import {ScrollingModule} from "@angular/cdk/scrolling";
         MatSliderModule,
         MatIconModule,
         MatChipsModule,
-        ScrollingModule
+        ScrollingModule,
+        MatTooltipModule
     ]
 })
 export class LandingpageModule { }

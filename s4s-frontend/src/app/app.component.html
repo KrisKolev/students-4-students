@@ -11,14 +11,14 @@
         <button mat-button routerLink="./faq">FAQ</button>
 
         <ng-template [ngIf]="isUserLoggedIn()==true">
-            <button mat-button (click)="onOpenManageSight()">
+            <button matTooltip="Add new sight." matTooltipPosition="above" mat-button (click)="onOpenManageSight()">
                 <mat-icon>add_location_alt</mat-icon>
             </button>
         </ng-template>
 
         <!--profile button-->
         <ng-template [ngIf]="isUserLoggedIn()==true" [ngIfElse]="loggedOut">
-            <button mat-button [matMenuTriggerFor]="menu">
+            <button matTooltip="Open profile menu." matTooltipPosition="above" mat-button [matMenuTriggerFor]="menu">
                 <ng-template [ngIf]="this.checkProfilePictureAvailability()" [ngIfElse]="noProfilePicture">
                     <img class="profilePicture" src="{{this.profilePictureUrl}}" alt="Avatar">
                 </ng-template>
