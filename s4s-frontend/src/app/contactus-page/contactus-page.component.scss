@@ -2,11 +2,51 @@ mat-card {
   text-align: center;
   margin: 10px;
   width: 50%;
+  border: solid 2px black;
 }
 .container {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
-  width: 100%;
+}
+
+.background {
+  background-image: url("../../assets/images/google.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  height: 93vh;
+  width: 100vw;
+  position: absolute;
+}
+
+.title {
+  font-size: 50px;
+  color: black;
+  display: flex;
+  justify-content: center;
+  padding-top: 3vw;
+}
+
+.somequestion {
+  font-size: 30px;
+}
+
+.sometext {
+  font-size: 20px;
+  color: black;
+}
+
+
+.aboutuscontainer {
+  width: 100vw;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sometext {
+  line-height: 30px;
 }

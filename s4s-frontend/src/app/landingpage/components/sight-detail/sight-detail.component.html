@@ -1,7 +1,7 @@
 <mat-card class="sight-panel">
     <mat-card-title>
         <span class="card-title" fxLayout="row">
-            <p [textContent]="sight.name"></p>
+            <div class="titleforsight" [textContent]="sight.name"></div>
             <span>
                 <button (click)="onCalcRoute(sight)" mat-mini-fab>
                     <mat-icon>explore</mat-icon>
