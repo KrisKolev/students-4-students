@@ -63,7 +63,7 @@
 <span>
     <div [@moveMapButtons]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-gotolocation">
         <mat-card-actions>
-            <button (click)="onGoToLocation()" background-color="primary" class="map-action-button" color="primary"
+            <button matTooltip="Go to your location." matTooltipPosition="above" (click)="onGoToLocation()" background-color="primary" class="map-action-button" color="primary"
                     mat-mini-fab>
                 <mat-icon>location_on</mat-icon>
             </button>
@@ -72,7 +72,7 @@
 
     <div [@moveFilterButtonContainer]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-filter-sights-button">
         <mat-card-actions>
-            <button (click)="onShowFilter()" class="map-action-button" color="primary" mat-mini-fab>
+            <button matTooltip="Show filter." matTooltipPosition="above" (click)="onShowFilter()" class="map-action-button" color="primary" mat-mini-fab>
                 <mat-icon *ngIf="!isFilterVisible">tune</mat-icon>
                 <mat-icon *ngIf="isFilterVisible">close</mat-icon>
             </button>
@@ -80,7 +80,7 @@
     </div>
 
     <div [@moveLocationButton]="isTopLocationsVisible ? 'open' : 'closed'" class="maps-toggleTopLocations">
-        <button (click)="onToggleTopLocations(false)" class="map-action-button" color="primary" mat-mini-fab>
+        <button matTooltip="Show Top Locations." matTooltipPosition="above"  (click)="onToggleTopLocations(false)" class="map-action-button" color="primary" mat-mini-fab>
             <mat-icon>keyboard_double_arrow_right</mat-icon>
         </button>
     </div>

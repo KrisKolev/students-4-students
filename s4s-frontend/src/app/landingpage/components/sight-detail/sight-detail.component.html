@@ -3,17 +3,17 @@
         <span class="card-title" fxLayout="row">
             <p [textContent]="sight.name"></p>
             <span>
-                <button (click)="onCalcRoute(sight)" mat-mini-fab>
+                <button matTooltip="Calculate distance." matTooltipPosition="above" (click)="onCalcRoute(sight)" mat-mini-fab>
                     <mat-icon>explore</mat-icon>
                 </button>
-                <button (click)="onGoToSight(sight)" *ngIf="!isDetailView" mat-mini-fab>
+                <button matTooltip="Look at reviews." matTooltipPosition="above" (click)="onGoToSight(sight)" *ngIf="!isDetailView" mat-mini-fab>
                     <mat-icon>open_in_new</mat-icon>
                 </button>
-                <button (click)="onExpand(sight.uid, sight.name, sight.overallRating, sight.allImageUrl, sight.ratingList)"
+                <button matTooltip="Detailed view." matTooltipPosition="above" (click)="onExpand(sight.uid, sight.name, sight.overallRating, sight.allImageUrl, sight.ratingList)"
                         mat-mini-fab>
                     <mat-icon>expand</mat-icon>
                 </button>
-                <button (click)="onClose()" *ngIf="isDetailView" class="close-button-detail" mat-mini-fab>
+                <button matTooltip="Close." matTooltipPosition="above"(click)="onClose()" *ngIf="isDetailView" class="close-button-detail" mat-mini-fab>
                     <mat-icon>close</mat-icon>
                 </button>
             </span>
@@ -65,7 +65,7 @@
     <mat-card-title>
         <span class="fxRow">
             <p>Comments</p>
-            <button *ngIf="currentUserUid != undefined" (click)="onAddComment(sight)"
+            <button matTooltip="Add comment." matTooltipPosition="above" *ngIf="currentUserUid != undefined" (click)="onAddComment(sight)"
                     style="-webkit-transform: scaleX(-1); transform: scaleX(-1);" mat-mini-fab>
                 <mat-icon>add_comment</mat-icon>
             </button>
